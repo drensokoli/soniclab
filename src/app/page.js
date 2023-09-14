@@ -5,6 +5,13 @@ import { Montserrat } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import NET from "vanta/dist/vanta.net.min";
+import {
+  Tabs,
+  TabsHeader,
+  TabsBody,
+  Tab,
+  TabPanel,
+} from "@material-tailwind/react";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -39,12 +46,40 @@ export default function Home() {
       if (vantaEffect) vantaEffect.destroy()
     }
   }, [vantaEffect])
-
+  const data = [
+    {
+      label: "Monthly Playlists",
+      value: "html",
+    },
+    {
+      label: "AI Gen Playlists",
+      value: "react",
+    }
+  ];
   return (
     <>
       <div ref={vantaRef} className='h-screen'>
-        <div className='flex flex-col justify-center items-center h-1/3'>
-          <h1 className={`sm:text-6xl font-bold text-4xl ${montserrat.className}`}>SpotiEngine</h1>
+        <div className='flex flex-col justify-center items-center h-1/4'>
+          <h1 className={`sm:text-6xl font-bold text-4xl text-white ${montserrat.className}`}>SpotiEngine</h1>
+        </div>
+        <div className='flex flex-col justify center items-center'>
+
+          <Tabs value="html" className="w-5/6">
+            <TabsHeader>
+              {data.map(({ label, value }) => (
+                <Tab key={value} value={value}>
+                  {label}
+                </Tab>
+              ))}
+            </TabsHeader>
+            <TabsBody>
+              {data.map(({ value, desc }) => (
+                <TabPanel key={value} value={value}>
+                  {desc}
+                </TabPanel>
+              ))}
+            </TabsBody>
+          </Tabs>
         </div>
       </div>
 
