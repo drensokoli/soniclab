@@ -8,7 +8,7 @@ import NET from "vanta/dist/vanta.net.min";
 
 const montserrat = Montserrat({
   subsets: ['latin'],
-  weight: '400',
+  weight: '600',
   style: 'normal',
 })
 
@@ -31,7 +31,7 @@ export default function Home() {
           scaleMobile: 1.00,
           points: 20.00,
           maxDistance: 23.00,
-          spacing: 18.00
+          spacing: 20.00
         })
       )
     }
@@ -43,9 +43,11 @@ export default function Home() {
   return (
     <>
       <div ref={vantaRef} className='h-screen'>
-        {/* Content of the first div */}
+        <div className='flex flex-col justify-center items-center h-1/3'>
+          <h1 className={`sm:text-6xl font-bold text-4xl ${montserrat.className}`}>SpotiEngine</h1>
+        </div>
       </div>
-      <div className='absolute inset-0 bg-opacity-20 backdrop-blur-sm'></div>
+
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" async></script>
       <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" async></script>
     </>
