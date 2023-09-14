@@ -46,8 +46,8 @@ export default function Home() {
         {/* Content of the first div */}
       </div>
       <div className='absolute inset-0 bg-opacity-20 backdrop-blur-sm'></div>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" async></script>
+      <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" async></script>
     </>
   )
 }
