@@ -21,11 +21,12 @@ const bebas_neue = Bebas_Neue({
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const [vantaEffect, setVantaEffect] = useState<any>(null); // Explicitly define the type as 'any'
+  const [vantaEffect, setVantaEffect] = useState<any>(null); 
   const vantaRef = useRef(null);
 
   useEffect(() => {
     if (!isLoading && !vantaEffect && vantaRef.current) {
+      const spacing = window.innerWidth >= 640 ? 20 : 30;
       setVantaEffect(
         NET({
           el: vantaRef.current,
@@ -38,7 +39,7 @@ export default function Home() {
           scaleMobile: 1.00,
           points: 20.00,
           maxDistance: 23.00,
-          spacing: 20.00
+          spacing: spacing
         })
       )
     }
@@ -49,10 +50,9 @@ export default function Home() {
   }, [isLoading, vantaEffect])
 
   useEffect(() => {
-    // Simulate an asynchronous operation
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // Change the duration as per your requirement
+    }, 1000); 
   }, [])
 
   return (
