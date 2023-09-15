@@ -42,14 +42,15 @@ export default function Home() {
         })
       )
     }
-    return () => {
-      if (vantaEffect) vantaEffect.destroy()
-    }
+    // return () => {
+    //   if (vantaEffect) vantaEffect.destroy()
+    // }
   }, [vantaEffect])
 
   return (
     <>
       <div ref={vantaRef} className='fixed w-screen h-screen'></div>
+      
       <div className='flex flex-col justify center items-center h-auto min-h-screen'>
         <div className='flex justify-center items-center h-1/4 py-16 z-10'>
           <h1 className={`sm:text-7xl font-bold text-5xl text-gray-300 ${bebas_neue.className}`}>Spoti-Engine</h1>
