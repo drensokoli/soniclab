@@ -6,7 +6,14 @@ import * as THREE from "three";
 import NET from "vanta/dist/vanta.net.min";
 import Monthly from '../components/Monthly'
 import AIGen from '../components/AIGen'
+import Footer from '../components/Footer'
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
+import {
+  signIn,
+  signOut,
+  useSession
+} from 'next-auth/react';
+
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -50,8 +57,11 @@ export default function Home() {
 
   return (
     <>
-      <div ref={vantaRef} className='h-screen'>
-        <div className='flex flex-col justify-center items-center h-1/4'>
+      <div ref={vantaRef} className='flex flex-col h-fit'>
+        {/* <div className='flex flex-col justify-center items-center h-1/4'>
+          <button className='bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-full' onClick={() => signIn()}>Login</button>
+        </div> */}
+        <div className='flex flex-col justify-center items-center h-1/4 py-16'>
           <h1 className={`sm:text-7xl font-bold text-4xl text-gray-400 ${bebas_neue.className}`}>Spoti-Engine</h1>
         </div>
         <div className='flex flex-col justify center items-center'>
@@ -70,7 +80,11 @@ export default function Home() {
             </TabsBody>
           </Tabs>
         </div>
+        <Footer />
       </div>
+      {/* <div className='flex flex-col items-end justify-end h-full'>
+
+      </div> */}
     </>
   )
 }
