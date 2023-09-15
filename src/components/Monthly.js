@@ -25,7 +25,7 @@ export default function Monthly() {
                     <div className='w-48 h-48 bg-gray-300 opacity-30'></div>
                     <div className='w-48 h-48 bg-gray-300 opacity-30'></div>
                 </div>
-                <div className='flex flex-row gap-4 justify-center items-center'>
+                <div className='flex flex-row gap-4 justify-center items-center  mb-4'>
                     <div className='w-48 h-48 bg-gray-300 opacity-30'></div>
                     <div className='w-48 h-48 bg-gray-300 opacity-30'></div>
                     <div className='w-48 h-48 bg-gray-300 opacity-30'></div>
