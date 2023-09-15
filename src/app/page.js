@@ -61,7 +61,7 @@ export default function Home() {
         <div className='flex flex-col justify-center items-center h-1/4 py-16'>
           <h1 className={`sm:text-7xl font-bold text-5xl text-gray-400 ${bebas_neue.className}`}>Spoti-Engine</h1>
         </div>
-        <div className='flex flex-col justify center items-center'>
+        <div className='flex flex-col justify center items-center flex-grow'>
           <Tabs value="html" className="w-5/6">
             <TabsHeader>
               <Tab value="html" className={`${montserrat.className}`}>Monthly Playlists</Tab>
@@ -79,9 +79,6 @@ export default function Home() {
         </div>
         <Footer />
       </div>
-      {/* <div className='flex flex-col items-end justify-end h-full'>
-
-      </div> */}
     </>
   )
 }
