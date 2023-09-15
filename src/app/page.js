@@ -56,8 +56,8 @@ export default function Home() {
         </div>
         <Tabs value="monthly" className="w-5/6">
           <TabsHeader>
-            <Tab value="monthly" className={`${montserrat.className}`}>Monthly Playlists</Tab>
-            <Tab value="aigen" className={`${montserrat.className}`}>AI Gen Playlists</Tab>
+            <Tab value="monthly" className={`${montserrat.className}`}>Library</Tab>
+            <Tab value="aigen" className={`${montserrat.className}`}>AI Gen</Tab>
           </TabsHeader>
           <TabsBody>
             <TabPanel value="monthly">
