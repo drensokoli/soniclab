@@ -57,12 +57,9 @@ export default function Home() {
 
   return (
     <>
-      <div ref={vantaRef} className='flex flex-col h-fit'>
-        {/* <div className='flex flex-col justify-center items-center h-1/4'>
-          <button className='bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-full' onClick={() => signIn()}>Login</button>
-        </div> */}
+      <div ref={vantaRef} className='flex flex-col h-auto min-h-screen'>
         <div className='flex flex-col justify-center items-center h-1/4 py-16'>
-          <h1 className={`sm:text-7xl font-bold text-4xl text-gray-400 ${bebas_neue.className}`}>Spoti-Engine</h1>
+          <h1 className={`sm:text-7xl font-bold text-5xl text-gray-400 ${bebas_neue.className}`}>Spoti-Engine</h1>
         </div>
         <div className='flex flex-col justify center items-center'>
           <Tabs value="html" className="w-5/6">
