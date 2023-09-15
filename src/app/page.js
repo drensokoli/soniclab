@@ -2,7 +2,7 @@
 import { Montserrat, Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import NET from "vanta/dist/vanta.net.min";
-import Monthly from '../components/Monthly'
+import Library from '../components/Library'
 import AIGen from '../components/AIGen'
 import Footer from '../components/Footer'
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
@@ -61,8 +61,7 @@ export default function Home() {
           </TabsHeader>
           <TabsBody>
             <TabPanel value="monthly">
-              <Monthly />
-              <Monthly />
+              <Library />
             </TabPanel>
             <TabPanel value="aigen">
               <AIGen />
