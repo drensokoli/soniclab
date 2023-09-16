@@ -16,7 +16,18 @@ const bebas_neue = Bebas_Neue({
 export default function AIGen() {
     return (
         <>
-            <div className='flex flex-col justify-center items-center'>
+            <div className='flex flex-col justify-center items-center py-20 text-center gap-6'>
+                <h1 className='text-2xl md:text-3xl text-gray-300'>You are not signed in.</h1>
+                <p className='text-lg md:text-xl text-gray-300'>Please sign in to generate you AI Spotify playlist with SpotiLab</p>
+                <button
+                    type="button"
+                    className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
+                    data-te-ripple-init>
+                    Sign In
+                </button>
+            </div>
+
+            <div className='flex flex-col justify-center items-center hidden'>
                 <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Write your playlist description here</h1>
                 <textarea id="description" rows={4} className="block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200" placeholder="The playlist should contain HipHop and R&B songs from the 90s..."></textarea>
                 <div className='flex justify-center items-center w-full md:w-3/4 py-4'>
@@ -33,17 +44,6 @@ export default function AIGen() {
                     className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
                     data-te-ripple-init>
                     Generate Songs
-                </button>
-            </div>
-            
-            <div className='flex flex-col justify-center items-center py-20 text-center gap-6 hidden'>
-                <h1 className='text-2xl md:text-3xl text-gray-300'>You are not signed in.</h1>
-                <p className='text-lg md:text-xl text-gray-300'>Please sign in to generate you AI Spotify playlist with SpotiLab</p>
-                <button
-                    type="button"
-                    className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
-                    data-te-ripple-init>
-                    Sign In
                 </button>
             </div>
 
