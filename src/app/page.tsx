@@ -84,7 +84,7 @@ export default function Home() {
           <div ref={vantaRef} className='fixed w-screen h-screen'></div>
           <div className='flex flex-col justify center items-center h-auto min-h-screen'>
             <div className='flex justify-center items-center h-1/4 py-16 z-10'>
-              <h1 className={`sm:text-7xl font-bold text-5xl text-gray-300 ${bebas_neue.className}`}>SpotiLab</h1>
+              <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
             </div>
             <Tabs value="monthly" className="w-5/6">
               <TabsHeader>

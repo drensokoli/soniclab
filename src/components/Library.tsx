@@ -21,7 +21,7 @@ export default function Library() {
                 <p className='text-lg md:text-xl text-gray-300'>Please sign in to see your monthly and AI generated Spotify playlists from SpotiLab</p>
                 <button
                     type="button"
-                    className="inline-block rounded border-2 border-neutral-50 px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-gray-300 hover:text-black"
+                    className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
                     data-te-ripple-init>
                     Sign In
                 </button>
