@@ -25,7 +25,18 @@ export default function Library() {
                     data-te-ripple-init>
                     Sign In
                 </button>
-
+            </div>
+            <div className='flex flex-col w-full hidden'>
+                <div className='flex flex-row justify-center items-center pt-12 gap-6'>
+                    <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/37i9dQZF1E35EHS4sKqRJq?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/37i9dQZF1E38Isr4yL497m?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/2HdTWOys41H1CZjTnhOz2k?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+                <div className='flex flex-row justify-center items-center pt-12 gap-6'>
+                    <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/37i9dQZF1E38Isr4yL497m?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/2HdTWOys41H1CZjTnhOz2k?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/37i9dQZF1E35EHS4sKqRJq?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
             </div>
         </>
     )
