@@ -4,12 +4,12 @@ import '../styles/globals.css';
 import { SessionProvider, useSession } from 'next-auth/react';
 import React, { useEffect } from 'react';
 import { NextRouter } from 'next/router';
-// import { Analytics } from '@vercel/analytics/react';
+import { createServer } from 'http';
+import { parse } from 'url';
 
 interface WrappedAppProps extends Omit<AppProps, 'router'> {
   router: NextRouter;
 }
-
 
 export default function App({ Component, pageProps, router }: AppProps) {
   return (
@@ -39,4 +39,18 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
       <Component {...pageProps} />
     </div>
   );
+}
+
+// Custom server implementation
+if (typeof window === 'undefined') {
+  createServer((req, res) => {
+    const parsedUrl = parse(req.url || '', true);
+
+    if (parsedUrl.pathname === '/api/auth/callback/spotify') {
+      res.setHeader('Connection', 'keep-alive');
+      res.setHeader('Keep-Alive', 'timeout=60');
+    }
+
+    // Your other custom server logic here
+  }).listen(3000);
 }
