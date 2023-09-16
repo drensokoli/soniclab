@@ -8,6 +8,7 @@ import Footer from '../components/Footer'
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image'
+import { useRouter } from 'next/router';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -25,9 +26,17 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef(null);
+
   const { data: session, status } = useSession();
   const user = session?.user?.name;
-  const userImage = session?.user?.image;
+
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    signOut().then(() => {
+      router.reload();
+    });
+  };
 
   useEffect(() => {
     if (!isLoading && !vantaEffect && vantaRef.current) {
@@ -101,7 +110,7 @@ export default function Home() {
                       type="button"
                       className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
                       data-te-ripple-init
-                      onClick={() => signOut()}
+                      onClick={handleSignOut}
                     >
                       Sign Out
                     </button>
