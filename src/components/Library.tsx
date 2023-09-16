@@ -16,20 +16,25 @@ const bebas_neue = Bebas_Neue({
 
 export default function Library() {
     const { data: session, status } = useSession();
+
+    const playlists = [
+        '1LdfTs1ksJzE7k0pN09FKr',
+        '37i9dQZF1E8Ep6B1tFwURi',
+        '37i9dQZF1DWSPMbB1kcXmo',
+        '0LbRnQanwBZvokjkYaV1bR',
+        '07r0pMwLekrqdt5fKQHsKV',
+        '37i9dQZF1E4kMz3pHspFDx',
+    ];
+
     return (
         <>
             {session ? (
-                <div className='flex flex-col w-full'>
-                    <div className='flex flex-row justify-center items-center pt-12 gap-6'>
-                        <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/37i9dQZF1E35EHS4sKqRJq?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                        <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/37i9dQZF1E38Isr4yL497m?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                        <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/2HdTWOys41H1CZjTnhOz2k?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                    </div>
-                    <div className='flex flex-row justify-center items-center pt-12 gap-6'>
-                        <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/37i9dQZF1E38Isr4yL497m?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                        <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/2HdTWOys41H1CZjTnhOz2k?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                        <iframe className='opacity-75' src="https://open.spotify.com/embed/playlist/37i9dQZF1E35EHS4sKqRJq?utm_source=generator" width="30%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
+                    {playlists.map((playlistId) => (
+                        <div key={playlistId} className="">
+                            <iframe className='opacity-75' src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`} width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        </div>
+                    ))}
                 </div>
             ) : (
                 <div className='flex flex-col justify-center items-center py-20 text-center gap-6'>
