@@ -1,4 +1,3 @@
-"use client"
 import { Montserrat, Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import NET from "vanta/dist/vanta.net.min";
@@ -6,9 +5,6 @@ import Library from '../components/Library'
 import AIGen from '../components/AIGen'
 import Footer from '../components/Footer'
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
-import Loading from "../../public/Growing rings.gif"
-import Image from 'next/image'
-import Link from 'next/link';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
