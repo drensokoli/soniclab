@@ -39,17 +39,9 @@ export default function AIGen() {
                             type="button"
                             className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
                             data-te-ripple-init
-                            // onClick={() => createPlaylist(userId, accessToken, 'SpotiLab-01', songIds)}
+                        // onClick={() => createPlaylist(userId, accessToken, 'SpotiLab-01', songIds)}
                         >
                             Generate Songs
-                        </button>
-                        <button
-                            type="button"
-                            className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
-                            data-te-ripple-init
-                            onClick={() => signOut()}
-                        >
-                            Sign Out
                         </button>
                     </div>
                 </>
