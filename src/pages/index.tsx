@@ -115,8 +115,8 @@ export default function Home() {
 
             <Tabs value="monthly" className="w-5/6">
               <TabsHeader>
-                <Tab value="monthly" className={`${montserrat.className}`}>Library</Tab>
-                <Tab value="aigen" className={`${montserrat.className}`}>AI Gen</Tab>
+                <Tab value="monthly" className={`${montserrat.className}`}>SpotiLab Library</Tab>
+                <Tab value="aigen" className={`${montserrat.className}`}>SpotiLab Generator</Tab>
               </TabsHeader>
               <TabsBody>
                 <TabPanel value="monthly">
