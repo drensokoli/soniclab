@@ -6,8 +6,6 @@ export default function Document() {
       <title>SpotiLab</title>
       <meta name="SpotiLab" content="" />
 
-      <script src="three.r134.min.js" defer></script>
-      <script src="vanta.birds.min.js" defer></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" defer></script>
       <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" defer></script>
 
@@ -19,11 +17,6 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-
-        <script src="three.r134.min.js" defer></script>
-        <script src="vanta.birds.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" defer></script>
 
       </body>
     </Html>
