@@ -1,6 +1,6 @@
 import { Montserrat, Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 const montserrat = Montserrat({
     subsets: ['latin'],
@@ -29,25 +29,13 @@ export default function Library() {
     return (
         <>
             {session ? (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
-                        {playlists.map((playlistId) => (
-                            <div key={playlistId} className="">
-                                <iframe className='opacity-75' src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`} width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                            </div>
-                        ))}
-                    </div>
-                    <div className='flex flex-row justify-center'>
-                        <button
-                            type="button"
-                            className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
-                            data-te-ripple-init
-                            onClick={() => signOut()}
-                        >
-                            Sign Out
-                        </button>
-                    </div>
-                </>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
+                    {playlists.map((playlistId) => (
+                        <div key={playlistId} className="">
+                            <iframe className='opacity-75' src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`} width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        </div>
+                    ))}
+                </div>
             ) : (
                 <div className='flex flex-col justify-center items-center py-20 text-center gap-6'>
                     <h1 className='text-2xl md:text-3xl text-gray-300'>You are not signed in.</h1>
