@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 import { Montserrat, Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import NET from "vanta/dist/vanta.net.min";
