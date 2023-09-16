@@ -8,6 +8,7 @@ import Footer from '../components/Footer'
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
 import Loading from "../../public/Growing rings.gif"
 import Image from 'next/image'
+import Link from 'next/link';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -81,6 +82,7 @@ export default function Home() {
         </div>
       ) : (
         <>
+
           <div ref={vantaRef} className='fixed w-screen h-screen'></div>
           <div className='flex flex-col justify center items-center h-auto min-h-screen'>
             <div className='flex justify-center items-center h-1/4 py-16 z-10'>
