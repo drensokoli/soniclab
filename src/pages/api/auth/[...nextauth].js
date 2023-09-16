@@ -18,12 +18,10 @@ export const authOptions = {
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    }),
+      scope: 'user-read-email playlist-modify-public playlist-modify-private'
+    })
   ],
   secret: process.env.JWT_SECRET,
-  pages: {
-    signIn: '/auth/signin',
-  }
 };
 
 export default (req, res) => NextAuth(req, res, authOptions);
