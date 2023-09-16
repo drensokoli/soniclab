@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 import { Montserrat, Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import NET from "vanta/dist/vanta.net.min";
@@ -6,7 +6,7 @@ import Library from '../components/Library'
 import AIGen from '../components/AIGen'
 import Footer from '../components/Footer'
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image'
 
 const montserrat = Montserrat({
@@ -22,15 +22,15 @@ const bebas_neue = Bebas_Neue({
 })
 
 export default function Home() {
-  const { data: session, status } = useSession();
-  const user = session?.user?.name;
-
   const [isLoading, setIsLoading] = useState(true);
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef(null);
+  const { data: session, status } = useSession();
+  const user = session?.user?.name;
+  const userImage = session?.user?.image;
 
   useEffect(() => {
-    if (!isLoading && !vantaEffect && vantaRef.current !== null) {
+    if (!isLoading && !vantaEffect && vantaRef.current) {
       const spacing = window.innerWidth >= 640 ? 20 : 30;
       setVantaEffect(
         NET({
@@ -48,15 +48,11 @@ export default function Home() {
         })
       )
     }
-  }, [isLoading, vantaEffect])
 
-  // useEffect(() => {
-  //   return () => {
-  //     if (vantaEffect) {
-  //       vantaEffect.destroy();
-  //     }
-  //   };
-  // }, [vantaEffect]);
+    return () => {
+      if (vantaEffect) vantaEffect.destroy()
+    }
+  }, [isLoading, vantaEffect])
 
   useEffect(() => {
     setTimeout(() => {
@@ -95,20 +91,10 @@ export default function Home() {
               <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
               {session ?
                 (
-                  <div className='flex flex-col justify-center items-center gap-6'>
-                    <div className='flex flex-row justify-center items-center gap-2'>
-                      <Image src={session?.user?.image?.toString()!} alt="Profile image" className="rounded-full mx-auto w-12 h-12 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={20} height={20} />
-                      <h1 className='text-gray-300 text-lg text-bold z-10 '>{user}</h1>
-                    </div>
 
-                    <button
-                      type="button"
-                      className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
-                      data-te-ripple-init
-                      onClick={() => signOut()}
-                    >
-                      Sign Out
-                    </button>
+                  <div className='flex flex-row justify-center items-center gap-2'>
+                    <Image src={session?.user?.image?.toString()!} alt="Profile image" className="rounded-full mx-auto w-12 h-12 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={20} height={20} />
+                    <h1 className='text-gray-300 text-lg text-bold z-10 '>{user}</h1>
                   </div>
                 ) : (
                   <>
