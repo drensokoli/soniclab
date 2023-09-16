@@ -85,10 +85,10 @@ export default function Home() {
       ) : (
         <>
 
-          <script src="three.r134.min.js" async></script>
-          <script src="vanta.birds.min.js" async></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" async></script>
-          <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" async></script>
+          <script src="three.r134.min.js" defer></script>
+          <script src="vanta.birds.min.js" defer></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" defer></script>
+          <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" defer></script>
 
           <div ref={vantaRef} className='fixed w-screen h-screen'></div>
           <div className='flex flex-col justify center items-center h-auto min-h-screen'>
