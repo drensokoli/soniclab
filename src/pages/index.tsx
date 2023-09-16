@@ -56,7 +56,7 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 2000);
   }, [])
 
   return (
@@ -86,7 +86,7 @@ export default function Home() {
 
           <div ref={vantaRef} className='fixed w-screen h-screen'></div>
           <div className='flex flex-col justify center items-center h-auto min-h-screen'>
-            <div className='flex flex-col justify-center items-center h-1/4 py-16 z-10 gap-4'>
+            <div className='flex flex-col justify-center items-center h-1/4 pb-10 pt-16 z-10 gap-4'>
               <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
               {session ?
                 (
