@@ -50,13 +50,13 @@ export default function Home() {
     }
   }, [isLoading, vantaEffect])
 
-  useEffect(() => {
-    return () => {
-      if (vantaEffect) {
-        vantaEffect.destroy();
-      }
-    };
-  }, [vantaEffect]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (vantaEffect) {
+  //       vantaEffect.destroy();
+  //     }
+  //   };
+  // }, [vantaEffect]);
 
   useEffect(() => {
     setTimeout(() => {
