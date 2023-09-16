@@ -1,8 +1,7 @@
-import { signOut, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { Montserrat, Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import { createPlaylist } from '../lib/spotify';
-import { signIn } from "next-auth/react"
 
 const montserrat = Montserrat({
     subsets: ['latin'],
