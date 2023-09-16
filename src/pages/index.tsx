@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 import { Montserrat, Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import NET from "vanta/dist/vanta.net.min";
@@ -8,7 +8,6 @@ import Footer from '../components/Footer'
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image'
-import { useRouter } from 'next/router';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -23,23 +22,15 @@ const bebas_neue = Bebas_Neue({
 })
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const user = session?.user?.name;
+
   const [isLoading, setIsLoading] = useState(true);
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef(null);
 
-  const { data: session, status } = useSession();
-  const user = session?.user?.name;
-
-  const router = useRouter();
-
-  const handleSignOut = () => {
-    signOut().then(() => {
-      router.reload();
-    });
-  };
-
   useEffect(() => {
-    if (!isLoading && !vantaEffect && vantaRef.current) {
+    if (!isLoading && !vantaEffect && vantaRef.current !== null) {
       const spacing = window.innerWidth >= 640 ? 20 : 30;
       setVantaEffect(
         NET({
@@ -57,11 +48,15 @@ export default function Home() {
         })
       )
     }
-
-    return () => {
-      if (vantaEffect) vantaEffect.destroy()
-    }
   }, [isLoading, vantaEffect])
+
+  useEffect(() => {
+    return () => {
+      if (vantaEffect) {
+        vantaEffect.destroy();
+      }
+    };
+  }, [vantaEffect]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -110,7 +105,7 @@ export default function Home() {
                       type="button"
                       className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
                       data-te-ripple-init
-                      onClick={handleSignOut}
+                      onClick={() => signOut()}
                     >
                       Sign Out
                     </button>
