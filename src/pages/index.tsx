@@ -58,7 +58,7 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 1500);
   }, [])
 
   return (
@@ -116,7 +116,7 @@ export default function Home() {
             <Tabs value="monthly" className="w-5/6">
               <TabsHeader>
                 <Tab value="monthly" className={`${montserrat.className}`}>SpotiLab Library</Tab>
-                <Tab value="aigen" className={`${montserrat.className}`}>SpotiLab Generator</Tab>
+                <Tab value="aigen" className={`${montserrat.className}`}>Playlist Generator</Tab>
               </TabsHeader>
               <TabsBody>
                 <TabPanel value="monthly">
