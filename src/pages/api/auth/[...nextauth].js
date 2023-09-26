@@ -3,7 +3,7 @@ import SpotifyProvider from 'next-auth/providers/spotify';
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from "../../../lib/mongodb"
 
-const db = process.env.NEXT_PUBLIC_MONGODB_DB_NAME;
+const db = process.env.MONGODB_DB_NAME;
 
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise, {
@@ -18,9 +18,21 @@ export const authOptions = {
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-      scope: 'user-read-email playlist-modify-public playlist-modify-private'
-    })
+      authorization: "https://accounts.spotify.com/authorize?scope=user-read-currently-playing,user-read-recently-played,user-top-read,user-read-email,playlist-modify-public,playlist-modify-private"
+    }),
   ],
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.refresh_token;
+      }
+      return token;
+    },
+    async session(session, user) {
+      session.user = user;
+      return session;
+    },
+  },
   secret: process.env.JWT_SECRET,
 };
 

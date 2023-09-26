@@ -5,10 +5,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { userEmail } = req.body;
 
-    const dbName = process.env.NEXT_PUBLIC_MONGODB_DB_NAME;
+    const dbName = process.env.MONGODB_DB_NAME;
+    const collectionName = process.env.MONGODB_COLLECTION_NAME;
 
     const client = await clientPromise;
-    const collection = client.db(dbName).collection('users');
+    const collection = client.db(dbName).collection("accounts");
     const user = await collection.findOne({ email: userEmail });
 
     if (user) {
