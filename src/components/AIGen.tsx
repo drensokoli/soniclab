@@ -86,6 +86,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                             <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
                                 {playlistNames.map((playlistName, index) => (
                                     <button
+                                        key={index}
                                         className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded'
                                         onClick={() => setPlaylistName(playlistName)}
                                     >
