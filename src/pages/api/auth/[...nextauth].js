@@ -21,18 +21,6 @@ export const authOptions = {
       authorization: "https://accounts.spotify.com/authorize?scope=user-read-currently-playing,user-read-recently-played,user-top-read,user-read-email,playlist-modify-public,playlist-modify-private"
     }),
   ],
-  callbacks: {
-    async jwt({ token, account }) {
-      if (account) {
-        token.accessToken = account.refresh_token;
-      }
-      return token;
-    },
-    async session(session, user) {
-      session.user = user;
-      return session;
-    },
-  },
   secret: process.env.JWT_SECRET,
 };
 

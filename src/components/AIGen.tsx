@@ -8,19 +8,36 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     const { data: session, status } = useSession();
     const router = useRouter();
 
-    const [userId, setUserId] = useState('');
+    const [providerAccountId, setProviderAccountId] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
-    
-    const fetchUser = async () => {
-        const res = await fetch('/api/getUser');
-        const data = await res.json();
 
-        setUserId(data.providerAccountId);
-        setRefreshToken(data.refresh_token);
+    async function fetchUser() {
+        try {
+            const response = await fetch('/api/getUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userEmail: session?.user?.email,
+                }),
+            });
+            const data = await response.json();
+
+            setProviderAccountId(data.providerAccountId);
+            setRefreshToken(data.refresh_token);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
+
+    useEffect(() => {
+        if (session)
+            fetchUser();
+    }, [])
 
     const fetchSongIds = async () => {
         try {
@@ -45,18 +62,14 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
             ];
 
             const ids = await searchSongs(songNames, refreshToken, spotifyClientId, spotifyClientSecret);
-            
+
             setPlaylistNames(playlistNames);
             setSongIds(ids);
+            
         } catch (error) {
             console.error(error);
         }
     };
-
-    useEffect(() => {
-        fetchUser();
-    }, [])
-
 
     return (
         <>
@@ -115,7 +128,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                 type="button"
                                 className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
                                 data-te-ripple-init
-                                onClick={() => createPlaylist(userId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret).then(router.reload)}
+                                onClick={() => createPlaylist(providerAccountId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret)}
                             >
                                 Create Playlist
                             </button>

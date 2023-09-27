@@ -9,11 +9,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const collectionName = process.env.MONGODB_COLLECTION_NAME;
 
     const client = await clientPromise;
-    const collection = client.db(dbName).collection("accounts");
+    const collection = client.db(dbName).collection("users");
     const user = await collection.findOne({ email: userEmail });
 
     if (user) {
-      res.status(200).json(user);
+      const id = user._id;
+
+      const client = await clientPromise;
+      const collection = client.db(dbName).collection("accounts");
+      const userAccount = await collection.findOne({ userId: id });
+      
+      res.status(200).json(userAccount);
     } else {
       res.status(404).json({ message: 'User not found' });
     }
