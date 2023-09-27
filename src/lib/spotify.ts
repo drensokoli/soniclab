@@ -1,11 +1,57 @@
-import axios from 'axios';
+import { forEachChild } from "typescript";
 
-interface PlaylistResponse {
-    id: string;
-}
-export async function createPlaylist(userId: string, accessToken: string, playlistName: string, songIds: string[]): Promise<void> {
+const getAccessToken = async (refresh_token: any, spotifyClientId: string, spotifyClientSecret: string) => {
+
+    const basic = Buffer.from(`${spotifyClientId}:${spotifyClientSecret}`).toString('base64');
+    const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
+
+    const response = await fetch(TOKEN_ENDPOINT, {
+        method: 'POST',
+        headers: {
+            Authorization: `Basic ${basic}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            grant_type: 'refresh_token',
+            refresh_token,
+        }),
+    });
+
+    return response.json();
+};
+
+export async function getSongsByName(songNames: string[], refreshToken: string, spotifyClientId: string, spotifyClientSecret: string): Promise<void> {
+
+    const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+
+    const songs = [];
+
+
+    songNames.forEach(async songName => {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${songName}&type=track&limit=1`, {
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        songs.push(data);
+        return data;
+    });
+    
+    return;
+
+};
+
+export async function createPlaylist(userId: string, refreshToken: string, playlistName: string, songIds: string[], spotifyClientId: string, spotifyClientSecret: string): Promise<void> {
     try {
-        // Create a new playlist
+        const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+
         const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
             method: 'POST',
             headers: {
@@ -26,7 +72,6 @@ export async function createPlaylist(userId: string, accessToken: string, playli
         const data = await response.json();
         const playlistId = data.id;
 
-        // Add tracks to the playlist
         const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
             method: 'POST',
             headers: {

@@ -8,7 +8,6 @@ import Footer from '../components/Footer'
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image'
-import { sign } from 'crypto';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -22,7 +21,7 @@ const bebas_neue = Bebas_Neue({
   style: 'normal',
 })
 
-export default function Home() {
+export default function Home({ spotifyClientId, spotifyClientSecret } : { spotifyClientId: string, spotifyClientSecret: string}) {
   const [isLoading, setIsLoading] = useState(true);
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef(null);
@@ -123,7 +122,7 @@ export default function Home() {
                   <Library />
                 </TabPanel>
                 <TabPanel value="aigen">
-                  <AIGen />
+                  <AIGen spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
                 </TabPanel>
               </TabsBody>
             </Tabs>
@@ -134,4 +133,15 @@ export default function Home() {
       )}
     </>
   )
+}
+
+export const getServerSideProps = async () => {
+  const spotifyClientId = process.env.SPOTIFY_CLIENT_ID;
+  const spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  return {
+    props: {
+      spotifyClientId,
+      spotifyClientSecret
+    }
+  }
 }
