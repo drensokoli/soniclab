@@ -11,11 +11,12 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
+    const user = session?.user;
 
     const fetchUser = async () => {
         const res = await fetch('/api/getUser');
         const data = await res.json();
-        console.log("data: ", data);
+        // console.log("data: ", data);
 
         setUserId(data.providerAccountId);
         setRefreshToken(data.refresh_token);
@@ -37,12 +38,14 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
         ];
 
         const playlistNames = [
-            'SpotiLab One',
-            'SpotiLab Two',
-            'SpotiLab Three',
-            'SpotiLab Four',
-            'SpotiLab Five',
-            'SpotiLab Six',
+            "90s Hip-Hop Throwback",
+            "Vintage Vibe: Hip-Hop Edition",
+            "Nostalgic Rap Jams",
+            "Decades of Dope Beats",
+            "Retro Rhythms: 90s Hip-Hop",
+            "Timeless Hip-Hop Classics",
+            "Old Skool Hip-Hop Chronicles",
+            "Backspin: 90s Hip-Hop Gems",
         ];
 
         setSongIds(songIds);
@@ -83,11 +86,18 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                     ) : (
                         <div className='flex flex-col justify-center items-center'>
                             <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Pick a name for your playlist</h1>
-                            <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+                            <input
+                                id="description"
+                                className="my-4 block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
+                                placeholder="Playlist Name"
+                                value={playlistName}
+                                onChange={(e) => setPlaylistName(e.target.value)}
+                            />
+                            <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
                                 {playlistNames.map((playlistName, index) => (
                                     <button
                                         key={index}
-                                        className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded'
+                                        className='bg-[#cf387a] hover:bg-[#a92e64] text-gray-200 py-1 px-2 rounded'
                                         onClick={() => setPlaylistName(playlistName)}
                                     >
                                         {playlistName}
