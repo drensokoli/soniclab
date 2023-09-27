@@ -1,6 +1,7 @@
 import { signIn, useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
-import { createPlaylist } from '../lib/spotify';
+import { createPlaylist, searchSongs } from '../lib/spotify';
+import { useRouter } from 'next/router';
 
 
 export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotifyClientId: string, spotifyClientSecret: string }) {
@@ -12,45 +13,46 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
     const user = session?.user;
-
+    const router = useRouter();
+    
     const fetchUser = async () => {
         const res = await fetch('/api/getUser');
         const data = await res.json();
-        // console.log("data: ", data);
 
         setUserId(data.providerAccountId);
         setRefreshToken(data.refresh_token);
     }
 
-    const generateSongs = async () => {
+    const fetchSongIds = async () => {
+        try {
 
-        const songNames = [
-            'track:Gin%20and%20Juice%20artist:Snoop%20Dogg&type=track',
-            'track:California%20Love%20artist:2Pac%20feat.%20Dr.%20Dre&type=track',
-            'track:My%20Name%20Is%20artist:Eminem&type=track',
-            'track:Mo%20Money%20Mo%20Problems%20artist:The%20Notorious%20B.I.G.%20feat.%20Puff%20Daddy%20and%20Mase&type=track',
-            'track:Hypnotize%20artist:The%20Notorious%20B.I.G.&type=track',
-        ];
+            const songNames = [
+                'track:California%20Love%20artist:2Pac%20&type=track',
+                'track:Gin%20and%20Juice%20artist:Snoop%20Dogg&type=track',
+                'track:My%20Name%20Is%20artist:Eminem&type=track',
+                'track:Mo%20Money%20Mo%20Problems%20artist:The%20Notorious%20B.I.G.%20feat.%20Puff%20Daddy%20and%20Mase&type=track',
+                'track:Hypnotize%20artist:The%20Notorious%20B.I.G.&type=track',
+            ];
 
-        const songIds = [
-            '4VMOFyIl8weDI5BXyti7sn',
-            '4neUUFnrFl1YrdtdZOAwBV',
-        ];
+            const playlistNames = [
+                "90s Hip-Hop Throwback",
+                "Vintage Vibe: Hip-Hop Edition",
+                "Nostalgic Rap Jams",
+                "Decades of Dope Beats",
+                "Retro Rhythms: 90s Hip-Hop",
+                "Timeless Hip-Hop Classics",
+                "Old Skool Hip-Hop Chronicles",
+                "Backspin: 90s Hip-Hop Gems",
+            ];
 
-        const playlistNames = [
-            "90s Hip-Hop Throwback",
-            "Vintage Vibe: Hip-Hop Edition",
-            "Nostalgic Rap Jams",
-            "Decades of Dope Beats",
-            "Retro Rhythms: 90s Hip-Hop",
-            "Timeless Hip-Hop Classics",
-            "Old Skool Hip-Hop Chronicles",
-            "Backspin: 90s Hip-Hop Gems",
-        ];
-
-        setSongIds(songIds);
-        setPlaylistNames(playlistNames);
-    }
+            const ids = await searchSongs(songNames, refreshToken, spotifyClientId, spotifyClientSecret);
+            
+            setPlaylistNames(playlistNames);
+            setSongIds(ids);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         fetchUser();
@@ -78,22 +80,22 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                 type="button"
                                 className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
                                 data-te-ripple-init
-                                onClick={() => generateSongs()}
+                                onClick={() => fetchSongIds()}
                             >
                                 Generate Songs
                             </button>
                         </div>
                     ) : (
-                        <div className='flex flex-col justify-center items-center'>
-                            <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Pick a name for your playlist</h1>
+                        <div className='flex flex-col justify-center items-center gap-4'>
+                            <h1 className='text-xl py-4 md:text-2xl font-bold text-gray-300 text-center'>Pick a name for your playlist</h1>
                             <input
                                 id="description"
-                                className="my-4 block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
+                                className=" block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
                                 placeholder="Playlist Name"
                                 value={playlistName}
                                 onChange={(e) => setPlaylistName(e.target.value)}
                             />
-                            <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
+                            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
                                 {playlistNames.map((playlistName, index) => (
                                     <button
                                         key={index}
@@ -114,7 +116,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                 type="button"
                                 className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
                                 data-te-ripple-init
-                                onClick={() => createPlaylist(userId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret)}
+                                onClick={() => createPlaylist(userId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret).then(router.reload)}
                             >
                                 Create Playlist
                             </button>

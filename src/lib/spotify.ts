@@ -20,6 +20,32 @@ const getAccessToken = async (refresh_token: any, spotifyClientId: string, spoti
     return response.json();
 };
 
+export async function searchSongs(songNames: string[], refreshToken: string, spotifyClientId: string, spotifyClientSecret: string): Promise<string[]> {
+    const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+    const songIds: string[] = [];
+  
+    for (const songName of songNames) {
+      const response = await fetch(`https://api.spotify.com/v1/search?q=${songName}&type=track&limit=1`, {
+        headers: {
+          'Authorization': 'Bearer ' + accessToken
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      const track = data.tracks.items[0];
+      if (track) {
+        songIds.push(track.id);
+      }
+    }
+  
+    return songIds;
+  }
+  
+
 export async function getSongsByName(songNames: string[], refreshToken: string, spotifyClientId: string, spotifyClientSecret: string): Promise<void> {
 
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
