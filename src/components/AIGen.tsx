@@ -6,14 +6,13 @@ import { useRouter } from 'next/router';
 
 export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotifyClientId: string, spotifyClientSecret: string }) {
     const { data: session, status } = useSession();
+    const router = useRouter();
 
     const [userId, setUserId] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
-    const user = session?.user;
-    const router = useRouter();
     
     const fetchUser = async () => {
         const res = await fetch('/api/getUser');
@@ -90,7 +89,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                             <h1 className='text-xl py-4 md:text-2xl font-bold text-gray-300 text-center'>Pick a name for your playlist</h1>
                             <input
                                 id="description"
-                                className=" block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
+                                className=" block p-2.5 w-full md:w-4/5 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
                                 placeholder="Playlist Name"
                                 value={playlistName}
                                 onChange={(e) => setPlaylistName(e.target.value)}
