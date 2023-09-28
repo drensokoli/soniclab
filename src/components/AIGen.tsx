@@ -78,7 +78,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
 
     return (
         <>
-            <div>
+            {/* <div>
                 {infoBubble && (
                     <div className='h-[80px] w-[250px] fixed top-12 right-12  flex flex-col justify-center items-center  bg-[#f33f81] rounded-xl text-gray-200'>
                         {playlistId ? (
@@ -93,7 +93,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                         )}
                     </div>
                 )}
-            </div >
+            </div > */}
             {
                 session ? (
                     <>
