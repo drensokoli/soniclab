@@ -15,8 +15,6 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
 
-    const [infoBubble, setInfoBubble] = useState(false);
-
     const [playlistId, setPlaylistId] = useState('');
 
     async function fetchUser() {
@@ -78,25 +76,21 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
 
     return (
         <>
+            {playlistId && (
+                <div className='h-[80px] w-[250px] fixed top-12 right-12  flex flex-col justify-center items-center  bg-[#f33f81] rounded-xl text-gray-200'>
+                    <a href={`https://open.spotify.com/playlist/${playlistId}?si=d0a3c3daf8ce4079`} target='_blank' rel='noreferrer'>
+                        <div className='text-center z-20 flex flex-col gap-2 justify-center items-center'>
+                            <h1>{playlistName}</h1>
+                            <SiSpotify className='w-5 h-5' />
+                        </div>
+                    </a>
+                </div>
+            )}
             {
                 session ? (
                     <>
                         {!(songIds.length > 0) ? (
                             <div className='flex flex-col justify-center items-center' id='song-generator'>
-                                {infoBubble && (
-                                    <div className='h-[80px] w-[250px] fixed top-12 right-12  flex flex-col justify-center items-center  bg-[#f33f81] rounded-xl text-gray-200'>
-                                        {playlistId ? (
-                                            <a href={`https://open.spotify.com/playlist/${playlistId}?si=d0a3c3daf8ce4079`} target='_blank'>
-                                                <div className='text-center z-20 flex flex-col gap-2 justify-center items-center'>
-                                                    <h1>{playlistName}</h1>
-                                                    <SiSpotify className='w-5 h-5' />
-                                                </div>
-                                            </a>
-                                        ) : (
-                                            <h1>Playlist failed to be created</h1>
-                                        )}
-                                    </div>
-                                )}
                                 <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Write your playlist description here</h1>
                                 <textarea id="description" rows={4} className="block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200" placeholder="The playlist should contain HipHop and R&B songs from the 90s..."></textarea>
                                 <div className='flex justify-center items-center w-full md:w-3/4 py-4'>
@@ -151,13 +145,12 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                     onClick={() => {
                                         createPlaylist(providerAccountId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret)
                                             .then((playlistId) => {
+                                                playlistId && setSongIds([]);
                                                 setPlaylistId(playlistId);
-                                                setSongIds([]);
-                                                setInfoBubble(true);
                                                 setTimeout(() => {
                                                     setPlaylistName('');
-                                                    setInfoBubble(false);
-                                                }, 4000);
+                                                    setPlaylistId('');
+                                                }, 5000);
                                             });
                                     }}
                                 >
