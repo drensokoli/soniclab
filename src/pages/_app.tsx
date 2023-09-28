@@ -20,7 +20,21 @@ export default function App({ Component, pageProps, router }: AppProps) {
 }
 
 function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
-  
+  const { data: session } = useSession();
+  const getUser = async () => {
+    const response = await fetch('/api/getUser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail: session?.user?.email }),
+    });
+    const user = await response.json();
+  };
+
+  useEffect(() => {
+    if (session)
+    getUser();
+  }, [session, router.pathname]);
+
   return (
     <div>
       <Component {...pageProps} />
