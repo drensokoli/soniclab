@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import connectToDatabase from '../../lib/mongodb';
 import clientPromise from '../../lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,15 +10,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const collectionName = process.env.MONGODB_COLLECTION_NAME;
 
     const client = await clientPromise;
-    const collection = client.db(dbName).collection("users");
-    const user = await collection.findOne({ email: userEmail });
+    const db = client.db(dbName);
+    const usersCollection = db.collection("users");
+    const accountsCollection = db.collection("accounts");
+
+    const user = await usersCollection.findOne({ email: userEmail });
 
     if (user) {
       const id = user._id;
-
-      const client = await clientPromise;
-      const collection = client.db(dbName).collection("accounts");
-      const userAccount = await collection.findOne({ userId: id });
+      const userAccount = await accountsCollection.findOne({ userId: id });
       
       res.status(200).json(userAccount);
     } else {
