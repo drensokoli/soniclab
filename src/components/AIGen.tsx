@@ -6,8 +6,7 @@ import { SiSpotify } from '@icons-pack/react-simple-icons';
 
 
 export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotifyClientId: string, spotifyClientSecret: string }) {
-    const { data: session, status } = useSession();
-    const router = useRouter();
+    const { data: session } = useSession();
 
     const [providerAccountId, setProviderAccountId] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
@@ -159,10 +158,8 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                                 setInfoBubble(true);
                                                 setTimeout(() => {
                                                     setPlaylistName('');
-                                                    setPlaylistId('');
                                                     setInfoBubble(false);
                                                 }, 4000);
-
                                             });
                                     }}
                                 >
