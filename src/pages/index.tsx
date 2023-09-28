@@ -22,12 +22,14 @@ const bebas_neue = Bebas_Neue({
 })
 
 export default function Home({ spotifyClientId, spotifyClientSecret } : { spotifyClientId: string, spotifyClientSecret: string}) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [vantaEffect, setVantaEffect] = useState<any>(null);
-  const vantaRef = useRef(null);
   const { data: session, status } = useSession();
   const user = session?.user?.name;
-  const userImage = session?.user?.image;
+  
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [vantaEffect, setVantaEffect] = useState<any>(null);
+  const vantaRef = useRef(null);
+
 
   useEffect(() => {
     if (!isLoading && !vantaEffect && vantaRef.current) {
