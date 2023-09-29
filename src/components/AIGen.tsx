@@ -1,16 +1,7 @@
 import { signIn, useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
 import { createPlaylist, searchSongs } from '../lib/spotify';
-import { useRouter } from 'next/router';
 import { SiSpotify } from '@icons-pack/react-simple-icons';
-import { Montserrat, Bebas_Neue } from 'next/font/google'
-
-const montserrat = Montserrat({
-    subsets: ['latin'],
-    weight: '500',
-    style: 'normal',
-})
-
 
 export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotifyClientId: string, spotifyClientSecret: string }) {
     const { data: session } = useSession();
@@ -81,6 +72,10 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
         }
     };
 
+    function removeSongId(songIdToRemove: string) {
+        setSongIds((prevSongIds) => prevSongIds.filter((songId) => songId !== songIdToRemove));
+    }
+
     return (
         <>
             {session ? (
@@ -133,24 +128,32 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                             <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Your generated songs</h1>
                             <div className='flex flex-col justify-center items-center w-full md:w-3/4'>
                                 {songIds.map((songId, index) => (
-                                    <iframe key={index} className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                                    <div className='flex flex-row items-center justify-center gap-2 w-full'>
+                                        <iframe key={index} className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                                        <button type="button" className="bg-[#cf387a] rounded-3xl p-2 inline-flex items-center justify-center text-white hover:bg-[#9c2a5b] mb-4"
+                                        onClick={() => removeSongId(songId)}
+                                        >
+                                            <span className="sr-only">Close menu</span>
+                                            <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 ))}
                             </div>
                             <button
                                 type="button"
-                                className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
+                                className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!playlistName ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 data-te-ripple-init
                                 onClick={() => {
                                     createPlaylist(providerAccountId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret)
                                         .then((playlistId) => {
                                             setPlaylistId(playlistId);
                                             setSongIds([]);
-                                            setTimeout(() => {
-                                                setPlaylistName('');
-                                                setPlaylistId('');
-                                            }, 4000);
+                                            setPlaylistName('');
                                         });
                                 }}
+                                disabled={!playlistName}
                             >
                                 Create Playlist
                             </button>
