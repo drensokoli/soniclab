@@ -134,8 +134,9 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                 {songIds.map((songId, index) => (
                                     <div key={index} className='flex flex-row items-center justify-center gap-2 w-full'>
                                         <iframe className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                                        <button type="button" className="bg-[#cf387a] rounded-3xl p-2 inline-flex items-center justify-center text-white hover:bg-[#9c2a5b] mb-4"
+                                        <button type="button" className={`bg-[#cf387a] rounded-3xl p-2 inline-flex items-center justify-center text-white hover:bg-[#9c2a5b] mb-4 ${!songIds.length <= 1 ? 'opacity-50 cursor-not-allowed mb-4' : ''}`}
                                             onClick={() => removeSongId(songId)}
+                                            disabled={songIds.length <= 1}
                                         >
                                             <span className="sr-only">Close menu</span>
                                             <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
