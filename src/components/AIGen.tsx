@@ -9,6 +9,8 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     const [providerAccountId, setProviderAccountId] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
 
+    const [description, setDescription] = useState('');
+
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
@@ -84,7 +86,9 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                         <>
                             <div className='flex flex-col justify-center items-center' id='song-generator'>
                                 <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Write your playlist description here</h1>
-                                <textarea id="description" rows={4} className="block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200" placeholder="The playlist should contain HipHop and R&B songs from the 90s..."></textarea>
+                                <textarea id="description" rows={4} className="block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200" placeholder="The playlist should contain HipHop and R&B songs from the 90s..."
+                                    onChange={(e) => setDescription(e.target.value)}
+                                ></textarea>
                                 <div className='flex justify-center items-center w-full md:w-3/4 py-4'>
                                     <div className='flex flex-row items-center cursor-pointer text-gray-300 hover:text-gray-400 w-fit'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -96,7 +100,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
 
                                 <button
                                     type="button"
-                                    className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
+                                    className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!description ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     data-te-ripple-init
                                     onClick={() => fetchSongIds()}
                                 >
@@ -128,10 +132,10 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                             <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Your generated songs</h1>
                             <div className='flex flex-col justify-center items-center w-full md:w-3/4'>
                                 {songIds.map((songId, index) => (
-                                    <div  key={index} className='flex flex-row items-center justify-center gap-2 w-full'>
+                                    <div key={index} className='flex flex-row items-center justify-center gap-2 w-full'>
                                         <iframe className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                                         <button type="button" className="bg-[#cf387a] rounded-3xl p-2 inline-flex items-center justify-center text-white hover:bg-[#9c2a5b] mb-4"
-                                        onClick={() => removeSongId(songId)}
+                                            onClick={() => removeSongId(songId)}
                                         >
                                             <span className="sr-only">Close menu</span>
                                             <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
