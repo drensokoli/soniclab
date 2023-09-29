@@ -108,19 +108,6 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                     Generate Songs
                                 </button>
                             </div>
-                            {playlistId && playlistName && (
-                                <div className='flex flex-col justify-center items-center py-8'>
-
-                                    <div className='border-2 border-white rounded-lg py-4 px-6 w-fit'>
-                                        <a href={`https://open.spotify.com/playlist/${playlistId}?si=d0a3c3daf8ce4079`} target='_blank' className='flex flex-row gap-2'>
-                                            <SiSpotify className='text-white w-6 h-6' />
-                                            <h1 className={`${montserrat.className} text-white`}>
-                                                {playlistName}
-                                            </h1>
-                                        </a>
-                                    </div>
-                                </div>
-                            )}
                         </>
                     ) : (
                         <div className='flex flex-col justify-center items-center gap-4'>
