@@ -128,8 +128,8 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                             <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Your generated songs</h1>
                             <div className='flex flex-col justify-center items-center w-full md:w-3/4'>
                                 {songIds.map((songId, index) => (
-                                    <div className='flex flex-row items-center justify-center gap-2 w-full'>
-                                        <iframe key={index} className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                                    <div  key={index} className='flex flex-row items-center justify-center gap-2 w-full'>
+                                        <iframe className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                                         <button type="button" className="bg-[#cf387a] rounded-3xl p-2 inline-flex items-center justify-center text-white hover:bg-[#9c2a5b] mb-4"
                                         onClick={() => removeSongId(songId)}
                                         >
