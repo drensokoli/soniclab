@@ -68,6 +68,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
 
             setPlaylistNames(playlistNames);
             setSongIds(ids);
+            setDescription('');
 
         } catch (error) {
             console.error(error);
@@ -103,6 +104,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                     className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!description ? 'opacity-50 cursor-not-allowed' : ''}`}
                                     data-te-ripple-init
                                     onClick={() => fetchSongIds()}
+                                    disabled={!description}
                                 >
                                     Generate Songs
                                 </button>
