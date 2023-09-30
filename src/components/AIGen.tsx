@@ -95,7 +95,20 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                     {loading ? (
                         <Loading height='h-[400px]' bgColor='' />
                     ) : !(songIds.length > 0) ? (
-                        <AIGenForm setDescription={setDescription} setRange={setRange} fetchSongIds={fetchSongIds} description={description} range={range} />
+                        <>
+                            <AIGenForm setDescription={setDescription} setRange={setRange} fetchSongIds={fetchSongIds} description={description} range={range} />
+                            {!playlistId &&
+                                <a href={`https://open.spotify.com/playlist/${playlistId}?si=4e338eb7220f49de`} className='flex flex-col justify-center items-center py-4'>
+                                    <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
+                                        <h1 className='text-gray-300'>Playlist created!</h1>
+                                        <div className='flex flex-row gap-2'>
+                                        <SiSpotify className='text-gray-300' />
+                                        <h1 className='text-gray-300'>{playlistName}</h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        </>
                     ) : (
                         <PlaylistCreator setPlaylistName={setPlaylistName} playlistNames={playlistNames} songIds={songIds} setSongIds={setSongIds} removeSongId={removeSongId} playlistName={playlistName} createPlaylist={createPlaylist} providerAccountId={providerAccountId} refreshToken={refreshToken} spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} setPlaylistId={setPlaylistId} setRange={setRange} />
                     )

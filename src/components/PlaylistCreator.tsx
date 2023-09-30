@@ -49,8 +49,10 @@ export default function PlaylistCreator({ setPlaylistName, playlistNames, songId
                         .then((playlistId: any) => {
                             setPlaylistId(playlistId);
                             setSongIds([]);
-                            setPlaylistName('');
                             setRange(25);
+                            setTimeout(() => {
+                                setPlaylistId('');
+                            }, 5000);
                         });
                 }}
                 disabled={!playlistName}
