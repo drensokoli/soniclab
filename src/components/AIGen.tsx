@@ -98,15 +98,12 @@ export default function AIGen({
                                 range={range}
                             />
                             {playlistId ? (
-                                <a target='_blank' href={`https://open.spotify.com/playlist/${playlistId}?si=4e338eb7220f49de`} className='flex flex-col justify-center items-center py-4'>
-                                    <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
-                                        <h1 className='text-gray-300'>Playlist created!</h1>
-                                        <div className='flex flex-row gap-2'>
-                                            <SiSpotify className='text-gray-300' />
-                                            {/* <h1 className='text-gray-300'>{playlistName}</h1> */}
-                                        </div>
+                                <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
+                                    <h1 className='text-gray-300'>Playlist created!</h1>
+                                    <div className='flex flex-row gap-2'>
+                                        <SiSpotify className='text-gray-300' />
                                     </div>
-                                </a>
+                                </div>
                             ) : null}
                         </>
                     ) : (
@@ -124,8 +121,7 @@ export default function AIGen({
                             setRange={setRange}
                             setPlaylistId={setPlaylistId}
                         />
-                    )
-                    }
+                    )}
                 </>
             ) : (
                 <NotSignedIn title='Please sign in to generate your AI Spotify playlist with SpotiLab' />
