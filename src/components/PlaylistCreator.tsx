@@ -12,7 +12,8 @@ export default function PlaylistCreator({
     refreshToken,
     spotifyClientId,
     spotifyClientSecret,
-    setRange
+    setRange,
+    setPlaylistId
 }: any) {
     return (
         <div className='flex flex-col justify-center items-center gap-4'>
@@ -60,7 +61,8 @@ export default function PlaylistCreator({
                 data-te-ripple-init
                 onClick={() => {
                     createPlaylist(providerAccountId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret)
-                        .then(() => {
+                        .then((playlistId: any) => {
+                            setPlaylistId(playlistId);
                             setSongIds([]);
                             setRange(25);
                         });

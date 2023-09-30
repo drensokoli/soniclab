@@ -19,12 +19,13 @@ export default function AIGen({
     refreshToken: string
 }) {
     const { data: session } = useSession();
-    
+
     const [description, setDescription] = useState('');
     const [range, setRange] = useState(25);
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
+    const [playlistId, setPlaylistId] = useState('');
     const [loading, setLoading] = useState(false);
 
     const fetchSongIds = async () => {
@@ -87,6 +88,11 @@ export default function AIGen({
                                 description={description}
                                 range={range}
                             />
+                            {playlistId ? (
+                                <div className='text-5xl bg-black'>set</div>
+                            ) : (
+                                <div className='text-5xl bg-black'>not set</div>
+                            )}
                         </>
                     ) : (
                         <PlaylistCreator setPlaylistName={setPlaylistName}
@@ -101,6 +107,7 @@ export default function AIGen({
                             spotifyClientId={spotifyClientId}
                             spotifyClientSecret={spotifyClientSecret}
                             setRange={setRange}
+                            setPlaylistId={setPlaylistId}
                         />
                     )
                     }

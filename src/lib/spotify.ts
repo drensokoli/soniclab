@@ -44,7 +44,7 @@ export async function searchSongs(songNames: string[], refreshToken: string, spo
     return songIds;
 }
 
-export async function createPlaylist(userId: string, refreshToken: string, playlistName: string, songIds: string[], spotifyClientId: string, spotifyClientSecret: string): Promise<void> {
+export async function createPlaylist(userId: string, refreshToken: string, playlistName: string, songIds: string[], spotifyClientId: string, spotifyClientSecret: string): Promise<string> {
     try {
         const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
@@ -83,10 +83,10 @@ export async function createPlaylist(userId: string, refreshToken: string, playl
             throw new Error(`HTTP error! status: ${addTracksResponse.status}`);
         }
 
-        return Promise.resolve();
+        return playlistId;
         
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        return '';
     }
 }
