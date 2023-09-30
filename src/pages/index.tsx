@@ -57,7 +57,10 @@ export default function Home({ spotifyClientId, spotifyClientSecret }: { spotify
   return (
     <>
       {isLoading ? (
-        <Loading height='h-screen' bgColor='bg-[#23153c]' />
+        <Loading
+          height='h-screen'
+          bgColor='bg-[#23153c]'
+        />
       ) : (
         <>
           <div ref={vantaRef} className='fixed w-screen h-screen'></div>
@@ -68,7 +71,10 @@ export default function Home({ spotifyClientId, spotifyClientSecret }: { spotify
                 <Profile />
               )}
             </div>
-            <Nav spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
+            <Nav
+              spotifyClientId={spotifyClientId}
+              spotifyClientSecret={spotifyClientSecret}
+            />
             <div className='flex flex-grow'></div>
             <Footer />
           </div>

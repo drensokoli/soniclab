@@ -1,4 +1,4 @@
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
 import { createPlaylist, searchSongs } from '../lib/spotify';
 import { SiSpotify } from '@icons-pack/react-simple-icons';
@@ -7,7 +7,13 @@ import AIGenForm from './AIGenForm';
 import PlaylistCreator from './PlaylistCreator';
 import NotSignedIn from './NotSignedIn';
 
-export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotifyClientId: string, spotifyClientSecret: string }) {
+export default function AIGen({
+    spotifyClientId,
+    spotifyClientSecret
+}: {
+    spotifyClientId: string,
+    spotifyClientSecret: string
+}) {
     const { data: session } = useSession();
     const [providerAccountId, setProviderAccountId] = useState('');
     const [refreshToken, setRefreshToken] = useState('');
@@ -17,7 +23,6 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
-    const [playlistId, setPlaylistId] = useState('');
     const [loading, setLoading] = useState(false);
 
     async function fetchUser() {
@@ -93,24 +98,33 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
             {session ? (
                 <>
                     {loading ? (
-                        <Loading height='h-[400px]' bgColor='' />
+                        <Loading
+                            height='h-[400px]'
+                            bgColor=''
+                        />
                     ) : !(songIds.length > 0) ? (
                         <>
-                            <AIGenForm setDescription={setDescription} setRange={setRange} fetchSongIds={fetchSongIds} description={description} range={range} />
-                            {/* {playlistId &&
-                                <a href={`https://open.spotify.com/playlist/${playlistId}?si=4e338eb7220f49de`} className='flex flex-col justify-center items-center py-4'>
-                                    <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-2 rounded-xl'>
-                                        <h1 className='text-gray-300'>Playlist created!</h1>
-                                        <div className='flex flex-row gap-2'>
-                                        <SiSpotify className='text-gray-300' />
-                                        <h1 className='text-gray-300'>{playlistName}</h1>
-                                        </div>
-                                    </div>
-                                </a>
-                            } */}
+                            <AIGenForm setDescription={setDescription}
+                                setRange={setRange}
+                                fetchSongIds={fetchSongIds}
+                                description={description}
+                                range={range}
+                            />
                         </>
                     ) : (
-                        <PlaylistCreator setPlaylistName={setPlaylistName} playlistNames={playlistNames} songIds={songIds} setSongIds={setSongIds} removeSongId={removeSongId} playlistName={playlistName} createPlaylist={createPlaylist} providerAccountId={providerAccountId} refreshToken={refreshToken} spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} setPlaylistId={setPlaylistId} setRange={setRange} />
+                        <PlaylistCreator setPlaylistName={setPlaylistName}
+                            playlistNames={playlistNames}
+                            songIds={songIds}
+                            setSongIds={setSongIds}
+                            removeSongId={removeSongId}
+                            playlistName={playlistName}
+                            createPlaylist={createPlaylist}
+                            providerAccountId={providerAccountId}
+                            refreshToken={refreshToken}
+                            spotifyClientId={spotifyClientId}
+                            spotifyClientSecret={spotifyClientSecret}
+                            setRange={setRange}
+                        />
                     )
                     }
                 </>

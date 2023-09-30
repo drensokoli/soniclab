@@ -1,12 +1,22 @@
-// NewComponent.js
 import React from 'react';
 
-
-export default function AIGenForm({ setDescription, setRange, fetchSongIds, description, range }: { setDescription: any, setRange: any, fetchSongIds: any, description: string, range: number })  {
+export default function AIGenForm({ setDescription,
+    setRange,
+    fetchSongIds,
+    description,
+    range
+}: {
+    setDescription: any,
+    setRange: any,
+    fetchSongIds: any,
+    description: string,
+    range: number
+}) {
     return (
         <div className='flex flex-col justify-center items-center' id='song-generator'>
             <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Write your playlist description here</h1>
-            <textarea id="description" rows={4} className="block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200" placeholder="The playlist should contain HipHop and R&B songs from the 90s..."
+            <textarea id="description" rows={4} className="block p-2.5 w-full md:w-3/4 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
+                placeholder="The playlist should contain HipHop and R&B songs from the 90s..."
                 onChange={(e) => setDescription(e.target.value)}
             ></textarea>
             <div className='flex justify-center items-center w-full md:w-3/4 pt-4'>
