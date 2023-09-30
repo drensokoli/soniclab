@@ -10,7 +10,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     const [refreshToken, setRefreshToken] = useState('');
 
     const [description, setDescription] = useState('');
-    const [range, setRange] = useState(50);
+    const [range, setRange] = useState(25);
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
@@ -99,16 +99,14 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                     </div>
                                 </div>
                                 <div className='w-full md:w-3/4 py-8'>
-                                    <h1 className='text-center font-bold text-2xl text-gray-200'>Number of songs: {range}</h1>
-                                    <label
-                                        htmlFor="customRange1"
-                                        className="mb-2 inline-block text-neutral-700 dark:text-neutral-200" />
+                                    <h1 className='text-center font-bold text-xl md:text-2xl text-gray-300'>Number of songs: <span className='border-b-2 border-gray-200'>{range}</span></h1>
                                     <input
                                         type="range"
-                                        className="transparent h-[4px] w-full cursor-pointer appearance-none border-transparent bg-neutral-200 dark:bg-neutral-600"
+                                        className="transparent h-[4px] w-full cursor-pointer accent-[#f33f81] border-transparent bg-neutral-200 dark:bg-neutral-600"
                                         id="customRange1"
                                         min={1}
                                         max={50}
+                                        defaultValue={25}
                                         onChange={(e) => setRange(parseInt(e.target.value))}
                                     />
                                 </div>
@@ -171,7 +169,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
                                             setPlaylistId(playlistId);
                                             setSongIds([]);
                                             setPlaylistName('');
-                                            setRange(50);
+                                            setRange(25);
                                         });
                                 }}
                                 disabled={!playlistName}
