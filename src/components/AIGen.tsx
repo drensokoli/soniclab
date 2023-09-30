@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { createPlaylist, searchSongs } from '../lib/spotify';
 import { SiSpotify } from '@icons-pack/react-simple-icons';
 import Loading from './Loading';
@@ -67,6 +67,15 @@ export default function AIGen({
         }
     };
 
+    useEffect(() => {
+        if (playlistId) {
+            setTimeout(() => {
+                setPlaylistId('');
+                setPlaylistName('');
+            }, 5000);
+        }
+    }, [playlistId]);
+
     function removeSongId(songIdToRemove: string) {
         setSongIds((prevSongIds) => prevSongIds.filter((songId) => songId !== songIdToRemove));
     }
@@ -89,10 +98,16 @@ export default function AIGen({
                                 range={range}
                             />
                             {playlistId ? (
-                                <div className='text-5xl bg-black'>set</div>
-                            ) : (
-                                <div className='text-5xl bg-black'>not set</div>
-                            )}
+                                <a target='_blank' href={`https://open.spotify.com/playlist/${playlistId}?si=4e338eb7220f49de`} className='flex flex-col justify-center items-center py-4'>
+                                    <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
+                                        <h1 className='text-gray-300'>Playlist created!</h1>
+                                        <div className='flex flex-row gap-2'>
+                                            <SiSpotify className='text-gray-300' />
+                                            <h1 className='text-gray-300'>{playlistName}</h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            ) : null}
                         </>
                     ) : (
                         <PlaylistCreator setPlaylistName={setPlaylistName}
