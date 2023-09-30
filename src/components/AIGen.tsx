@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPlaylist, searchSongs } from '../lib/spotify';
 import { SiSpotify } from '@icons-pack/react-simple-icons';
 import Loading from './Loading';
@@ -19,13 +19,12 @@ export default function AIGen({
     refreshToken: string
 }) {
     const { data: session } = useSession();
-
+    
     const [description, setDescription] = useState('');
     const [range, setRange] = useState(25);
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
-    const [playlistId, setPlaylistId] = useState('');
     const [loading, setLoading] = useState(false);
 
     const fetchSongIds = async () => {
@@ -67,15 +66,6 @@ export default function AIGen({
         }
     };
 
-    useEffect(() => {
-        if (playlistId) {
-            setTimeout(() => {
-                setPlaylistId('');
-                setPlaylistName('');
-            }, 5000);
-        }
-    }, [playlistId]);
-
     function removeSongId(songIdToRemove: string) {
         setSongIds((prevSongIds) => prevSongIds.filter((songId) => songId !== songIdToRemove));
     }
@@ -97,14 +87,6 @@ export default function AIGen({
                                 description={description}
                                 range={range}
                             />
-                            {playlistId ? (
-                                <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
-                                    <h1 className='text-gray-300'>Playlist created!</h1>
-                                    <div className='flex flex-row gap-2'>
-                                        <SiSpotify className='text-gray-300' />
-                                    </div>
-                                </div>
-                            ) : null}
                         </>
                     ) : (
                         <PlaylistCreator setPlaylistName={setPlaylistName}
@@ -119,9 +101,9 @@ export default function AIGen({
                             spotifyClientId={spotifyClientId}
                             spotifyClientSecret={spotifyClientSecret}
                             setRange={setRange}
-                            setPlaylistId={setPlaylistId}
                         />
-                    )}
+                    )
+                    }
                 </>
             ) : (
                 <NotSignedIn title='Please sign in to generate your AI Spotify playlist with SpotiLab' />
