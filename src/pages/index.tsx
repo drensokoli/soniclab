@@ -114,17 +114,17 @@ export default function Home({ spotifyClientId, spotifyClientSecret } : { spotif
               }
             </div>
 
-            <Tabs value="monthly" className="w-5/6">
+            <Tabs value="aigen" className="w-5/6">
               <TabsHeader>
-                <Tab value="monthly" className={`${montserrat.className}`}>SpotiLab Library</Tab>
-                <Tab value="aigen" className={`${montserrat.className}`}>Playlist Generator</Tab>
+                <Tab value="aigen" className={`${montserrat.className} px-2`}>Playlist Generator</Tab>
+                <Tab value="monthly" className={`${montserrat.className} px-5`}>SpotiLab Library</Tab>
               </TabsHeader>
               <TabsBody>
-                <TabPanel value="monthly">
-                  <Library />
-                </TabPanel>
                 <TabPanel value="aigen">
                   <AIGen spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
+                </TabPanel>
+                <TabPanel value="monthly">
+                  <Library />
                 </TabPanel>
               </TabsBody>
             </Tabs>

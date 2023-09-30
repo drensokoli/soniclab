@@ -14,8 +14,8 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
-
     const [playlistId, setPlaylistId] = useState('');
+    const [loading, setLoading] = useState(false);
 
     async function fetchUser() {
         try {
@@ -43,6 +43,7 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
     }, [])
 
     const fetchSongIds = async () => {
+        setLoading(true);
         try {
 
             const songNames = [
@@ -72,6 +73,10 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
 
         } catch (error) {
             console.error(error);
+        } finally {
+            setTimeout(() => {
+                setLoading(false);
+            }, 2000); // wait for 3 seconds before setting loading to false
         }
     };
 
@@ -83,7 +88,27 @@ export default function AIGen({ spotifyClientId, spotifyClientSecret }: { spotif
         <>
             {session ? (
                 <>
-                    {!(songIds.length > 0) ? (
+                    {loading ? (
+                        <div className='h-[400px] flex flex-col justify-center items-center gap-4'>
+                            <div className="cssload-loader-inner">
+                                <div className="cssload-cssload-loader-line-wrap-wrap">
+                                    <div className="cssload-loader-line-wrap"></div>
+                                </div>
+                                <div className="cssload-cssload-loader-line-wrap-wrap">
+                                    <div className="cssload-loader-line-wrap"></div>
+                                </div>
+                                <div className="cssload-cssload-loader-line-wrap-wrap">
+                                    <div className="cssload-loader-line-wrap"></div>
+                                </div>
+                                <div className="cssload-cssload-loader-line-wrap-wrap">
+                                    <div className="cssload-loader-line-wrap"></div>
+                                </div>
+                                <div className="cssload-cssload-loader-line-wrap-wrap">
+                                    <div className="cssload-loader-line-wrap"></div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : !(songIds.length > 0) ? (
                         <>
                             <div className='flex flex-col justify-center items-center' id='song-generator'>
                                 <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Write your playlist description here</h1>
