@@ -103,7 +103,7 @@ export default function AIGen({
                                         <h1 className='text-gray-300'>Playlist created!</h1>
                                         <div className='flex flex-row gap-2'>
                                             <SiSpotify className='text-gray-300' />
-                                            <h1 className='text-gray-300'>{playlistName}</h1>
+                                            {/* <h1 className='text-gray-300'>{playlistName}</h1> */}
                                         </div>
                                     </div>
                                 </a>
