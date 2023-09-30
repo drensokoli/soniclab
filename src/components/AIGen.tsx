@@ -9,46 +9,23 @@ import NotSignedIn from './NotSignedIn';
 
 export default function AIGen({
     spotifyClientId,
-    spotifyClientSecret
+    spotifyClientSecret,
+    providerAccountId,
+    refreshToken
 }: {
     spotifyClientId: string,
-    spotifyClientSecret: string
+    spotifyClientSecret: string,
+    providerAccountId: string,
+    refreshToken: string
 }) {
     const { data: session } = useSession();
-    const [providerAccountId, setProviderAccountId] = useState('');
-    const [refreshToken, setRefreshToken] = useState('');
-
+    
     const [description, setDescription] = useState('');
     const [range, setRange] = useState(25);
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
     const [loading, setLoading] = useState(false);
-
-    async function fetchUser() {
-        try {
-            const response = await fetch('/api/getUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userEmail: session?.user?.email,
-                }),
-            });
-            const data = await response.json();
-
-            setProviderAccountId(data.providerAccountId);
-            setRefreshToken(data.refresh_token);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    useEffect(() => {
-        if (session)
-            fetchUser();
-    }, [])
 
     const fetchSongIds = async () => {
 

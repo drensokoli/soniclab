@@ -14,7 +14,14 @@ const bebas_neue = Bebas_Neue({
   style: 'normal',
 })
 
-export default function Home({ spotifyClientId, spotifyClientSecret }: { spotifyClientId: string, spotifyClientSecret: string }) {
+export default function Home({
+  spotifyClientId,
+  spotifyClientSecret
+}: {
+  spotifyClientId: string,
+  spotifyClientSecret: string
+}) {
+  
   const { data: session } = useSession();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +29,35 @@ export default function Home({ spotifyClientId, spotifyClientSecret }: { spotify
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef(null);
 
+  const [providerAccountId, setProviderAccountId] = useState('');
+  const [refreshToken, setRefreshToken] = useState('');
+
+  async function fetchUser() {
+    try {
+      const response = await fetch('/api/getUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userEmail: session?.user?.email,
+        }),
+      });
+      const data = await response.json();
+
+      setProviderAccountId(data.providerAccountId);
+      setRefreshToken(data.refresh_token);
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  useEffect(() => {
+    if (session) {
+      fetchUser();
+    }
+  }, [session])
 
   useEffect(() => {
     if (!isLoading && !vantaEffect && vantaRef.current) {
@@ -74,6 +110,8 @@ export default function Home({ spotifyClientId, spotifyClientSecret }: { spotify
             <Nav
               spotifyClientId={spotifyClientId}
               spotifyClientSecret={spotifyClientSecret}
+              providerAccountId={providerAccountId}
+              refreshToken={refreshToken}
             />
             <div className='flex flex-grow'></div>
             <Footer />
