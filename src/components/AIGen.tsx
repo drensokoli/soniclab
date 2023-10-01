@@ -19,7 +19,7 @@ export default function AIGen({
     refreshToken: string
 }) {
     const { data: session } = useSession();
-    
+
     const [description, setDescription] = useState('');
     const [range, setRange] = useState(25);
     const [songIds, setSongIds] = useState<string[]>([]);
@@ -66,6 +66,24 @@ export default function AIGen({
         }
     };
 
+    const createPlaylistHandler = async () => {
+        setLoading(true);
+
+        try {
+            const playlistId = createPlaylist(providerAccountId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret);
+            setSongIds([]);
+            setRange(25);
+            setPlaylistName('');
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setLoading(false);
+            }, 2000);
+        }
+    };
+
     function removeSongId(songIdToRemove: string) {
         setSongIds((prevSongIds) => prevSongIds.filter((songId) => songId !== songIdToRemove));
     }
@@ -77,11 +95,12 @@ export default function AIGen({
                     {loading ? (
                         <Loading
                             height='h-[400px]'
-                            bgColor=''
+                            bgColor='transparent'
                         />
                     ) : !(songIds.length > 0) ? (
                         <>
-                            <AIGenForm setDescription={setDescription}
+                            <AIGenForm
+                                setDescription={setDescription}
                                 setRange={setRange}
                                 fetchSongIds={fetchSongIds}
                                 description={description}
@@ -89,21 +108,15 @@ export default function AIGen({
                             />
                         </>
                     ) : (
-                        <PlaylistCreator setPlaylistName={setPlaylistName}
+                        <PlaylistCreator
+                            setPlaylistName={setPlaylistName}
                             playlistNames={playlistNames}
                             songIds={songIds}
-                            setSongIds={setSongIds}
                             removeSongId={removeSongId}
                             playlistName={playlistName}
-                            createPlaylist={createPlaylist}
-                            providerAccountId={providerAccountId}
-                            refreshToken={refreshToken}
-                            spotifyClientId={spotifyClientId}
-                            spotifyClientSecret={spotifyClientSecret}
-                            setRange={setRange}
+                            createPlaylistHandler={createPlaylistHandler}
                         />
-                    )
-                    }
+                    )}
                 </>
             ) : (
                 <NotSignedIn title='Please sign in to generate your AI Spotify playlist with SpotiLab' />

@@ -1,9 +1,13 @@
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { useState } from 'react';
+import { Tooltip, Button } from "@material-tailwind/react";
 
 export default function Profile() {
     const { data: session, status } = useSession();
     const user = session?.user?.name;
+
+    const [checked, setChecked] = useState(false);
 
     return (
         <div className='flex flex-col justify-center items-center gap-6'>
@@ -17,7 +21,29 @@ export default function Profile() {
                 />
                 <h1 className='text-gray-300 text-lg text-bold z-10'>{user}</h1>
             </div>
+            <div className='flex flex-row gap-2 justify-center items-center'>
 
+                <h1 className='text-lg md:text-xl font-bold text-gray-300 text-center'>Generate monthly playlists?</h1>
+                <Tooltip
+                    content={
+                        <div className='flex flex-col justify-center items-center w-[200px]'>
+                            <h1 className='text-center'>
+                                SpotiLab will create a monthly playlist based on your top tracks of the last 4 weeks.
+                            </h1>
+                        </div>
+                    }
+
+                    placement="top"
+                    animate={{
+                        mount: { scale: 1, y: 0 },
+                        unmount: { scale: 0, y: 25 },
+                    }}>
+                    <label className="relative inline-flex items-center mr-5 cursor-pointer">
+                        <input type="checkbox" value="" className="sr-only peer" />
+                        <div className="w-11 h-6 bg-[#a2285c] rounded-full peer peer-focus:ring-4 peer-focus:ring-[#7c1f44] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#f33f81]"></div>
+                    </label>
+                </Tooltip>
+            </div>
             <button
                 type="button"
                 className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"

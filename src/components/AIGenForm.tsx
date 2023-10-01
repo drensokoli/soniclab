@@ -1,3 +1,4 @@
+import { Tooltip } from '@material-tailwind/react';
 import React from 'react';
 
 export default function AIGenForm({ setDescription,
@@ -28,7 +29,11 @@ export default function AIGenForm({ setDescription,
                 </div>
             </div>
             <div className='w-full md:w-3/4 py-8'>
-                <h1 className='text-center font-bold text-xl md:text-2xl text-gray-300'>Number of songs: <span className='border-b-2 border-gray-200'>{range}</span></h1>
+                <div className='flex flex-row justify-center items-center text-center pb-4'>
+                    <h1 className='w-fit px-4 py-3 bg-[#f33f81] text-gray-200 rounded-lg'>
+                        {range} songs
+                    </h1>
+                </div>
                 <input
                     type="range"
                     className="transparent h-[4px] w-full cursor-pointer accent-[#f33f81] border-transparent bg-neutral-200 dark:bg-neutral-600"
