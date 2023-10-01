@@ -62,6 +62,10 @@ export default function Home({
   useEffect(() => {
     if (session && !sessionStorage.getItem('userId') && !sessionStorage.getItem('providerAccountId') && !sessionStorage.getItem('refreshToken')) {
       fetchUser();
+    } else if(session && sessionStorage.getItem('userId') && sessionStorage.getItem('providerAccountId') && sessionStorage.getItem('refreshToken')) {
+      setUserId(sessionStorage.getItem('userId') as string);
+      setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);
+      setRefreshToken(sessionStorage.getItem('refreshToken') as string);
     }
   }, [session])
 
