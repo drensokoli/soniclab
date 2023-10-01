@@ -1,54 +1,44 @@
 import { useSession } from 'next-auth/react'
 import NotSignedIn from './NotSignedIn';
 import { useEffect, useState } from 'react';
+import Loading from './Loading';
 
 export default function Library() {
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
 
     const [playlists, setPlaylists] = useState<string[]>([]);
-    // const playlists = [
-    //     '1LdfTs1ksJzE7k0pN09FKr',
-    //     '37i9dQZF1E8Ep6B1tFwURi',
-    //     '37i9dQZF1DWSPMbB1kcXmo',
-    //     '0LbRnQanwBZvokjkYaV1bR',
-    //     '07r0pMwLekrqdt5fKQHsKV',
-    //     '37i9dQZF1E4kMz3pHspFDx',
-    // ];
-
-    async function fetchPlaylists() {
-        const userId = sessionStorage.getItem('userId');
-
-        try {
-            const response = await fetch('/api/getPlaylists', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                }),
-            });
-
-            const data = await response.json();
-            const monthlyPlaylists = data.monthly_playlists.map((playlist: { playlistId: any; }) => playlist.playlistId);
-            const aiGenPlaylists = data.ai_gen_playlists.map((playlist: { playlistId: any; }) => playlist.playlistId);
-            const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
-
-            setPlaylists(allPlaylists);
-            sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
-
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (session && !sessionStorage.getItem('playlists')) {
-            fetchPlaylists();
-        } else if (session && sessionStorage.getItem('playlists')) {
-            setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
+        const intervalId = setInterval(() => {
+            if (session && sessionStorage.getItem('playlists')) {
+                const playlistsString = sessionStorage.getItem('playlists');
+                if (playlistsString !== null) {
+                    setPlaylists(JSON.parse(playlistsString));
+                }
+            }
+        }, 2000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [session]);
+
+    useEffect(() => {
+        if (session && sessionStorage.getItem('playlists')) {
+            const playlistsString = sessionStorage.getItem('playlists');
+            if (playlistsString !== null) {
+                setPlaylists(JSON.parse(playlistsString));
+                setIsLoading(false);
+            }
         }
-    }, [session])
+    }, [session]);
+
+    if (isLoading) {
+        return <Loading
+            height='h-[400px]'
+            bgColor='transparent' />;
+    }
 
     return (
         <>

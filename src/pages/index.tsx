@@ -1,3 +1,4 @@
+
 "use client"
 import { Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
@@ -21,7 +22,7 @@ export default function Home({
   spotifyClientId: string,
   spotifyClientSecret: string
 }) {
-  
+
   const { data: session } = useSession();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -45,24 +46,50 @@ export default function Home({
         }),
       });
       const data = await response.json();
-
+  
       setUserId(data.userId);
       setProviderAccountId(data.providerAccountId);
       setRefreshToken(data.refresh_token);
-
+  
       sessionStorage.setItem('userId', data.userId);
       sessionStorage.setItem('providerAccountId', data.providerAccountId);
       sessionStorage.setItem('refreshToken', data.refresh_token);
-
+  
+      fetchPlaylists(data.userId);
+  
     } catch (error) {
       console.error('Error:', error);
+    }
+  }  
+
+  async function fetchPlaylists(userId: any) {
+    try {
+      const response = await fetch('/api/getPlaylists', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+        }),
+      });
+  
+      const data = await response.json();
+      const monthlyPlaylists = data.monthly_playlists.map((playlist: { playlistId: any; }) => playlist.playlistId);
+      const aiGenPlaylists = data.ai_gen_playlists.map((playlist: { playlistId: any; }) => playlist.playlistId);
+      const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
+  
+      sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
+  
+    } catch (error) {
+      console.error(error);
     }
   }
 
   useEffect(() => {
     if (session && !sessionStorage.getItem('userId') && !sessionStorage.getItem('providerAccountId') && !sessionStorage.getItem('refreshToken')) {
       fetchUser();
-    } else if(session && sessionStorage.getItem('userId') && sessionStorage.getItem('providerAccountId') && sessionStorage.getItem('refreshToken')) {
+    } else if (session && sessionStorage.getItem('userId') && sessionStorage.getItem('providerAccountId') && sessionStorage.getItem('refreshToken')) {
       setUserId(sessionStorage.getItem('userId') as string);
       setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);
       setRefreshToken(sessionStorage.getItem('refreshToken') as string);
