@@ -1,5 +1,9 @@
 
-const getAccessToken = async (refresh_token: any, spotifyClientId: string, spotifyClientSecret: string) => {
+const getAccessToken = async (
+    refresh_token: any,
+    spotifyClientId: string,
+    spotifyClientSecret: string
+) => {
 
     const basic = Buffer.from(`${spotifyClientId}:${spotifyClientSecret}`).toString('base64');
     const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
@@ -19,7 +23,13 @@ const getAccessToken = async (refresh_token: any, spotifyClientId: string, spoti
     return response.json();
 };
 
-export async function searchSongs(songNames: string[], refreshToken: string, spotifyClientId: string, spotifyClientSecret: string): Promise<string[]> {
+export async function searchSongs(
+    songNames: string[],
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string
+): Promise<string[]> {
+
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
     const songIds: string[] = [];
 
@@ -44,11 +54,19 @@ export async function searchSongs(songNames: string[], refreshToken: string, spo
     return songIds;
 }
 
-export async function createPlaylist(userId: string, refreshToken: string, playlistName: string, songIds: string[], spotifyClientId: string, spotifyClientSecret: string): Promise<string> {
+export async function createPlaylist(
+    providerAccountId: string,
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string,
+    playlistName: string,
+    songIds: string[],
+    type: string
+): Promise<string> {
     try {
         const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
-        const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+        const response = await fetch(`https://api.spotify.com/v1/users/${providerAccountId}/playlists`, {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -68,25 +86,73 @@ export async function createPlaylist(userId: string, refreshToken: string, playl
         const data = await response.json();
         const playlistId = data.id;
 
-        const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                uris: songIds.map(id => `spotify:track:${id}`)
-            })
-        });
-
-        if (!addTracksResponse.ok) {
-            throw new Error(`HTTP error! status: ${addTracksResponse.status}`);
+        if (type == 'ai_gen') {
+            await addTracksToAIPlaylist(playlistId, accessToken, songIds);
+        } else if (type == 'monthly') {
+            await addTracksToMonthlyPlaylist(playlistId, accessToken);
         }
 
         return playlistId;
-        
+
     } catch (error) {
         console.error(error);
         return '';
     }
 }
+
+const addTracksToAIPlaylist = async (
+    playlistId: string,
+    accessToken: string,
+    songIds: string[]
+) => {
+
+    const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            uris: songIds.map(id => `spotify:track:${id}`)
+        })
+    });
+
+    if (!addTracksResponse.ok) {
+        throw new Error(`HTTP error! status: ${addTracksResponse.status}`);
+    }
+
+    return addTracksResponse;
+}
+
+const addTracksToMonthlyPlaylist = async (
+    playlistId: string,
+    accessToken: string
+) => {
+    
+    // const songIds = await getMonthlyPlaylistTracks(accessToken);
+    const songIds = [''];
+
+    const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            uris: songIds.map(id => `spotify:track:${id}`)
+        })
+    });
+
+    if (!addTracksResponse.ok) {
+        throw new Error(`HTTP error! status: ${addTracksResponse.status}`);
+    }
+
+    return addTracksResponse;
+}
+
+const getMonthlyPlaylistTracks = async (
+    accessToken: string
+) => {
+    throw new Error('Not implemented');
+}
+

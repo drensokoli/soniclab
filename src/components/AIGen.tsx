@@ -6,6 +6,7 @@ import Loading from './Loading';
 import AIGenForm from './AIGenForm';
 import PlaylistCreator from './PlaylistCreator';
 import NotSignedIn from './NotSignedIn';
+import { type } from 'os';
 
 export default function AIGen({
     spotifyClientId,
@@ -26,7 +27,7 @@ export default function AIGen({
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
     const [loading, setLoading] = useState(false);
-
+    const type = "ai_gen";
     const fetchSongIds = async () => {
 
         setLoading(true);
@@ -57,7 +58,7 @@ export default function AIGen({
             setSongIds(ids);
 
             sessionStorage.setItem('playlistNames', JSON.stringify(playlistNames));
-            sessionStorage.setItem('songIds', JSON.stringify(ids)); 
+            sessionStorage.setItem('songIds', JSON.stringify(ids));
             sessionStorage.setItem('description', description);
 
         } catch (error) {
@@ -65,7 +66,7 @@ export default function AIGen({
         } finally {
             setTimeout(() => {
                 setLoading(false);
-            }, 2000);
+            }, 1000);
         }
     };
 
@@ -73,12 +74,20 @@ export default function AIGen({
         setLoading(true);
 
         try {
-            const playlistId = createPlaylist(providerAccountId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret);
-            
+            const playlistId = createPlaylist(
+                providerAccountId,
+                refreshToken,
+                spotifyClientId,
+                spotifyClientSecret,
+                playlistName,
+                songIds,
+                type,
+            );
+
             sessionStorage.removeItem('songIds');
             sessionStorage.removeItem('playlistNames');
             sessionStorage.removeItem('description');
-            
+
             setSongIds([]);
             setRange(25);
             setPlaylistName('');
@@ -88,7 +97,7 @@ export default function AIGen({
         } finally {
             setTimeout(() => {
                 setLoading(false);
-            }, 2000);
+            }, 1000);
         }
     };
 
@@ -99,7 +108,7 @@ export default function AIGen({
     }
 
     useEffect(() => {
-        if(sessionStorage.getItem('playlistNames') && sessionStorage.getItem('songIds') && sessionStorage.getItem('description')) {
+        if (sessionStorage.getItem('playlistNames') && sessionStorage.getItem('songIds') && sessionStorage.getItem('description')) {
             setPlaylistNames(JSON.parse(sessionStorage.getItem('playlistNames') as string));
             setSongIds(JSON.parse(sessionStorage.getItem('songIds') as string));
             setDescription(sessionStorage.getItem('description') as string);
