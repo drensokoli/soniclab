@@ -55,11 +55,10 @@ export default function AIGen({
 
             setPlaylistNames(playlistNames);
             setSongIds(ids);
-            setDescription('');
-            
-            // save playlistnames to session storage
+
             sessionStorage.setItem('playlistNames', JSON.stringify(playlistNames));
             sessionStorage.setItem('songIds', JSON.stringify(ids)); 
+            sessionStorage.setItem('description', description);
 
         } catch (error) {
             console.error(error);
@@ -78,6 +77,7 @@ export default function AIGen({
             
             sessionStorage.removeItem('songIds');
             sessionStorage.removeItem('playlistNames');
+            sessionStorage.removeItem('description');
             
             setSongIds([]);
             setRange(25);
@@ -99,9 +99,10 @@ export default function AIGen({
     }
 
     useEffect(() => {
-        if(sessionStorage.getItem('playlistNames') && sessionStorage.getItem('songIds')) {
+        if(sessionStorage.getItem('playlistNames') && sessionStorage.getItem('songIds') && sessionStorage.getItem('description')) {
             setPlaylistNames(JSON.parse(sessionStorage.getItem('playlistNames') as string));
             setSongIds(JSON.parse(sessionStorage.getItem('songIds') as string));
+            setDescription(sessionStorage.getItem('description') as string);
         }
     }, []);
 
