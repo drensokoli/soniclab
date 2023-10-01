@@ -49,13 +49,20 @@ export default function Library() {
         <>
             {session ? (
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
-                        {playlists.map((playlistId, index) => (
-                            <div key={index} className="">
-                                <iframe className='opacity-75' src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`} width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                            </div>
-                        ))}
-                    </div>
+                    {!(playlists.length === 0) ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
+                            {playlists.map((playlistId, index) => (
+                                <div key={index} className="">
+                                    <iframe className='opacity-75' src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`} width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className='flex flex-col h-[200px] justify-center items-center'>
+                            <h1 className='text-xl md:text-xl font-bold text-gray-400 opacity-70 text-center'>Your SpotiLab playlists will appear here</h1>
+                            <h1 className='text-xl md:text-xl font-bold text-gray-400 opacity-70 text-center'>Head over to the Playlist Generator tab and create your first playlist</h1>
+                        </div>
+                    )}
                 </>
             ) : (
                 <NotSignedIn title='Please sign in to see your monthly and AI generated Spotify playlists from SpotiLab' />
