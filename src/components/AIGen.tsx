@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { createPlaylist, searchSongs } from '../lib/spotify';
 import { SiSpotify } from '@icons-pack/react-simple-icons';
 import Loading from './Loading';
@@ -56,6 +56,10 @@ export default function AIGen({
             setPlaylistNames(playlistNames);
             setSongIds(ids);
             setDescription('');
+            
+            // save playlistnames to session storage
+            sessionStorage.setItem('playlistNames', JSON.stringify(playlistNames));
+            sessionStorage.setItem('songIds', JSON.stringify(ids)); 
 
         } catch (error) {
             console.error(error);
@@ -71,6 +75,10 @@ export default function AIGen({
 
         try {
             const playlistId = createPlaylist(providerAccountId, refreshToken, playlistName, songIds, spotifyClientId, spotifyClientSecret);
+            
+            sessionStorage.removeItem('songIds');
+            sessionStorage.removeItem('playlistNames');
+            
             setSongIds([]);
             setRange(25);
             setPlaylistName('');
@@ -86,7 +94,16 @@ export default function AIGen({
 
     function removeSongId(songIdToRemove: string) {
         setSongIds((prevSongIds) => prevSongIds.filter((songId) => songId !== songIdToRemove));
+        // remove songId from session storage
+        sessionStorage.setItem('songIds', JSON.stringify(songIds.filter((songId) => songId !== songIdToRemove)));
     }
+
+    useEffect(() => {
+        if(sessionStorage.getItem('playlistNames') && sessionStorage.getItem('songIds')) {
+            setPlaylistNames(JSON.parse(sessionStorage.getItem('playlistNames') as string));
+            setSongIds(JSON.parse(sessionStorage.getItem('songIds') as string));
+        }
+    }, []);
 
     return (
         <>
