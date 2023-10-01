@@ -29,6 +29,7 @@ export default function Home({
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef(null);
 
+  const [userId, setUserId] = useState('');
   const [providerAccountId, setProviderAccountId] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
 
@@ -45,8 +46,13 @@ export default function Home({
       });
       const data = await response.json();
 
+      setUserId(data.userId);
       setProviderAccountId(data.providerAccountId);
       setRefreshToken(data.refresh_token);
+
+      sessionStorage.setItem('userId', data.userId);
+      sessionStorage.setItem('providerAccountId', data.providerAccountId);
+      sessionStorage.setItem('refreshToken', data.refresh_token);
 
     } catch (error) {
       console.error('Error:', error);
@@ -54,7 +60,7 @@ export default function Home({
   }
 
   useEffect(() => {
-    if (session) {
+    if (session && !sessionStorage.getItem('userId') && !sessionStorage.getItem('providerAccountId') && !sessionStorage.getItem('refreshToken')) {
       fetchUser();
     }
   }, [session])
