@@ -95,6 +95,27 @@ export async function createPlaylist(
             await addTracksToMonthlyPlaylist(playlistId, accessToken);
         }
 
+        const savePlaylist = await fetch('/api/savePlaylist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId,
+                playlistId,
+                playlistName,
+                description,
+                type
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const savePlaylistData = await savePlaylist.json();
+        console.log(savePlaylistData.message);
+
         return playlistId;
 
     } catch (error) {

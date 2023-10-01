@@ -27,6 +27,8 @@ export default function AIGen({
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
     const [loading, setLoading] = useState(false);
+    const [playlistId, setPlaylistId] = useState('');
+
     const type = "ai_gen";
     const fetchSongIds = async () => {
 
@@ -74,11 +76,11 @@ export default function AIGen({
         setLoading(true);
 
         try {
-
             const userId = sessionStorage.getItem('userId') as string;
             const description = sessionStorage.getItem('description') as string;
 
-            const playlistId = createPlaylist(
+            // Add await here to wait for the playlistId
+            const playlistId = await createPlaylist(
                 providerAccountId,
                 refreshToken,
                 spotifyClientId,
@@ -98,6 +100,15 @@ export default function AIGen({
             setSongIds([]);
             setRange(25);
             setPlaylistName('');
+            
+            // Retrieve the existing playlist IDs
+            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as string[];
+
+            // Append the new playlist ID
+            playlists.push(playlistId);
+
+            // Store the updated playlist IDs
+            sessionStorage.setItem('playlists', JSON.stringify(playlists));
 
         } catch (error) {
             console.error(error);
