@@ -74,6 +74,10 @@ export default function AIGen({
         setLoading(true);
 
         try {
+
+            const userId = sessionStorage.getItem('userId') as string;
+            const description = sessionStorage.getItem('description') as string;
+
             const playlistId = createPlaylist(
                 providerAccountId,
                 refreshToken,
@@ -82,6 +86,9 @@ export default function AIGen({
                 playlistName,
                 songIds,
                 type,
+                userId,
+                description,
+                range
             );
 
             sessionStorage.removeItem('songIds');
