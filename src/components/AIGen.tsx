@@ -6,6 +6,7 @@ import AIGenForm from './AIGenForm';
 import PlaylistCreator from './PlaylistCreator';
 import NotSignedIn from './NotSignedIn';
 import SpotifyBubble from './SpotifyBubble';
+import SpotifyIcon from '../../public/spotify.svg'
 
 export default function AIGen({
     spotifyClientId,
@@ -100,7 +101,6 @@ export default function AIGen({
 
             setSongIds([]);
             setRange(25);
-            setPlaylistName('');
 
             // Retrieve the existing playlist IDs
             const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as string[];
@@ -119,6 +119,7 @@ export default function AIGen({
             }, 1000);
             setTimeout(() => {
                 setPlaylistId('');
+                setPlaylistName('');
             }, 5000);
         }
     };
@@ -149,15 +150,7 @@ export default function AIGen({
                     ) : !(songIds.length > 0) ? (
                         <>
                             {playlistId && (
-                                // <div className='flex flex-col justify-center items-center py-4'>
-                                //     <a href={`https://open.spotify.com/playlist/${playlistId}`} target='_blank'>
-                                //         <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
-                                //             <SiSpotify className='text-gray-300' />
-                                //             <h1 className='text-gray-300'>Open in Spotify</h1>
-                                //         </div>
-                                //     </a>
-                                // </div>
-                                <SpotifyBubble playlistId={playlistId} />
+                                <SpotifyBubble playlistId={playlistId} playlistName={playlistName} />
                             )}
                             <AIGenForm
                                 setDescription={setDescription}
