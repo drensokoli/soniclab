@@ -93,6 +93,8 @@ export default function AIGen({
                 range
             );
 
+            setPlaylistId(playlistId);
+
             sessionStorage.removeItem('songIds');
             sessionStorage.removeItem('playlistNames');
             sessionStorage.removeItem('description');
@@ -100,7 +102,7 @@ export default function AIGen({
             setSongIds([]);
             setRange(25);
             setPlaylistName('');
-            
+
             // Retrieve the existing playlist IDs
             const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as string[];
 
@@ -144,6 +146,11 @@ export default function AIGen({
                         />
                     ) : !(songIds.length > 0) ? (
                         <>
+                            {playlistId && (
+                            <div>
+                                {playlistId}
+                            </div>
+                            )}
                             <AIGenForm
                                 setDescription={setDescription}
                                 setRange={setRange}
