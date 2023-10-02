@@ -150,9 +150,11 @@ export default function AIGen({
                     ) : !(songIds.length > 0) ? (
                         <>
                             {playlistId && (
-                            <div>
-                                {playlistId}
-                            </div>
+                                <div>
+                                    <a href={`https://open.spotify.com/playlist/${playlistId}?si=d0a3c3daf8ce4079`} target='_blank'>
+                                        Open in Spotify
+                                    </a>
+                                </div>
                             )}
                             <AIGenForm
                                 setDescription={setDescription}
