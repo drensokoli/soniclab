@@ -118,6 +118,9 @@ export default function AIGen({
             setTimeout(() => {
                 setLoading(false);
             }, 1000);
+            setTimeout(() => {
+                setPlaylistId('');
+            }, 5000);
         }
     };
 
