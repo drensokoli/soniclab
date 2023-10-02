@@ -1,12 +1,11 @@
 import { useSession } from 'next-auth/react';
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPlaylist, searchSongs } from '../lib/spotify';
-import { SiSpotify } from '@icons-pack/react-simple-icons';
 import Loading from './Loading';
 import AIGenForm from './AIGenForm';
 import PlaylistCreator from './PlaylistCreator';
 import NotSignedIn from './NotSignedIn';
-import { type } from 'os';
+import SpotifyBubble from './SpotifyBubble';
 
 export default function AIGen({
     spotifyClientId,
@@ -150,26 +149,15 @@ export default function AIGen({
                     ) : !(songIds.length > 0) ? (
                         <>
                             {playlistId && (
-                                <div className='flex flex-col justify-center items-center py-4'>
-                                    <a href={`https://open.spotify.com/playlist/${playlistId}`} target='_blank'>
-                                        <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
-                                            <SiSpotify className='text-gray-300' />
-                                            <h1 className='text-gray-300'>Open in Spotify</h1>
-                                        </div>
-                                    </a>
-                                </div>
-                                //     <a target='_blank' href={`https://open.spotify.com/playlist/${playlistId}?si=4e338eb7220f49de`} className='flex flex-col justify-center items-center py-4'>
-                                //     <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
-                                //         <h1 className='text-gray-300'>Playlist created!</h1>
-                                //         <div className='flex flex-row gap-2'>
-                                //             {/* <h1 className='text-gray-300'>{playlistName}</h1> */}
+                                // <div className='flex flex-col justify-center items-center py-4'>
+                                //     <a href={`https://open.spotify.com/playlist/${playlistId}`} target='_blank'>
+                                //         <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
+                                //             <SiSpotify className='text-gray-300' />
+                                //             <h1 className='text-gray-300'>Open in Spotify</h1>
                                 //         </div>
-                                // <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
-                                //     <h1 className='text-gray-300'>Playlist created!</h1>
-                                //     <div className='flex flex-row gap-2'>
-                                //         <SiSpotify className='text-gray-300' />
-                                //     </div>
-                                // </a>
+                                //     </a>
+                                // </div>
+                                <SpotifyBubble playlistId={playlistId} />
                             )}
                             <AIGenForm
                                 setDescription={setDescription}
