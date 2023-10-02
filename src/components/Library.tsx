@@ -50,10 +50,18 @@ export default function Library() {
             {session ? (
                 <>
                     {!(playlists.length === 0) ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
                             {playlists.map((playlistId, index) => (
-                                <div key={index} className="">
+                                <div key={index} className=" flex flex-col gap-2">
                                     <iframe className='opacity-75' src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`} width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                                    {/* <h1 className='text-gray-200'>Description</h1> */}
+                                    <button
+                                        type="button"
+                                        className="inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black"
+                                        data-te-ripple-init
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             ))}
                         </div>

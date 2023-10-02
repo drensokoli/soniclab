@@ -33,7 +33,7 @@ export default function PlaylistCreator({
             <div className='flex flex-col justify-center items-center w-full md:w-3/4'>
                 {songIds.map((songId: any, index: Key | null | undefined) => (
                     <div key={index} className='flex flex-row items-center justify-center gap-2 w-full'>
-                        <iframe className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        <iframe className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="90%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                         <button
                             type="button"
                             className={`bg-[#cf387a] rounded-3xl p-2 inline-flex items-center justify-center text-white hover:bg-[#9c2a5b] mb-4 ${songIds.length <= 1 ? 'opacity-50 mb-4' : ''}`}

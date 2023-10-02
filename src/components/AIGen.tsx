@@ -101,6 +101,7 @@ export default function AIGen({
 
             setSongIds([]);
             setRange(25);
+            setDescription('');
 
             // Retrieve the existing playlist IDs
             const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as string[];
