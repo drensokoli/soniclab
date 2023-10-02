@@ -149,7 +149,7 @@ export default function AIGen({
                         />
                     ) : !(songIds.length > 0) ? (
                         <>
-                            {!playlistId && (
+                            {playlistId && (
                                 <div className='flex flex-col justify-center items-center py-4'>
                                     <a href={`https://open.spotify.com/playlist/${playlistId}`} target='_blank'>
                                         <div className='flex flex-col gap-2 justify-center items-center border-2 border-white px-12 py-4 rounded-xl'>
