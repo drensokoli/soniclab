@@ -2,11 +2,7 @@
     "crons": [
       {
         "path": "/api/cron/createMonthlyPlaylist",
-<<<<<<< HEAD
         "schedule": "*/3 * * * *"
-=======
-        "schedule": "0 22 * * *"
->>>>>>> 1fe22562f2228b47d3d6804fd394eb5dc3cf7e6c
       }
     ]
   }
