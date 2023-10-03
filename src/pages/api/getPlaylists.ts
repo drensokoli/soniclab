@@ -5,13 +5,13 @@ import clientPromise from '@/lib/mongodb';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     try {
-        const { userid } = req.body;
+        const { userId } = req.body;
 
         const client = await clientPromise;
         const db = client.db('playlists');
         const collection = db.collection('user_playlists');
 
-        const user = await collection.findOne({ userid: userid });
+        const user = await collection.findOne({ userId: userId });
 
         // Filter out the playlists where deleted is false
         const ai_gen_playlists = user?.ai_gen_playlists.filter((playlist: any) => !playlist.deleted);

@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Set the deleted value to true for the playlist
         if (playlistType === 'monthly_playlists') {
             user.monthly_playlists = user.monthly_playlists.map((p: { playlistId: any; }) =>
-                p === playlistId ? { ...p, deleted: true } : p
+                p.playlistId === playlistId ? { ...p, deleted: true } : p
             );
         } else if (playlistType === 'ai_gen_playlists') {
             user.ai_gen_playlists = user.ai_gen_playlists.map((p: { playlistId: any; }) =>
