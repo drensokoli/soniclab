@@ -152,9 +152,9 @@ const addTracksToMonthlyPlaylist = async (
     playlistId: string,
     accessToken: string
 ) => {
-    
-    // const songIds = await getMonthlyPlaylistTracks(accessToken);
-    const songIds = [''];
+
+    const songIds = await getMonthlyTracks(accessToken);
+    // const songIds = [''];
 
     const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
         method: 'POST',
@@ -163,7 +163,7 @@ const addTracksToMonthlyPlaylist = async (
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            uris: songIds.map(id => `spotify:track:${id}`)
+            uris: songIds.map((id: any) => `spotify:track:${id}`)
         })
     });
 
@@ -174,10 +174,22 @@ const addTracksToMonthlyPlaylist = async (
     return addTracksResponse;
 }
 
-const getMonthlyPlaylistTracks = async (
+const getMonthlyTracks = async (
     accessToken: string
 ) => {
-    throw new Error('Not implemented');
+    const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50`, {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const trackIds = data.items.map((item: any) => item.id);
+    return trackIds;
 }
 
 export async function deletePlaylist(
@@ -204,7 +216,7 @@ export async function deletePlaylist(
 
         const deletePlaylistData = await response.json();
         console.log(deletePlaylistData.message);
-        
+
         return deletePlaylistData.message;
 
     } catch (error) {

@@ -29,6 +29,7 @@ export default function AIGen({
     const [playlistId, setPlaylistId] = useState('');
 
     const type = "ai_gen_playlists";
+
     const fetchSongIds = async () => {
 
         setLoading(true);
@@ -128,7 +129,54 @@ export default function AIGen({
         setSongIds((prevSongIds) => prevSongIds.filter((songId) => songId !== songIdToRemove));
         // remove songId from session storage
         sessionStorage.setItem('songIds', JSON.stringify(songIds.filter((songId) => songId !== songIdToRemove)));
-    }
+    };
+
+    const createMonthlyPlaylist = async () => {
+        setLoading(true);
+
+        try {
+            const userId = sessionStorage.getItem('userId') as string;
+            const description = sessionStorage.getItem('description') as string;
+            const playlistName = `${new Date().toLocaleString('default', { month: 'short' })} ${new Date().getFullYear()}`;
+            const songIds = [''];
+            const type = "monthly_playlists";
+            const range = 50;
+            
+            // Add await here to wait for the playlistId
+            const playlistId = await createPlaylist(
+                providerAccountId,
+                refreshToken,
+                spotifyClientId,
+                spotifyClientSecret,
+                playlistName,
+                songIds,
+                type,
+                userId,
+                description,
+                range
+            );
+
+            // Retrieve the existing playlist IDs
+            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string }[];
+
+            // Append the new playlist data
+            playlists.push({ playlistId, description, type });
+        
+            // Store the updated playlist data
+            sessionStorage.setItem('playlists', JSON.stringify(playlists));
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+            setTimeout(() => {
+                setPlaylistId('');
+                setPlaylistName('');
+            }, 5000);
+        }
+    };
 
     useEffect(() => {
         if (sessionStorage.getItem('playlistNames') && sessionStorage.getItem('songIds') && sessionStorage.getItem('description')) {
@@ -158,6 +206,7 @@ export default function AIGen({
                                 fetchSongIds={fetchSongIds}
                                 description={description}
                                 range={range}
+                                createMonthlyPlaylist={createMonthlyPlaylist}
                             />
                         </>
                     ) : (
