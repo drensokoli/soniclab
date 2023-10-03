@@ -46,23 +46,29 @@ export default function Home({
         }),
       });
       const data = await response.json();
-  
+
       setUserId(data.userId);
       setProviderAccountId(data.providerAccountId);
       setRefreshToken(data.refresh_token);
-  
+
       sessionStorage.setItem('userId', data.userId);
       sessionStorage.setItem('providerAccountId', data.providerAccountId);
       sessionStorage.setItem('refreshToken', data.refresh_token);
-  
+
       fetchPlaylists(data.userId);
-  
+
     } catch (error) {
       console.error('Error:', error);
     }
-  }  
+  }
 
-  async function fetchPlaylists(userId: any) {
+  interface Playlist {
+    playlistId: string;
+    description: string;
+    type: string;
+  }
+
+  async function fetchPlaylists(userId: any): Promise<Playlist[]> {
     try {
       const response = await fetch('/api/getPlaylists', {
         method: 'POST',
@@ -73,16 +79,29 @@ export default function Home({
           userId: userId,
         }),
       });
-  
+
       const data = await response.json();
-      const monthlyPlaylists = data.monthly_playlists.map((playlist: { playlistId: any; }) => playlist.playlistId);
-      const aiGenPlaylists = data.ai_gen_playlists.map((playlist: { playlistId: any; }) => playlist.playlistId);
+      
+      const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
+        playlistId: playlist.playlistId,
+        description: playlist.description,
+        type: 'monthly_playlists',
+      }));
+
+      const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
+        playlistId: playlist.playlistId,
+        description: playlist.description,
+        type: 'ai_gen_playlists',
+      }));
+      
       const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
-  
+
       sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
-  
+
+      return allPlaylists;
     } catch (error) {
       console.error(error);
+      return [];
     }
   }
 

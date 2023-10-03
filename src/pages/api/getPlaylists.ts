@@ -5,17 +5,26 @@ import clientPromise from '@/lib/mongodb';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     try {
-        const { userId } = req.body;
+        const { userid } = req.body;
 
         const client = await clientPromise;
         const db = client.db('playlists');
         const collection = db.collection('user_playlists');
 
-        const user = await collection.findOne({ userId: userId });
-        
-        res.status(200).json(user);
+        const user = await collection.findOne({ userid: userid });
+
+        // Filter out the playlists where deleted is false
+        const ai_gen_playlists = user?.ai_gen_playlists.filter((playlist: any) => !playlist.deleted);
+        const monthly_playlists = user?.monthly_playlists.filter((playlist: any) => !playlist.deleted);
+
+        // Send the response with the filtered playlists
+        res.status(200).json({
+            ...user,
+            ai_gen_playlists,
+            monthly_playlists
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'internal server error' });
     }
 }

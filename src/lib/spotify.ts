@@ -89,9 +89,9 @@ export async function createPlaylist(
         const data = await response.json();
         const playlistId = data.id;
 
-        if (type == 'ai_gen') {
+        if (type == 'ai_gen_playlists') {
             await addTracksToAIPlaylist(playlistId, accessToken, songIds);
-        } else if (type == 'monthly') {
+        } else if (type == 'monthly_playlists') {
             await addTracksToMonthlyPlaylist(playlistId, accessToken);
         }
 
@@ -180,3 +180,35 @@ const getMonthlyPlaylistTracks = async (
     throw new Error('Not implemented');
 }
 
+export async function deletePlaylist(
+    providerAccountId: string,
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string,
+    playlistId: string
+): Promise<void> {
+    try {
+        const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const deletePlaylistData = await response.json();
+        console.log(deletePlaylistData.message);
+        
+        return deletePlaylistData.message;
+
+    } catch (error) {
+        console.error(error);
+        return Promise.reject("Error deleting playlist" + error);
+    }
+}

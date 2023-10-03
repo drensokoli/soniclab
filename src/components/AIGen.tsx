@@ -6,7 +6,6 @@ import AIGenForm from './AIGenForm';
 import PlaylistCreator from './PlaylistCreator';
 import NotSignedIn from './NotSignedIn';
 import SpotifyBubble from './SpotifyBubble';
-import SpotifyIcon from '../../public/spotify.svg'
 
 export default function AIGen({
     spotifyClientId,
@@ -29,7 +28,7 @@ export default function AIGen({
     const [loading, setLoading] = useState(false);
     const [playlistId, setPlaylistId] = useState('');
 
-    const type = "ai_gen";
+    const type = "ai_gen_playlists";
     const fetchSongIds = async () => {
 
         setLoading(true);
@@ -104,12 +103,12 @@ export default function AIGen({
             setDescription('');
 
             // Retrieve the existing playlist IDs
-            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as string[];
+            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string }[];
 
-            // Append the new playlist ID
-            playlists.push(playlistId);
-
-            // Store the updated playlist IDs
+            // Append the new playlist data
+            playlists.push({ playlistId, description, type });
+        
+            // Store the updated playlist data
             sessionStorage.setItem('playlists', JSON.stringify(playlists));
 
         } catch (error) {

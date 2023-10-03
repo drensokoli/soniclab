@@ -43,7 +43,12 @@ export default function Nav({
                     />
                 </TabPanel>
                 <TabPanel value="monthly">
-                    <Library />
+                    <Library 
+                        spotifyClientId={spotifyClientId}
+                        spotifyClientSecret={spotifyClientSecret}
+                        providerAccountId={providerAccountId}
+                        refreshToken={refreshToken}
+                    />
                 </TabPanel>
             </TabsBody>
         </Tabs>

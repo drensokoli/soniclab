@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const collection = db.collection('user_playlists');
 
         const user = await collection.findOne({ userId: userId });
-
+        
         if (!user) {
             await collection.insertOne({
                 userId: userId,
@@ -31,12 +31,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             });
         }
 
+        const deleted = false;
         const update = {
             $push: {
-                [`${type}_playlists`]: {
+                [`${type}`]: {
                     playlistId,
                     playlistName,
                     description,
+                    deleted,
                     created_at: new Date()
                 }
             }
