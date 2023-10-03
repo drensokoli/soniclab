@@ -18,7 +18,7 @@ export const authOptions = {
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-      authorization: "https://accounts.spotify.com/authorize?scope=user-read-currently-playing,user-read-recently-played,user-top-read,user-read-email,playlist-modify-public,playlist-modify-private"
+      authorization: "https://accounts.spotify.com/authorize?scope=ugc-image-upload,user-read-playback-state,user-modify-playback-state,user-read-currently-playing,playlist-read-private,playlist-read-collaborative,playlist-modify-private,playlist-modify-public,user-follow-modify,user-follow-read,user-top-read,user-read-recently-played,user-library-modify,user-library-read,user-read-email,user-read-private"
     }),
   ],
   secret: process.env.JWT_SECRET,
