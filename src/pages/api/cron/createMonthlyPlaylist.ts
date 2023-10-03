@@ -13,7 +13,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   for (const user of users) {
     const providerAccountId = user.providerAccountId
     const refreshToken = user.refresh_token
+<<<<<<< HEAD
     const playlistName = `SpotiLab Monthly Playlist - ${new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })} - 10pm cron`;
+=======
+    const playlistName = `SpotiLab Monthly Playlist - ${new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}`;
+>>>>>>> 1fe22562f2228b47d3d6804fd394eb5dc3cf7e6c
     const type = 'monthly_playlists';
     const userId = user.userId
     const description = 'SpotiLab monthly personalized playlist';
