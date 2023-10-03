@@ -64,7 +64,8 @@ export async function createPlaylist(
     type: string,
     userId: string,
     description: string,
-    songNumber: number
+    songNumber: number,
+    url: string
 ): Promise<string> {
     try {
         const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
@@ -95,7 +96,9 @@ export async function createPlaylist(
             await addTracksToMonthlyPlaylist(playlistId, accessToken);
         }
 
-        const savePlaylist = await fetch('/api/savePlaylist', {
+        const endpoint = `${url}/api/savePlaylist`;
+
+        const savePlaylist = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

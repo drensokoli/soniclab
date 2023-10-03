@@ -90,7 +90,8 @@ export default function AIGen({
                 type,
                 userId,
                 description,
-                range
+                range,
+                ''
             );
 
             setPlaylistId(playlistId);
@@ -108,7 +109,7 @@ export default function AIGen({
 
             // Append the new playlist data
             playlists.push({ playlistId, description, type });
-        
+
             // Store the updated playlist data
             sessionStorage.setItem('playlists', JSON.stringify(playlists));
 
@@ -132,50 +133,13 @@ export default function AIGen({
     };
 
     const createMonthlyPlaylist = async () => {
-        setLoading(true);
 
-        try {
-            const userId = sessionStorage.getItem('userId') as string;
-            const description = sessionStorage.getItem('description') as string;
-            const playlistName = `${new Date().toLocaleString('default', { month: 'short' })} ${new Date().getFullYear()}`;
-            const songIds = [''];
-            const type = "monthly_playlists";
-            const range = 50;
-            
-            // Add await here to wait for the playlistId
-            const playlistId = await createPlaylist(
-                providerAccountId,
-                refreshToken,
-                spotifyClientId,
-                spotifyClientSecret,
-                playlistName,
-                songIds,
-                type,
-                userId,
-                description,
-                range
-            );
+        const response = await fetch('/api/createMonthlyPlaylist');
 
-            // Retrieve the existing playlist IDs
-            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string }[];
+        const data = await response.json();
 
-            // Append the new playlist data
-            playlists.push({ playlistId, description, type });
-        
-            // Store the updated playlist data
-            sessionStorage.setItem('playlists', JSON.stringify(playlists));
+        console.log(data);
 
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setTimeout(() => {
-                setLoading(false);
-            }, 1000);
-            setTimeout(() => {
-                setPlaylistId('');
-                setPlaylistName('');
-            }, 5000);
-        }
     };
 
     useEffect(() => {
@@ -200,15 +164,15 @@ export default function AIGen({
                             {playlistId && (
                                 <SpotifyBubble playlistId={playlistId} playlistName={playlistName} />
                             )}
-                            <AIGenForm
+                                                        <AIGenForm
                                 setDescription={setDescription}
                                 setRange={setRange}
                                 fetchSongIds={fetchSongIds}
                                 description={description}
                                 range={range}
                                 createMonthlyPlaylist={createMonthlyPlaylist}
-                            />
-                        </>
+                                                            />
+                                                    </>
                     ) : (
                         <PlaylistCreator
                             setPlaylistName={setPlaylistName}
