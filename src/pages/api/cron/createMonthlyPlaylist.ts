@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createPlaylist } from '../../lib/spotify';
-import clientPromise from '../../lib/mongodb';
+import { createPlaylist } from '../../../lib/spotify';
+import clientPromise from '../../../lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

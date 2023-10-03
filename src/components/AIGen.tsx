@@ -134,7 +134,7 @@ export default function AIGen({
 
     const createMonthlyPlaylist = async () => {
 
-        const response = await fetch('/api/createMonthlyPlaylist');
+        const response = await fetch('/api/cron/createMonthlyPlaylist');
 
         const data = await response.json();
 
