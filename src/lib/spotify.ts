@@ -65,61 +65,113 @@ export async function createPlaylist(
     userId: string,
     description: string,
     songNumber: number,
-    url: string
+    url: string,
+    createMonthly: boolean
 ): Promise<string> {
     try {
         const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
-        const response = await fetch(`https://api.spotify.com/v1/users/${providerAccountId}/playlists`, {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: playlistName,
-                description: description,
-                public: false
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const playlistId = data.id;
-
         if (type == 'ai_gen_playlists') {
+
+            const response = await fetch(`https://api.spotify.com/v1/users/${providerAccountId}/playlists`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: playlistName,
+                    description: description,
+                    public: false
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const playlistId = data.id;
+
             await addTracksToAIPlaylist(playlistId, accessToken, songIds);
-        } else if (type == 'monthly_playlists') {
+
+
+            const endpoint = `${url}/api/savePlaylist`;
+
+            const savePlaylist = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId,
+                    playlistId,
+                    playlistName,
+                    description,
+                    type
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const savePlaylistData = await savePlaylist.json();
+            console.log(savePlaylistData.message);
+
+            return playlistId;
+
+        } else if (type == 'monthly_playlists' && createMonthly) {
+            const response = await fetch(`https://api.spotify.com/v1/users/${providerAccountId}/playlists`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: playlistName,
+                    description: description,
+                    public: false
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const playlistId = data.id;
+
             await addTracksToMonthlyPlaylist(playlistId, accessToken);
+
+
+            const endpoint = `${url}/api/savePlaylist`;
+
+            const savePlaylist = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId,
+                    playlistId,
+                    playlistName,
+                    description,
+                    type
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const savePlaylistData = await savePlaylist.json();
+            console.log(savePlaylistData.message);
+
+            return playlistId;
         }
 
-        const endpoint = `${url}/api/savePlaylist`;
-
-        const savePlaylist = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                userId,
-                playlistId,
-                playlistName,
-                description,
-                type
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const savePlaylistData = await savePlaylist.json();
-        console.log(savePlaylistData.message);
-
-        return playlistId;
+        return '';
 
     } catch (error) {
         console.error(error);

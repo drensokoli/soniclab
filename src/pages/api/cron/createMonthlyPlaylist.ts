@@ -18,19 +18,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const userId = user.userId
     const description = 'SpotiLab monthly personalized playlist';
     const url = process.env.NEXTAUTH_URL ?? '';
+    const createMonthly = user.createMonthly;
 
-    const playlistId = await createPlaylist(
+    await createPlaylist(
       providerAccountId,
       refreshToken,
       process.env.SPOTIFY_CLIENT_ID ?? '',
       process.env.SPOTIFY_CLIENT_SECRET ?? '',
       playlistName,
-      [''], // no songs yet
+      [''],
       'monthly_playlists',
       userId,
       description,
       0,
-      url
+      url,
+      createMonthly
     );
   }
   res.status(200).json({ message: 'Monthly playlists created' });

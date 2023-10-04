@@ -33,6 +33,7 @@ export default function Home({
   const [userId, setUserId] = useState('');
   const [providerAccountId, setProviderAccountId] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
+  const [createMonthly, setCreateMonthly] = useState(false);
 
   async function fetchUser() {
     try {
@@ -50,10 +51,12 @@ export default function Home({
       setUserId(data.userId);
       setProviderAccountId(data.providerAccountId);
       setRefreshToken(data.refresh_token);
+      setCreateMonthly(data.createMonthly);
 
       sessionStorage.setItem('userId', data.userId);
       sessionStorage.setItem('providerAccountId', data.providerAccountId);
       sessionStorage.setItem('refreshToken', data.refresh_token);
+      sessionStorage.setItem('createMonthly', data.createMonthly);
 
       fetchPlaylists(data.userId);
 
@@ -106,12 +109,13 @@ export default function Home({
   }
 
   useEffect(() => {
-    if (session && !sessionStorage.getItem('userId') && !sessionStorage.getItem('providerAccountId') && !sessionStorage.getItem('refreshToken')) {
+    if (session && !sessionStorage.getItem('userId') && !sessionStorage.getItem('providerAccountId') && !sessionStorage.getItem('refreshToken') && !sessionStorage.getItem('createMonthly')) {
       fetchUser();
-    } else if (session && sessionStorage.getItem('userId') && sessionStorage.getItem('providerAccountId') && sessionStorage.getItem('refreshToken')) {
+    } else if (session && sessionStorage.getItem('userId') && sessionStorage.getItem('providerAccountId') && sessionStorage.getItem('refreshToken') && sessionStorage.getItem('createMonthly')) {
       setUserId(sessionStorage.getItem('userId') as string);
       setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);
       setRefreshToken(sessionStorage.getItem('refreshToken') as string);
+      setCreateMonthly(sessionStorage.getItem('createMonthly') as any);
     }
   }, [session])
 

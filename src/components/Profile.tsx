@@ -1,13 +1,38 @@
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tooltip, Button } from "@material-tailwind/react";
 
 export default function Profile() {
     const { data: session, status } = useSession();
     const user = session?.user?.name;
 
-    const [checked, setChecked] = useState(false);
+    const [createMonthly, setCreateMonthly] = useState(sessionStorage.getItem('createMonthly') === 'true' ? true : false);
+
+    async function handleCreateMonthly() {
+
+        const createMonthly = sessionStorage.getItem('createMonthly') === 'true' ? false : true;
+        // const createMonthlyBoolean = createMonthly === 'true' ? true : false;
+
+        const response = await fetch('/api/checkMonthly', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userEmail: session?.user?.email,
+                createMonthly: createMonthly,
+            }),
+        });
+
+        const data = await response.json();
+
+        setCreateMonthly(createMonthly);
+        sessionStorage.setItem('createMonthly', createMonthly.toString());
+        
+        console.log(data.message);
+    }
+
 
     return (
         <div className='flex flex-col justify-center items-center gap-6'>
@@ -39,7 +64,9 @@ export default function Profile() {
                         unmount: { scale: 0, y: 25 },
                     }}>
                     <label className="relative inline-flex items-center mr-5 cursor-pointer">
-                        <input type="checkbox" value="" className="sr-only peer" />
+                        <input type="checkbox" checked={createMonthly} className="sr-only peer"
+                            onChange={() => { handleCreateMonthly() }}
+                        />
                         <div className="w-11 h-6 bg-[#a2285c] rounded-full peer peer-focus:ring-4 peer-focus:ring-[#7c1f44] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#f33f81]"></div>
                     </label>
                 </Tooltip>
