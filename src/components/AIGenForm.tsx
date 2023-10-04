@@ -6,14 +6,12 @@ export default function AIGenForm({ setDescription,
     fetchSongIds,
     description,
     range,
-    createMonthlyPlaylist
 }: {
     setDescription: any,
     setRange: any,
     fetchSongIds: any,
     description: string,
     range: number,
-    createMonthlyPlaylist: any
 }) {
     return (
         <div className='flex flex-col justify-center items-center' id='song-generator'>
@@ -54,14 +52,6 @@ export default function AIGenForm({ setDescription,
                 disabled={!description}
             >
                 Generate Songs
-            </button>
-            <button
-                type="button"
-                className=" mt-12 inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out"
-                data-te-ripple-init
-                onClick={() => createMonthlyPlaylist()}
-            >
-                Create monthly playlist
             </button>
         </div>
     );
