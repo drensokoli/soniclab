@@ -134,16 +134,6 @@ export default function AIGen({
         sessionStorage.setItem('songIds', JSON.stringify(songIds.filter((songId) => songId !== songIdToRemove)));
     };
 
-    const createMonthlyPlaylist = async () => {
-
-        const response = await fetch('/api/cron/createMonthlyPlaylist');
-
-        const data = await response.json();
-
-        console.log(data);
-
-    };
-
     useEffect(() => {
         if (sessionStorage.getItem('playlistNames') && sessionStorage.getItem('songIds') && sessionStorage.getItem('description')) {
             setPlaylistNames(JSON.parse(sessionStorage.getItem('playlistNames') as string));
@@ -172,7 +162,6 @@ export default function AIGen({
                                 fetchSongIds={fetchSongIds}
                                 description={description}
                                 range={range}
-                                createMonthlyPlaylist={createMonthlyPlaylist}
                             />
                         </>
                     ) : (
