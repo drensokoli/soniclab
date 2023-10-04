@@ -2,19 +2,19 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '../../lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { providerAccoundId, createMonthly } = req.body;
+    const { providerAccountId, createMonthly } = req.body;
 
 
     const client = await clientPromise;
     const db = client.db("users");
     const accountsCollection = db.collection("accounts");
 
-    const user = await accountsCollection.findOne({ providerAccoundId: providerAccoundId });
+    const user = await accountsCollection.findOne({ providerAccountId: providerAccountId });
 
     if (user) {
 
         const updatedUserAccount = await accountsCollection.updateOne(
-            { providerAccoundId: providerAccoundId },
+            { providerAccountId: providerAccountId },
             { $set: { createMonthly: createMonthly } }
         );
 

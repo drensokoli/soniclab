@@ -12,7 +12,7 @@ export default function Profile() {
     async function handleCreateMonthly() {
 
         const createMonthly = sessionStorage.getItem('createMonthly') === 'true' ? false : true;
-        const providerAccoundId = sessionStorage.getItem('providerAccoundId');
+        const providerAccountId = sessionStorage.getItem('providerAccountId');
 
         const response = await fetch('/api/checkMonthly', {
             method: 'POST',
@@ -20,7 +20,7 @@ export default function Profile() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                providerAccoundId: providerAccoundId,
+                providerAccountId: providerAccountId,
                 createMonthly: createMonthly,
             }),
         });
