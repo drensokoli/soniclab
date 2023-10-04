@@ -1,7 +1,7 @@
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react';
-import { Tooltip, Button } from "@material-tailwind/react";
+import { useState } from 'react';
+import { Tooltip } from "@material-tailwind/react";
 
 export default function Profile() {
     const { data: session, status } = useSession();
@@ -12,7 +12,7 @@ export default function Profile() {
     async function handleCreateMonthly() {
 
         const createMonthly = sessionStorage.getItem('createMonthly') === 'true' ? false : true;
-        // const createMonthlyBoolean = createMonthly === 'true' ? true : false;
+        const providerAccoundId = sessionStorage.getItem('providerAccoundId');
 
         const response = await fetch('/api/checkMonthly', {
             method: 'POST',
@@ -20,7 +20,7 @@ export default function Profile() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userEmail: session?.user?.email,
+                providerAccoundId: providerAccoundId,
                 createMonthly: createMonthly,
             }),
         });

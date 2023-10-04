@@ -62,7 +62,7 @@ export default function Library(
     const handleDeletePlaylist = async (playlistId: string, playlistType: string) => {
         try {
             
-            deletePlaylist(providerAccountId, refreshToken, spotifyClientId, spotifyClientSecret, playlistId);
+            deletePlaylist(refreshToken, spotifyClientId, spotifyClientSecret, playlistId);
             
             const userId = sessionStorage.getItem('userId');
             const response = await axios.delete('/api/deletePlaylist', {
