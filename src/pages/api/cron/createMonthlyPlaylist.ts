@@ -13,7 +13,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   for (const user of users) {
     const providerAccountId = user.providerAccountId
     const refreshToken = user.refresh_token
-    const playlistName = `SpotiLab Monthly Playlist - ${new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}`;
+
+    const currentDate = new Date();
+    
+    let previousMonth = currentDate.getMonth() - 1;
+    let previousYear = currentDate.getFullYear();
+
+    if (previousMonth === -1) {
+      previousMonth = 11; // December is represented as 11 in JavaScript Date object
+      previousYear--;
+    }
+
+    const playlistName = `SpotiLab Monthly Playlist - ${new Date(previousYear, previousMonth).toLocaleString('en-US', { month: 'long', year: 'numeric' })}`;
     const type = 'monthly_playlists';
     const userId = user.userId
     const description = 'SpotiLab monthly personalized playlist';
