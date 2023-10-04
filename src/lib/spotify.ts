@@ -248,7 +248,6 @@ const getMonthlyTracks = async (
 }
 
 export async function deletePlaylist(
-    providerAccountId: string,
     refreshToken: string,
     spotifyClientId: string,
     spotifyClientSecret: string,
