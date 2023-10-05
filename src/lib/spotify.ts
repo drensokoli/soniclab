@@ -75,7 +75,7 @@ export async function createAIPlaylist(
         },
         body: JSON.stringify({
             name: playlistName,
-            description: description,
+            description: description + ` with ${songNumber} songs`,
             public: false
         })
     });
@@ -138,7 +138,7 @@ export async function createMonthlyPlaylist(
 
     const playlistName = `SpotiLab Monthly Playlist - ${new Date(previousYear, previousMonth).toLocaleString('en-US', { month: 'long', year: 'numeric' })}`;
     const type = 'monthly_playlists';
-    const description = 'SpotiLab monthly personalized playlist';
+    const description = 'SpotiLab Monthly Playlist with your top 50 songs from the previous month';
     const url = process.env.NEXTAUTH_URL ?? '';
 
     if (createMonthly) {
@@ -161,8 +161,10 @@ export async function createMonthlyPlaylist(
 
         const data = await response.json();
         const playlistId = data.id;
+        const songIds = await getMonthlyTracks(accessToken);
 
-        await addTracksToMonthlyPlaylist(playlistId, accessToken);
+
+        await addTracksToMonthlyPlaylist(playlistId, accessToken, songIds);
 
 
         const endpoint = `${url}/api/savePlaylist`;
@@ -186,7 +188,7 @@ export async function createMonthlyPlaylist(
         }
 
         const savePlaylistData = await savePlaylist.json();
-        console.log(savePlaylistData.message);
+        console.log("savePlaylistData.message - ", savePlaylistData.message);
         return playlistId;
     }
 
@@ -219,11 +221,9 @@ const addTracksToAIPlaylist = async (
 
 const addTracksToMonthlyPlaylist = async (
     playlistId: string,
-    accessToken: string
+    accessToken: string,
+    songIds: string[]
 ) => {
-
-    const songIds = await getMonthlyTracks(accessToken);
-    // const songIds = [''];
 
     const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
         method: 'POST',
@@ -232,7 +232,7 @@ const addTracksToMonthlyPlaylist = async (
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            uris: songIds.map((id: any) => `spotify:track:${id}`)
+            uris: songIds.map(id => `spotify:track:${id}`)
         })
     });
 

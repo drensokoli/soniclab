@@ -20,6 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const id = user._id;
       const userAccount = await accountsCollection.findOne({ userId: id });
       
+      if (userAccount && !userAccount.hasOwnProperty('createMonthly')) {
+        await accountsCollection.updateOne({ userId: id }, { $set: { createMonthly: true } });
+      }
+
       res.status(200).json(userAccount);
     } else {
       res.status(404).json({ message: 'User not found' });
