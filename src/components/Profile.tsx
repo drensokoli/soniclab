@@ -1,6 +1,6 @@
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tooltip } from "@material-tailwind/react";
 
 export default function Profile() {
@@ -32,7 +32,10 @@ export default function Profile() {
         
         console.log(data.message);
     }
-
+    
+    useEffect(() => {
+        setCreateMonthly(sessionStorage.getItem('createMonthly') === 'true' ? true : false);
+    }, [sessionStorage.getItem('createMonthly')])
 
     return (
         <div className='flex flex-col justify-center items-center gap-6'>

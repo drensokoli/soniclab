@@ -17,14 +17,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const userId = user.userId
     const createMonthly = user.createMonthly;
 
-    await createMonthlyPlaylist(
-      providerAccountId,
-      refreshToken,
-      process.env.SPOTIFY_CLIENT_ID ?? '',
-      process.env.SPOTIFY_CLIENT_SECRET ?? '',
-      userId,
-      createMonthly
-    );
+    try {await createMonthlyPlaylist(
+        providerAccountId,
+        refreshToken,
+        process.env.SPOTIFY_CLIENT_ID ?? '',
+        process.env.SPOTIFY_CLIENT_SECRET ?? '',
+        userId,
+        createMonthly
+      );
+
+    } catch (error) {
+      console.error(`Error creating monthly playlist for user ${userId}: ${error}`);
+      continue;
+    }
+    
   }
   res.status(200).json({ message: 'Monthly playlists created' });
 }
