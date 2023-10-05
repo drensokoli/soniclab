@@ -141,7 +141,7 @@ export async function createMonthlyPlaylist(
     const description = 'SpotiLab monthly personalized playlist';
     const url = process.env.NEXTAUTH_URL ?? '';
 
-    if (!createMonthly) {
+    if (createMonthly) {
         const response = await fetch(`https://api.spotify.com/v1/users/${providerAccountId}/playlists`, {
             method: 'POST',
             headers: {
