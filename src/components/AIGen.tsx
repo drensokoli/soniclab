@@ -30,29 +30,107 @@ export default function AIGen({
 
     const type = "ai_gen_playlists";
 
+    function getSongs(response: any): string[] {
+        const songs = response.songs;
+        const songNames: string[] = [];
+
+        for (let i = 0; i < songs.length; i++) {
+            const song = songs[i];
+            const name = song.name.replace(/ /g, '%20');
+            const artist = song.artist.replace(/ /g, '%20');
+            const feature = song.feature ? `%20feat.%20${song.feature.replace(/ /g, '%20')}` : '';
+            const songName = `track:${name}%20artist:${artist}${feature}&type=track`;
+            songNames.push(songName);
+        }
+
+        return songNames;
+    }
+
+    function getPlaylistNames(response: any): string[] {
+        const playlistNames = response.playlistNames;
+        return playlistNames;
+    }
+
     const fetchSongIds = async () => {
 
         setLoading(true);
 
         try {
-            const songNames = [
-                'track:California%20Love%20artist:2Pac%20&type=track',
-                'track:Gin%20and%20Juice%20artist:Snoop%20Dogg&type=track',
-                'track:My%20Name%20Is%20artist:Eminem&type=track',
-                'track:Mo%20Money%20Mo%20Problems%20artist:The%20Notorious%20B.I.G.%20feat.%20Puff%20Daddy%20and%20Mase&type=track',
-                'track:Hypnotize%20artist:The%20Notorious%20B.I.G.&type=track',
-            ];
 
-            const playlistNames = [
-                "90s Hip-Hop Throwback",
-                "Vintage Vibe: Hip-Hop Edition",
-                "Nostalgic Rap Jams",
-                "Decades of Dope Beats",
-                "Retro Rhythms: 90s Hip-Hop",
-                "Timeless Hip-Hop Classics",
-                "Old Skool Hip-Hop Chronicles",
-                "Backspin: 90s Hip-Hop Gems",
-            ];
+            const response = {
+                "songs": [
+                    {
+                        "name": "Inside My Love",
+                        "artist": "Minnie Riperton",
+                        "feature": null
+                    },
+                    {
+                        "name": "Everybody Dies",
+                        "artist": "J. Cole",
+                        "feature": null
+                    },
+                    {
+                        "name": "Heather",
+                        "artist": "Billy Cobham",
+                        "feature": null
+                    },
+                    {
+                        "name": "93 'til Infinity",
+                        "artist": "Souls of Mischief",
+                        "feature": null
+                    },
+                    {
+                        "name": "Never Too Much / What's The Use (Tom Misch Arrangement)",
+                        "artist": "Nic Kierstead",
+                        "feature": null
+                    },
+                    {
+                        "name": "What's the Use?",
+                        "artist": "Mac Miller",
+                        "feature": null
+                    },
+                    {
+                        "name": "Between the Sheets",
+                        "artist": "The Isley Brothers",
+                        "feature": null
+                    },
+                    {
+                        "name": "Big Poppa",
+                        "artist": "The Notorious B.I.G.",
+                        "feature": null
+                    },
+                    {
+                        "name": "Funky Worm",
+                        "artist": "Ohio Players",
+                        "feature": null
+                    },
+                    {
+                        "name": "Regulate",
+                        "artist": "Warren G",
+                        "feature": "Nate Dogg"
+                    },
+                    {
+                        "name": "I Keep Forgettin'",
+                        "artist": "Michael McDonald",
+                        "feature": null
+                    }
+                ],
+                "playlistNames": [
+                    "Sampled Soul: Hip-Hop Chronicles",
+                    "R&B Resampled: The Golden Era",
+                    "Soulful Hip-Hop Journeys",
+                    "Old R&B Revival: Hip-Hop Remakes",
+                    "Rhythms of the Past: Hip-Hop Edition",
+                    "Soulful Sampling Spectacle",
+                    "Hip-Hop's R&B Roots",
+                    "Timeless Beats and Melodies"
+                ]
+            }
+
+
+            const songNames = getSongs(response);
+
+            const playlistNames = getPlaylistNames(response);
 
             const ids = await searchSongs(songNames, refreshToken, spotifyClientId, spotifyClientSecret);
 
@@ -71,6 +149,7 @@ export default function AIGen({
             }, 1000);
         }
     };
+
 
     const createPlaylistHandler = async () => {
         setLoading(true);
