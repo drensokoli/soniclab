@@ -100,12 +100,10 @@ export default function Profile({
     }, [isLoading, vantaEffect])
 
     useEffect(() => {
-        if (session) {
-            setRefreshToken(sessionStorage.getItem('refreshToken') as string);
-            setUserId(sessionStorage.getItem('userId') as string);
-            fetchPlaylists();
-        }
-    }, [session])
+        setRefreshToken(sessionStorage.getItem('refreshToken') as string);
+        setUserId(sessionStorage.getItem('userId') as string);
+        fetchPlaylists();
+    }, [])
 
     useEffect(() => {
         setTimeout(() => {
