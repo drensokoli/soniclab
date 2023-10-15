@@ -6,6 +6,7 @@ import Footer from '../components/Layout/Footer'
 import { useSession } from 'next-auth/react';
 import Loading from '@/components/Helpers/Loading';
 import Nav from '@/components/Layout/Nav';
+import Link from 'next/link';
 
 const bebas_neue = Bebas_Neue({
   subsets: ['latin'],
@@ -119,7 +120,7 @@ export default function Home({
           <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
 
           {session && (
-            <a href='/profile' className='flex flex-row justify-center items-center gap-2'>
+            <Link href='/profile' className='flex flex-row justify-center items-center gap-2'>
               <img
                 src={session?.user?.image?.toString()!}
                 alt="Profile image"
@@ -128,7 +129,7 @@ export default function Home({
                 height={20}
               />
               <h1 className='text-gray-300 text-lg text-bold z-10'>{user}</h1>
-            </a>
+            </Link>
           )}
 
         </div>
