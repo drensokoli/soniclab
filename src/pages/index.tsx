@@ -1,13 +1,11 @@
-
 "use client"
 import { Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import NET from "vanta/dist/vanta.net.min";
-import Footer from '../components/Footer'
+import Footer from '../components/Layout/Footer'
 import { useSession } from 'next-auth/react';
-import Loading from '@/components/Loading';
-import Profile from '@/components/Profile';
-import Nav from '@/components/Nav';
+import Loading from '@/components/Helpers/Loading';
+import Nav from '@/components/Layout/Nav';
 
 const bebas_neue = Bebas_Neue({
   subsets: ['latin'],
@@ -33,7 +31,7 @@ export default function Home({
   const [userId, setUserId] = useState('');
   const [providerAccountId, setProviderAccountId] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
-  const [createMonthly, setCreateMonthly] = useState(false);
+  const user = session?.user?.name;
 
   async function fetchUser() {
     try {
@@ -51,60 +49,14 @@ export default function Home({
       setUserId(data.userId);
       setProviderAccountId(data.providerAccountId);
       setRefreshToken(data.refresh_token);
-      setCreateMonthly(data.createMonthly);
 
       sessionStorage.setItem('userId', data.userId);
       sessionStorage.setItem('providerAccountId', data.providerAccountId);
       sessionStorage.setItem('refreshToken', data.refresh_token);
       sessionStorage.setItem('createMonthly', data.createMonthly);
 
-      fetchPlaylists(data.userId);
-
     } catch (error) {
       console.error('Error:', error);
-    }
-  }
-
-  interface Playlist {
-    playlistId: string;
-    description: string;
-    type: string;
-  }
-
-  async function fetchPlaylists(userId: any): Promise<Playlist[]> {
-    try {
-      const response = await fetch('/api/getPlaylists', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: userId,
-        }),
-      });
-
-      const data = await response.json();
-      
-      const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
-        playlistId: playlist.playlistId,
-        description: playlist.description,
-        type: 'monthly_playlists',
-      }));
-
-      const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
-        playlistId: playlist.playlistId,
-        description: playlist.description,
-        type: 'ai_gen_playlists',
-      }));
-      
-      const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
-
-      sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
-
-      return allPlaylists;
-    } catch (error) {
-      console.error(error);
-      return [];
     }
   }
 
@@ -115,7 +67,6 @@ export default function Home({
       setUserId(sessionStorage.getItem('userId') as string);
       setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);
       setRefreshToken(sessionStorage.getItem('refreshToken') as string);
-      setCreateMonthly(sessionStorage.getItem('createMonthly') as any);
     }
   }, [session])
 
@@ -150,34 +101,45 @@ export default function Home({
     }, 1000);
   }, [])
 
+
+  if (isLoading) {
+    return (
+      <Loading
+        height='h-screen'
+        bgColor='bg-[#23153c]'
+      />
+    )
+  }
+
   return (
     <>
-      {isLoading ? (
-        <Loading
-          height='h-screen'
-          bgColor='bg-[#23153c]'
+      <div ref={vantaRef} className='fixed w-screen h-screen'></div>
+      <div className='flex flex-col justify center items-center h-auto min-h-screen'>
+        <div className='flex flex-col justify-center items-center h-1/4 pb-10 pt-16 z-10 gap-4'>
+          <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
+
+          {session && (
+            <a href='/profile' className='flex flex-row justify-center items-center gap-2'>
+              <img
+                src={session?.user?.image?.toString()!}
+                alt="Profile image"
+                className="rounded-full mx-auto w-12 h-12 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 "
+                width={20}
+                height={20}
+              />
+              <h1 className='text-gray-300 text-lg text-bold z-10'>{user}</h1>
+            </a>
+          )}
+
+        </div>
+        <Nav
+          spotifyClientId={spotifyClientId}
+          spotifyClientSecret={spotifyClientSecret}
+          providerAccountId={providerAccountId}
+          refreshToken={refreshToken}
         />
-      ) : (
-        <>
-          <div ref={vantaRef} className='fixed w-screen h-screen'></div>
-          <div className='flex flex-col justify center items-center h-auto min-h-screen'>
-            <div className='flex flex-col justify-center items-center h-1/4 pb-10 pt-16 z-10 gap-4'>
-              <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
-              {session && (
-                <Profile />
-              )}
-            </div>
-            <Nav
-              spotifyClientId={spotifyClientId}
-              spotifyClientSecret={spotifyClientSecret}
-              providerAccountId={providerAccountId}
-              refreshToken={refreshToken}
-            />
-            <div className='flex flex-grow'></div>
-            <Footer />
-          </div>
-        </>
-      )}
+        <Footer />
+      </div>
     </>
   )
 }

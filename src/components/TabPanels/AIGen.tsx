@@ -1,11 +1,11 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
-import { createAIPlaylist, searchSongs } from '../lib/spotify';
-import Loading from './Loading';
+import { createAIPlaylist, searchSongs } from '../../lib/spotify';
+import Loading from '../Helpers/Loading';
 import AIGenForm from './AIGenForm';
 import PlaylistCreator from './PlaylistCreator';
-import NotSignedIn from './NotSignedIn';
-import SpotifyBubble from './SpotifyBubble';
+import NotSignedIn from '../Layout/NotSignedIn';
+import SpotifyBubble from '../Helpers/SpotifyBubble';
 
 export default function AIGen({
     spotifyClientId,

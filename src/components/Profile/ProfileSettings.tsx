@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react';
 import { Tooltip } from "@material-tailwind/react";
 
-export default function Profile() {
+export default function ProfilePage() {
     const { data: session, status } = useSession();
     const user = session?.user?.name;
 
@@ -49,6 +49,7 @@ export default function Profile() {
                 />
                 <h1 className='text-gray-300 text-lg text-bold z-10'>{user}</h1>
             </div>
+            <a href="/">Back</a>
             <div className='flex flex-row gap-2 justify-center items-center'>
 
                 <h1 className='text-lg md:text-xl font-bold text-gray-300 text-center'>Generate monthly playlists?</h1>

@@ -292,3 +292,53 @@ export async function deletePlaylist(
         return Promise.reject("Error deleting playlist" + error);
     }
 }
+
+export async function getRecentlyPlayedSongs(
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string
+): Promise<string[]> {
+
+    const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+
+    const response = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=50', {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    });
+
+    const data = await response.json();
+
+    let songIds = [];
+    if (data.items) {
+      songIds = data.items.map((item: { track: { id: any; }; }) => item.track.id); 
+    }
+  
+    return songIds;
+  
+}
+
+export async function getTopSongs(
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string,
+    timeRange: string
+): Promise<string[]> {
+
+    const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+
+    const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=50`, {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    });
+
+    const data = await response.json();
+
+    let songIds = [];
+    if (data.items) {
+      songIds = data.items.map((item: { id: any; }) => item.id); 
+    }
+  
+    return songIds;
+}

@@ -1,7 +1,9 @@
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
 import { Montserrat, Bebas_Neue } from 'next/font/google'
-import AIGen from "./AIGen";
-import Library from "./Library";
+import AIGen from "../TabPanels/AIGen";
+import Library from "../Profile/Library";
+import Recent from "../TabPanels/Recent";
+import Top from "../TabPanels/Top";
 
 const montserrat = Montserrat({
     subsets: ['latin'],
@@ -27,11 +29,15 @@ export default function Nav({
                 <Tab
                     value="aigen"
                     className={`${montserrat.className} px-2`}
-                >Playlist Generator</Tab>
+                >AI Gen</Tab>
                 <Tab
-                    value="monthly"
+                    value="recent"
                     className={`${montserrat.className} px-5`}
-                >SpotiLab Library</Tab>
+                >Recent</Tab>
+                <Tab
+                    value="top"
+                    className={`${montserrat.className} px-5`}
+                >Top</Tab>
             </TabsHeader>
             <TabsBody>
                 <TabPanel value="aigen">
@@ -42,11 +48,17 @@ export default function Nav({
                         refreshToken={refreshToken}
                     />
                 </TabPanel>
-                <TabPanel value="monthly">
-                    <Library 
+                <TabPanel value="recent">
+                    <Recent
                         spotifyClientId={spotifyClientId}
                         spotifyClientSecret={spotifyClientSecret}
-                        providerAccountId={providerAccountId}
+                        refreshToken={refreshToken}
+                    />
+                </TabPanel>
+                <TabPanel value="top">
+                    <Top 
+                        spotifyClientId={spotifyClientId}
+                        spotifyClientSecret={spotifyClientSecret}
                         refreshToken={refreshToken}
                     />
                 </TabPanel>
