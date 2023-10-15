@@ -103,7 +103,7 @@ export default function Profile({
         setRefreshToken(sessionStorage.getItem('refreshToken') as string);
         setUserId(sessionStorage.getItem('userId') as string);
         fetchPlaylists();
-    }, [])
+    }, [fetchPlaylists])
 
     useEffect(() => {
         setTimeout(() => {
