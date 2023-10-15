@@ -4,6 +4,13 @@ import NotSignedIn from "../Layout/NotSignedIn";
 import { useEffect, useState } from "react";
 import { getRecentlyPlayedSongs } from "@/lib/spotify";
 
+interface Song {
+    name: string;
+    artist: string;
+    image: string;
+    link: string;
+}
+
 export default function Recent({
     spotifyClientId,
     spotifyClientSecret,
@@ -16,18 +23,25 @@ export default function Recent({
 
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
-    const [songIds, setSongIds] = useState<string[]>([""]);
+    const [songs, setSongs] = useState<Song[]>([]);
 
     const fetchSongs = async () => {
-        const ids = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret);
-        setSongIds(ids);
-    }
+        const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret);
+        console.log("RECENT - ", recentSongs);
+        const songsArray = recentSongs.map((recentSong: any) => ({
+            name: recentSong.name,
+            artist: recentSong.artist.name,
+            image: recentSong.image,
+            link: recentSong.link
+        }))
+        setSongs(songsArray);
+    };
 
     useEffect(() => {
         setLoading(true);
         fetchSongs();
         setLoading(false);
-    }, [refreshToken, spotifyClientId, spotifyClientSecret])
+    }, [refreshToken, spotifyClientId, spotifyClientSecret]);
 
     if (!session) {
         return <NotSignedIn title='Please sign in to see your recently played songs' />
@@ -41,28 +55,16 @@ export default function Recent({
     }
     return (
         <>
-            {loading ? (
-                <Loading
-                    height='h-[400px]'
-                    bgColor='transparent'
-                />
-            ) : (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
-                        {songIds.map((id, index) => (
-                            <iframe
-                                key={id + '_' + index}
-                                src={`https://open.spotify.com/embed/track/${id}`}
-                                width="30%"
-                                height="160"
-                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                loading="lazy"
-                                className="w-full"
-                            />
-                        ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
+                {songs.map(song => (
+                    <div key={song.link}>
+                        <img src={song.image} alt={song.name} />
+                        <p>{song.name}</p>
+                        <p>{song.artist}</p>
+                        <a href={song.link}>Play on Spotify</a>
                     </div>
-                </>
-            )}
+                ))}
+            </div>
         </>
     )
 }

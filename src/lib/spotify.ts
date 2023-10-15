@@ -293,11 +293,18 @@ export async function deletePlaylist(
     }
 }
 
+interface Song {
+    name: string;
+    artist: string;
+    image: string;
+    link: string;
+}
+
 export async function getRecentlyPlayedSongs(
     refreshToken: string,
     spotifyClientId: string,
     spotifyClientSecret: string
-): Promise<string[]> {
+): Promise<Song[]> {
 
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
@@ -309,13 +316,20 @@ export async function getRecentlyPlayedSongs(
 
     const data = await response.json();
 
-    let songIds = [];
+    let songs: Song[] = [];
     if (data.items) {
-      songIds = data.items.map((item: { track: { id: any; }; }) => item.track.id); 
+        songs = data.items.map((item: { track: any; }) => {
+            const track = item.track;
+            return {
+                name: track.name,
+                artist: track.artists[0].name,
+                image: track.album.images[0].url,
+                link: track.external_urls.spotify
+            };
+        });
     }
-  
-    return songIds;
-  
+
+    return songs;
 }
 
 export async function getTopSongs(
@@ -323,7 +337,7 @@ export async function getTopSongs(
     spotifyClientId: string,
     spotifyClientSecret: string,
     timeRange: string
-): Promise<string[]> {
+): Promise<Song[]> {
 
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
@@ -335,10 +349,15 @@ export async function getTopSongs(
 
     const data = await response.json();
 
-    let songIds = [];
+    let songs: Song[] = [];
     if (data.items) {
-      songIds = data.items.map((item: { id: any; }) => item.id); 
+        songs = data.items.map((item: any) => ({
+            name: item.name,
+            artist: item.artists[0].name,
+            image: item.album.images[0].url,
+            link: item.external_urls.spotify
+        }));
     }
-  
-    return songIds;
+
+    return songs;
 }
