@@ -294,6 +294,7 @@ export async function deletePlaylist(
 }
 
 interface Song {
+    id: string;
     name: string;
     artist: string;
     image: string;
@@ -321,6 +322,7 @@ export async function getRecentlyPlayedSongs(
         songs = data.items.map((item: { track: any; }) => {
             const track = item.track;
             return {
+                id : track.id,
                 name: track.name,
                 artist: track.artists[0].name,
                 image: track.album.images[0].url,
@@ -352,6 +354,7 @@ export async function getTopSongs(
     let songs: Song[] = [];
     if (data.items) {
         songs = data.items.map((item: any) => ({
+            id: item.id,
             name: item.name,
             artist: item.artists[0].name,
             image: item.album.images[0].url,

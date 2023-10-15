@@ -3,8 +3,10 @@ import Loading from "../Helpers/Loading";
 import NotSignedIn from "../Layout/NotSignedIn";
 import { useEffect, useState } from "react";
 import { getRecentlyPlayedSongs } from "@/lib/spotify";
+import SongCard from "../Helpers/SongCard";
 
 interface Song {
+    id: string;
     name: string;
     artist: string;
     image: string;
@@ -27,10 +29,10 @@ export default function Recent({
 
     const fetchSongs = async () => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret);
-        console.log("RECENT - ", recentSongs);
         const songsArray = recentSongs.map((recentSong: any) => ({
+            id: recentSong.id,
             name: recentSong.name,
-            artist: recentSong.artist.name,
+            artist: recentSong.artist,
             image: recentSong.image,
             link: recentSong.link
         }))
@@ -55,16 +57,7 @@ export default function Recent({
     }
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
-                {songs.map(song => (
-                    <div key={song.link}>
-                        <img src={song.image} alt={song.name} />
-                        <p>{song.name}</p>
-                        <p>{song.artist}</p>
-                        <a href={song.link}>Play on Spotify</a>
-                    </div>
-                ))}
-            </div>
+            <SongCard songs={songs} />
         </>
     )
 }
