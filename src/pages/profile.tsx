@@ -62,46 +62,46 @@ export default function Profile({
         }
     }, [isLoading, vantaEffect])
 
+    async function fetchPlaylists(): Promise<Playlist[]> {
+        try {
+            const response = await fetch('/api/getPlaylists', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                }),
+            });
+
+            const data = await response.json();
+
+            const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
+                playlistId: playlist.playlistId,
+                description: playlist.description,
+                type: 'monthly_playlists',
+            }));
+
+            const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
+                playlistId: playlist.playlistId,
+                description: playlist.description,
+                type: 'ai_gen_playlists',
+            }));
+
+            const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
+
+            sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
+
+            return allPlaylists;
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    }
+
     useEffect(() => {
         setRefreshToken(sessionStorage.getItem('refreshToken') as string);
         setUserId(sessionStorage.getItem('userId') as string);
-
-        async function fetchPlaylists(): Promise<Playlist[]> {
-            try {
-                const response = await fetch('/api/getPlaylists', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userId: userId,
-                    }),
-                });
-
-                const data = await response.json();
-
-                const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
-                    playlistId: playlist.playlistId,
-                    description: playlist.description,
-                    type: 'monthly_playlists',
-                }));
-
-                const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
-                    playlistId: playlist.playlistId,
-                    description: playlist.description,
-                    type: 'ai_gen_playlists',
-                }));
-
-                const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
-
-                sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
-
-                return allPlaylists;
-            } catch (error) {
-                console.error(error);
-                return [];
-            }
-        }
         fetchPlaylists();
     }, [])
 
