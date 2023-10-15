@@ -37,31 +37,6 @@ export default function Profile({
     const [refreshToken, setRefreshToken] = useState('');
     const [userId, setUserId] = useState('');
 
-    useEffect(() => {
-        if (!isLoading && !vantaEffect && vantaRef.current) {
-            const spacing = window.innerWidth >= 640 ? 20 : 30;
-            setVantaEffect(
-                NET({
-                    el: vantaRef.current,
-                    mouseControls: true,
-                    touchControls: true,
-                    gyroControls: false,
-                    minHeight: 200.00,
-                    minWidth: 200.00,
-                    scale: 1.00,
-                    scaleMobile: 1.00,
-                    points: 20.00,
-                    maxDistance: 23.00,
-                    spacing: spacing
-                })
-            )
-        }
-
-        return () => {
-            if (vantaEffect) vantaEffect.destroy()
-        }
-    }, [isLoading, vantaEffect])
-
     async function fetchPlaylists(): Promise<Playlist[]> {
         try {
             const response = await fetch('/api/getPlaylists', {
@@ -100,10 +75,37 @@ export default function Profile({
     }
 
     useEffect(() => {
-        setRefreshToken(sessionStorage.getItem('refreshToken') as string);
-        setUserId(sessionStorage.getItem('userId') as string);
-        fetchPlaylists();
-    }, [])
+        if (!isLoading && !vantaEffect && vantaRef.current) {
+            const spacing = window.innerWidth >= 640 ? 20 : 30;
+            setVantaEffect(
+                NET({
+                    el: vantaRef.current,
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    scale: 1.00,
+                    scaleMobile: 1.00,
+                    points: 20.00,
+                    maxDistance: 23.00,
+                    spacing: spacing
+                })
+            )
+        }
+
+        return () => {
+            if (vantaEffect) vantaEffect.destroy()
+        }
+    }, [isLoading, vantaEffect])
+
+    useEffect(() => {
+        if (session && !sessionStorage.getItem('playlists')) {
+            setRefreshToken(sessionStorage.getItem('refreshToken') as string);
+            setUserId(sessionStorage.getItem('userId') as string);
+            fetchPlaylists();
+        }
+    }, [session])
 
     useEffect(() => {
         setTimeout(() => {
