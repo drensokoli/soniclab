@@ -5,6 +5,8 @@ import { SetStateAction, useEffect, useState } from "react";
 import { getTopSongs } from "@/lib/spotify";
 import SongCard from "../Helpers/SongCard";
 import { Select, Option, select } from "@material-tailwind/react";
+import SongList from "../Helpers/SongList";
+import View from "../Helpers/View";
 
 interface Song {
     id: string;
@@ -28,6 +30,8 @@ export default function Top({
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
     const [timeRange, setTimeRange] = useState('short_term');
+
+    const [view, setView] = useState('card');
 
     const fetchSongs = async (timeRange: string) => {
         const topSongs = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, timeRange);
@@ -59,23 +63,30 @@ export default function Top({
     return (
         <>
             <div className="my-4">
-                <select
-                    id="countries"
-                    className="bg-gray-200 w-[200px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value={timeRange}
-                    onChange={(e) => {
-                        setTimeRange(e.target.value);
-                        setLoading(true);
-                        fetchSongs(e.target.value);
-                        setLoading(false);
-                    }}
-                >
-                    <option value="short_term">Short term</option>
-                    <option value="medium_term">Medium term</option>
-                    <option value="long_term">Long term</option>
-                </select>
+                <div className="flex flex-row gap-2 items-center justify-end w-full">
+                    <select
+                        id="timeRange"
+                        className="bg-gray-200 w-[200px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        value={timeRange}
+                        onChange={(e) => {
+                            setTimeRange(e.target.value);
+                            fetchSongs(e.target.value);
+                        }}
+                    >
+                        <option value="short_term">Short term</option>
+                        <option value="medium_term">Medium term</option>
+                        <option value="long_term">Long term</option>
+                    </select>
+
+                    <View setView={setView} />
+
+                </div>
             </div>
-            <SongCard songs={songs} />
+            {view === 'card' ? (
+                <SongCard songs={songs} />
+            ) : (
+                <SongList songs={songs} />
+            )}
         </>
     )
 

@@ -4,6 +4,8 @@ import NotSignedIn from "../Layout/NotSignedIn";
 import { useEffect, useState } from "react";
 import { getRecentlyPlayedSongs } from "@/lib/spotify";
 import SongCard from "../Helpers/SongCard";
+import View from "../Helpers/View";
+import SongList from "../Helpers/SongList";
 
 interface Song {
     id: string;
@@ -26,6 +28,8 @@ export default function Recent({
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
+
+    const [view, setView] = useState('card');
 
     const fetchSongs = async () => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret);
@@ -57,7 +61,16 @@ export default function Recent({
     }
     return (
         <>
-            <SongCard songs={songs} />
+            <div className="my-4">
+                <div className="flex flex-row gap-2 items-center justify-end w-full">
+                    <View setView={setView} />
+                </div>
+            </div>
+            {view === 'card' ? (
+                <SongCard songs={songs} />
+            ) : (
+                <SongList songs={songs} />
+            )}
         </>
     )
 }

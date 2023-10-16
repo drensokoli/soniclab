@@ -1,4 +1,3 @@
-import { ReactElement, JSXElementConstructor, ReactNode, PromiseLikeOfReactNode, ReactPortal, Key } from "react";
 
 export default function SongCard({
     songs
@@ -14,7 +13,7 @@ export default function SongCard({
     return (
         <>
 
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6">
                 {songs.map((song, index) => (
                     <a
                         href={`https://open.spotify.com/track/${song.id}`}
