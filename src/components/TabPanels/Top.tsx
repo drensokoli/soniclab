@@ -82,11 +82,13 @@ export default function Top({
 
                 </div>
             </div>
-            {view === 'card' ? (
-                <SongCard songs={songs} />
-            ) : (
-                <SongList songs={songs} />
-            )}
+            <div className="w-[100%]">
+                {view === 'card' ? (
+                    <SongCard songs={songs} />
+                ) : (
+                    <SongList songs={songs} />
+                )}
+            </div>
         </>
     )
 

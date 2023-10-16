@@ -40,7 +40,7 @@ export default function Nav({
                 >Top</Tab>
             </TabsHeader>
             <TabsBody>
-                <TabPanel value="aigen">
+                <TabPanel value="aigen" className="p-0">
                     <AIGen
                         spotifyClientId={spotifyClientId}
                         spotifyClientSecret={spotifyClientSecret}
@@ -48,14 +48,14 @@ export default function Nav({
                         refreshToken={refreshToken}
                     />
                 </TabPanel>
-                <TabPanel value="recent">
+                <TabPanel value="recent" className="p-0">
                     <Recent
                         spotifyClientId={spotifyClientId}
                         spotifyClientSecret={spotifyClientSecret}
                         refreshToken={refreshToken}
                     />
                 </TabPanel>
-                <TabPanel value="top">
+                <TabPanel value="top" className="p-0">
                     <Top 
                         spotifyClientId={spotifyClientId}
                         spotifyClientSecret={spotifyClientSecret}
