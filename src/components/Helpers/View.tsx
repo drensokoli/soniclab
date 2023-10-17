@@ -24,13 +24,11 @@ export default function View({ setView }: Props) {
     };
 
     return (
-        <div className="flex flex-row gap-2">
             <button onClick={handleClick}>
                 <img
                     src={images[icon].path}
                     className="h-[40px] p-1 rounded-md hover:border-2 border-gray-300"
                 />
             </button>
-        </div>
     );
 }

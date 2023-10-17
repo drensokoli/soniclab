@@ -85,15 +85,19 @@ export default function Recent({
                         />
                     </div>
                 </div>
-                <div className="flex flex-row gap-2 items-center justify-end w-full py-4">
+            </div>
+            <div className="flex flex-row justify-center">
+                <div className="flex items-center justify-end w-full py-4">
                     <View setView={setView} />
                 </div>
             </div>
-            {view === 'card' ? (
-                <SongCard songs={songs} />
-            ) : (
-                <SongList songs={songs} />
-            )}
+            <div className="flex justify-center">
+                {view === 'card' ? (
+                    <SongCard songs={songs} />
+                ) : (
+                    <SongList songs={songs} />
+                )}
+            </div>
         </>
     )
 }

@@ -86,10 +86,12 @@ export default function Top({
                         />
                     </div>
                 </div>
-                <div className="flex flex-row gap-2 items-center justify-end w-full">
+            </div>
+            <div className="flex flex-row justify-center items-center">
+                <div className="flex items-center justify-end w-full py-4 gap-2">
                     <select
                         id="timeRange"
-                        className="bg-gray-200 w-[200px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={timeRange}
                         onChange={(e) => {
                             setTimeRange(e.target.value);
@@ -100,16 +102,16 @@ export default function Top({
                         <option value="medium_term">Six months</option>
                         <option value="long_term">All time</option>
                     </select>
-                    <div className="py-4">
-                        <View setView={setView} />
-                    </div>
+                    <View setView={setView} />
                 </div>
             </div>
-            {view === 'card' ? (
-                <SongCard songs={songs} />
-            ) : (
-                <SongList songs={songs} />
-            )}
+            <div className="flex justify-center">
+                {view === 'card' ? (
+                    <SongCard songs={songs} />
+                ) : (
+                    <SongList songs={songs} />
+                )}
+            </div>
         </>
     )
 
