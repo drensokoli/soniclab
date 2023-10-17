@@ -28,7 +28,7 @@ export default function View({ setView }: Props) {
             <button onClick={handleClick}>
                 <img
                     src={images[icon].path}
-                    className="h-[40px] p-1 rounded-md"
+                    className="h-[40px] p-1 rounded-md hover:border-2 border-gray-300"
                 />
             </button>
         </div>

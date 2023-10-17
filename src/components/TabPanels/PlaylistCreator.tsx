@@ -9,8 +9,8 @@ export default function PlaylistCreator({
     createPlaylistHandler
 }: any) {
     return (
-        <div className='flex flex-col justify-center items-center gap-4'>
-            <h1 className='text-xl py-4 md:text-2xl font-bold text-gray-300 text-center'>Pick a name for your playlist</h1>
+        <div className='flex flex-col justify-center items-center gap-4 pt-8 pb-2'>
+            <h1 className='text-xl md:text-2xl text-gray-300 text-center'>Pick a name for your playlist</h1>
             <input
                 id="description"
                 className=" block p-2.5 w-full md:w-4/5 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
@@ -18,18 +18,18 @@ export default function PlaylistCreator({
                 value={playlistName}
                 onChange={(e) => setPlaylistName(e.target.value)}
             />
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full md:w-4/5'>
                 {playlistNames.map((playlistName: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | PromiseLikeOfReactNode | null | undefined, index: Key | null | undefined) => (
                     <button
                         key={index}
-                        className='bg-[#cf387a] hover:bg-[#a92e64] text-gray-200 py-1 px-2 rounded'
+                        className='bg-[#cf387a] hover:bg-[#a92e64] text-gray-200 text-sm rounded px-2 h-[40px] sm:h-[50px] w-full'
                         onClick={() => setPlaylistName(playlistName)}
                     >
                         {playlistName}
                     </button>
                 ))}
             </div>
-            <h1 className='text-xl md:text-2xl py-4 font-bold text-gray-300 text-center'>Your generated songs</h1>
+            <h1 className='text-xl md:text-2xl text-gray-300 text-center'>Your generated songs</h1>
             <div className='flex flex-col justify-center items-center w-full md:w-3/4'>
                 {songIds.map((songId: any, index: Key | null | undefined) => (
                     <div key={index} className='flex flex-row items-center justify-center gap-2 w-full'>

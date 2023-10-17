@@ -7,6 +7,7 @@ import SongCard from "../Helpers/SongCard";
 import { Select, Option, select } from "@material-tailwind/react";
 import SongList from "../Helpers/SongList";
 import View from "../Helpers/View";
+import Slider from "../Helpers/Slider";
 
 interface Song {
     id: string;
@@ -30,11 +31,13 @@ export default function Top({
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
     const [timeRange, setTimeRange] = useState('short_term');
+    const [playlistName, setPlaylistName] = useState('');
 
     const [view, setView] = useState('card');
+    const [range, setRange] = useState(50);
 
-    const fetchSongs = async (timeRange: string) => {
-        const topSongs = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, timeRange);
+    const fetchSongs = async (timeRange: string, range: number) => {
+        const topSongs = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, timeRange, range);
         const songsArray = topSongs.map((topSong: any) => ({
             id: topSong.id,
             name: topSong.name,
@@ -47,7 +50,7 @@ export default function Top({
 
     useEffect(() => {
         setLoading(true);
-        fetchSongs(timeRange);
+        fetchSongs(timeRange, range);
         setLoading(false);
     }, [refreshToken, spotifyClientId, spotifyClientSecret]);
 
@@ -62,7 +65,27 @@ export default function Top({
 
     return (
         <>
-            <div className="my-4">
+            <div>
+                <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
+                    <h1 className="text-gray-300 text-xl md:text-2xl text-center">Create a playlist with your top songs</h1>
+                    <input
+                        id="description"
+                        className=" block p-2.5 w-full md:w-4/5 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
+                        placeholder="Playlist Name"
+                        value={playlistName}
+                        onChange={(e) => setPlaylistName(e.target.value)}
+                    />
+                    <div className="w-full md:w-4/5">
+                        <Slider
+                            max={50}
+                            range={range}
+                            onChange={(value) => {
+                                setRange(value);
+                                fetchSongs(timeRange, value);
+                            }}
+                        />
+                    </div>
+                </div>
                 <div className="flex flex-row gap-2 items-center justify-end w-full">
                     <select
                         id="timeRange"
@@ -70,25 +93,23 @@ export default function Top({
                         value={timeRange}
                         onChange={(e) => {
                             setTimeRange(e.target.value);
-                            fetchSongs(e.target.value);
+                            fetchSongs(e.target.value, range);
                         }}
                     >
-                        <option value="short_term">Short term</option>
-                        <option value="medium_term">Medium term</option>
-                        <option value="long_term">Long term</option>
+                        <option value="short_term">Four weeks</option>
+                        <option value="medium_term">Six months</option>
+                        <option value="long_term">All time</option>
                     </select>
-
-                    <View setView={setView} />
-
+                    <div className="py-4">
+                        <View setView={setView} />
+                    </div>
                 </div>
             </div>
-            <div className="w-[100%]">
-                {view === 'card' ? (
-                    <SongCard songs={songs} />
-                ) : (
-                    <SongList songs={songs} />
-                )}
-            </div>
+            {view === 'card' ? (
+                <SongCard songs={songs} />
+            ) : (
+                <SongList songs={songs} />
+            )}
         </>
     )
 

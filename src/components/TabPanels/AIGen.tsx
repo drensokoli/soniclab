@@ -21,7 +21,7 @@ export default function AIGen({
     const { data: session } = useSession();
 
     const [description, setDescription] = useState('');
-    const [range, setRange] = useState(25);
+    const [range, setRange] = useState(13);
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
@@ -150,7 +150,6 @@ export default function AIGen({
         }
     };
 
-
     const createPlaylistHandler = async () => {
         setLoading(true);
 
@@ -179,7 +178,7 @@ export default function AIGen({
             sessionStorage.removeItem('description');
 
             setSongIds([]);
-            setRange(25);
+            setRange(13);
             setDescription('');
 
             // Retrieve the existing playlist IDs

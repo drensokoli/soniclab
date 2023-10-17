@@ -6,6 +6,7 @@ import { getRecentlyPlayedSongs } from "@/lib/spotify";
 import SongCard from "../Helpers/SongCard";
 import View from "../Helpers/View";
 import SongList from "../Helpers/SongList";
+import Slider from "../Helpers/Slider";
 
 interface Song {
     id: string;
@@ -28,11 +29,13 @@ export default function Recent({
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
+    const [playlistName, setPlaylistName] = useState('');
 
     const [view, setView] = useState('card');
+    const [range, setRange] = useState(50);
 
-    const fetchSongs = async () => {
-        const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret);
+    const fetchSongs = async (range: number) => {
+        const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret, range);
         const songsArray = recentSongs.map((recentSong: any) => ({
             id: recentSong.id,
             name: recentSong.name,
@@ -45,7 +48,7 @@ export default function Recent({
 
     useEffect(() => {
         setLoading(true);
-        fetchSongs();
+        fetchSongs(range);
         setLoading(false);
     }, [refreshToken, spotifyClientId, spotifyClientSecret]);
 
@@ -61,8 +64,28 @@ export default function Recent({
     }
     return (
         <>
-            <div className="my-4">
-                <div className="flex flex-row gap-2 items-center justify-end w-full">
+            <div>
+                <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
+                    <h1 className="text-gray-300 text-xl md:text-2xl text-center">Create a session playlist with your recently played songs</h1>
+                    <input
+                        id="description"
+                        className=" block p-2.5 w-full md:w-4/5 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"
+                        placeholder="Playlist Name"
+                        value={playlistName}
+                        onChange={(e) => setPlaylistName(e.target.value)}
+                    />
+                    <div className="w-full md:w-4/5">
+                        <Slider
+                            max={50}
+                            range={range}
+                            onChange={(value) => {
+                                setRange(value);
+                                fetchSongs(value);
+                            }}
+                        />
+                    </div>
+                </div>
+                <div className="flex flex-row gap-2 items-center justify-end w-full py-4">
                     <View setView={setView} />
                 </div>
             </div>

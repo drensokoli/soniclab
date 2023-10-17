@@ -304,12 +304,13 @@ interface Song {
 export async function getRecentlyPlayedSongs(
     refreshToken: string,
     spotifyClientId: string,
-    spotifyClientSecret: string
+    spotifyClientSecret: string,
+    range: number
 ): Promise<Song[]> {
 
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
-    const response = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=50', {
+    const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=${range}`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken
         }
@@ -338,12 +339,13 @@ export async function getTopSongs(
     refreshToken: string,
     spotifyClientId: string,
     spotifyClientSecret: string,
-    timeRange: string
+    timeRange: string,
+    songRange: number
 ): Promise<Song[]> {
 
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
-    const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=50`, {
+    const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${songRange}`, {
         headers: {
             'Authorization': 'Bearer ' + accessToken
         }
