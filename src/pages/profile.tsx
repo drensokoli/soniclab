@@ -9,12 +9,6 @@ import ProfileSettings from '@/components/Profile/ProfileSettings';
 import Library from '@/components/Profile/Library';
 import Link from 'next/link';
 
-interface Playlist {
-    playlistId: string;
-    description: string;
-    type: string;
-}
-
 const bebas_neue = Bebas_Neue({
     subsets: ['latin'],
     weight: '400',
@@ -36,44 +30,6 @@ export default function Profile({
     const vantaRef = useRef(null);
 
     const [refreshToken, setRefreshToken] = useState('');
-    const [userId, setUserId] = useState('');
-
-    async function fetchPlaylists(): Promise<Playlist[]> {
-        try {
-            const response = await fetch('/api/getPlaylists', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                }),
-            });
-
-            const data = await response.json();
-
-            const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
-                playlistId: playlist.playlistId,
-                description: playlist.description,
-                type: 'monthly_playlists',
-            }));
-
-            const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
-                playlistId: playlist.playlistId,
-                description: playlist.description,
-                type: 'ai_gen_playlists',
-            }));
-
-            const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
-
-            sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
-
-            return allPlaylists;
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    }
 
     useEffect(() => {
         if (!isLoading && !vantaEffect && vantaRef.current) {
@@ -101,17 +57,9 @@ export default function Profile({
     }, [isLoading, vantaEffect])
 
     useEffect(() => {
-        if (session && !sessionStorage.getItem('playlists')) {
-            setRefreshToken(sessionStorage.getItem('refreshToken') as string);
-            setUserId(sessionStorage.getItem('userId') as string);
-            fetchPlaylists();
-        }
-    }, [session])
-
-    useEffect(() => {
         setTimeout(() => {
             setIsLoading(false);
-        }, 1000);
+        }, 500);
     }, [])
 
     if (isLoading) {
@@ -126,10 +74,9 @@ export default function Profile({
     return (
         <>
             <div ref={vantaRef} className='fixed w-screen h-screen'></div>
-            <div className='flex flex-col justify center items-center h-auto min-h-screen'>
-                <div className='flex flex-col justify-center items-center h-1/4 pb-10 pt-16 z-10 gap-4'>
-
-                    <Link href='/' className='absolute top-7 left-9'>
+            <div className='flex flex-col justify center items-center'>
+                <div className='flex flex-col justify-center items-center h-1/4 pb-10 pt-16 z-10 gap-4 w-full'>
+                    <Link href='/' className='absolute md:top-7 top-3 md:left-9 left-4'>
                         <button type="button" className=" text-white rounded-md border-gray-100 py-2 hover:text-white">
                             <div className="flex flex-row align-middle">
                                 <svg className="w-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

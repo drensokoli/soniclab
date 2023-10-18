@@ -8,6 +8,12 @@ import Loading from '@/components/Helpers/Loading';
 import Nav from '@/components/Layout/Nav';
 import Link from 'next/link';
 
+interface Playlist {
+  playlistId: string;
+  description: string;
+  type: string;
+}
+
 const bebas_neue = Bebas_Neue({
   subsets: ['latin'],
   weight: '400',
@@ -61,9 +67,49 @@ export default function Home({
     }
   }
 
+  async function fetchPlaylists(): Promise<Playlist[]> {
+    try {
+      const userId = sessionStorage.getItem('userId') as string;
+      const response = await fetch('/api/getPlaylists', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+        }),
+      });
+
+      const data = await response.json();
+
+      const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
+        playlistId: playlist.playlistId,
+        description: playlist.description,
+        type: 'monthly_playlists',
+      }));
+
+      const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
+        playlistId: playlist.playlistId,
+        description: playlist.description,
+        type: 'ai_gen_playlists',
+      }));
+
+      const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
+
+      sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
+
+      return allPlaylists;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
   useEffect(() => {
-    if (session && !sessionStorage.getItem('userId') && !sessionStorage.getItem('providerAccountId') && !sessionStorage.getItem('refreshToken') && !sessionStorage.getItem('createMonthly')) {
-      fetchUser();
+    if (session && !sessionStorage.getItem('userId') && !sessionStorage.getItem('providerAccountId') && !sessionStorage.getItem('refreshToken') && !sessionStorage.getItem('createMonthly') && !sessionStorage.getItem('playlists')) {
+      fetchUser().then(() => {
+        fetchPlaylists();
+      });
     } else if (session && sessionStorage.getItem('userId') && sessionStorage.getItem('providerAccountId') && sessionStorage.getItem('refreshToken') && sessionStorage.getItem('createMonthly')) {
       setUserId(sessionStorage.getItem('userId') as string);
       setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);

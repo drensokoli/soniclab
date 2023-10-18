@@ -28,45 +28,6 @@ export default function Library(
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-
-    async function fetchPlaylists(): Promise<Playlist[]> {
-        try {
-            const userId = sessionStorage.getItem('userId');
-            const response = await fetch('/api/getPlaylists', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                }),
-            });
-
-            const data = await response.json();
-
-            const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
-                playlistId: playlist.playlistId,
-                description: playlist.description,
-                type: 'monthly_playlists',
-            }));
-
-            const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
-                playlistId: playlist.playlistId,
-                description: playlist.description,
-                type: 'ai_gen_playlists',
-            }));
-
-            const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
-            // setPlaylists(allPlaylists);
-            sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
-
-            return allPlaylists;
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    }
-
     const handleDeletePlaylist = async (playlistId: string, playlistType: string) => {
         try {
 
@@ -100,10 +61,11 @@ export default function Library(
 
     useEffect(() => {
         setIsLoading(true);
-        if (!isLoading && !playlists.length) {
-            fetchPlaylists();
-            setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
-            console.log('playlists: ', playlists);
+        if (session) {
+            const playlistsString = sessionStorage.getItem('playlists');
+            if (playlistsString !== null) {
+                setPlaylists(JSON.parse(playlistsString));
+            }
         }
         setIsLoading(false);
     }, [session]);
@@ -115,39 +77,41 @@ export default function Library(
 
     return (
         <>
-            {!(playlists.length === 0) ? (
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8'>
-                    {playlists.map((playlist, index) => (
-                        <div key={index} className='flex flex-col gap-2'>
-                            <iframe
-                                className='opacity-75'
-                                src={`https://open.spotify.com/embed/playlist/${playlist.playlistId}?utm_source=generator`}
-                                width='100%'
-                                height='352'
-                                allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'
-                                loading='lazy'
-                            ></iframe>
-                            <button
-                                type='button'
-                                className='inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black'
-                                data-te-ripple-init
-                                onClick={() => handleDeletePlaylist(playlist.playlistId, playlist.type)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <div className='flex flex-col h-[200px] justify-center items-center'>
-                    <h1 className='text-xl md:text-xl font-bold text-gray-400 opacity-70 text-center'>
-                        Your SpotiLab playlists will appear here
-                    </h1>
-                    <h1 className='text-xl md:text-xl font-bold text-gray-400 opacity-70 text-center'>
-                        Head over to the Playlist Generator tab and create your first playlist
-                    </h1>
-                </div>
-            )}
+            <div className='w-[75%] md:w-[85%] pt-4'>
+                {!(playlists.length === 0) ? (
+                    <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
+                        {playlists.map((playlist, index) => (
+                            <div key={index} className='flex flex-col gap-2'>
+                                <iframe
+                                    className='opacity-75'
+                                    src={`https://open.spotify.com/embed/playlist/${playlist.playlistId}?utm_source=generator`}
+                                    width='100%'
+                                    height='420'
+                                    allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'
+                                    loading='lazy'
+                                ></iframe>
+                                <button
+                                    type='button'
+                                    className='inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black'
+                                    data-te-ripple-init
+                                    onClick={() => handleDeletePlaylist(playlist.playlistId, playlist.type)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className='flex flex-col h-[200px] justify-center items-center'>
+                        <h1 className='text-xl md:text-xl font-bold text-gray-400 opacity-70 text-center'>
+                            Your SpotiLab playlists will appear here
+                        </h1>
+                        <h1 className='text-xl md:text-xl font-bold text-gray-400 opacity-70 text-center'>
+                            Head over to the Playlist Generator tab and create your first playlist
+                        </h1>
+                    </div>
+                )}
+            </div>
         </>
     );
 }
