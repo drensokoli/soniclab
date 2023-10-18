@@ -14,6 +14,7 @@ interface Song {
     artist: string;
     image: string;
     link: string;
+    show: boolean;
 }
 
 export default function Recent({
@@ -41,9 +42,30 @@ export default function Recent({
             name: recentSong.name,
             artist: recentSong.artist,
             image: recentSong.image,
-            link: recentSong.link
+            link: recentSong.link,
+            show: true,
         }))
         setSongs(songsArray);
+    };
+
+    const handleRangeChange = (value: number) => {
+        
+        setRange(value);
+
+        const updatedSongs = songs.map((song, index) => {
+            if (index < value) {
+                return {
+                    ...song,
+                    show: true,
+                };
+            }
+            return {
+                ...song,
+                show: false,
+            };
+        });
+
+        setSongs(updatedSongs);
     };
 
     useEffect(() => {
@@ -79,8 +101,7 @@ export default function Recent({
                             max={50}
                             range={range}
                             onChange={(value) => {
-                                setRange(value);
-                                fetchSongs(value);
+                                handleRangeChange(value);
                             }}
                         />
                     </div>

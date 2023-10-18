@@ -8,6 +8,7 @@ export default function SongList({
         image: any;
         name: any;
         artist: any;
+        show: boolean;
     }[]
 }) {
 
@@ -27,7 +28,9 @@ export default function SongList({
         <>
 
             <div className="flex flex-col gap-4 w-full">
-                {songArray.map((song, index) => (
+                {songArray
+                .filter((song) => song.show)
+                .map((song, index) => (
                     <div
                         key={index}
                         className="flex flex-row items-center justify-between gap-4 p-3 bg-[#282828] text-gray-200 rounded-lg shadow-md dark:bg-gray-800"

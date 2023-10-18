@@ -15,6 +15,7 @@ interface Song {
     artist: string;
     image: string;
     link: string;
+    show: boolean;
 }
 
 export default function Top({
@@ -43,9 +44,30 @@ export default function Top({
             name: topSong.name,
             artist: topSong.artist,
             image: topSong.image,
-            link: topSong.link
+            link: topSong.link,
+            show: true,
         }))
         setSongs(songsArray);
+    };
+
+    const handleRangeChange = (value: number) => {
+        
+        setRange(value);
+
+        const updatedSongs = songs.map((song, index) => {
+            if (index < value) {
+                return {
+                    ...song,
+                    show: true,
+                };
+            }
+            return {
+                ...song,
+                show: false,
+            };
+        });
+
+        setSongs(updatedSongs);
     };
 
     useEffect(() => {
@@ -80,8 +102,7 @@ export default function Top({
                             max={50}
                             range={range}
                             onChange={(value) => {
-                                setRange(value);
-                                fetchSongs(timeRange, value);
+                                handleRangeChange(value);
                             }}
                         />
                     </div>
