@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from '../Helpers/Slider';
+import Slider from '../../Helpers/Slider';
 
 export default function AIGenForm({ setDescription,
     setRange,

@@ -30,10 +30,10 @@ export default function ProfilePage() {
 
         setCreateMonthly(createMonthly);
         sessionStorage.setItem('createMonthly', createMonthly.toString());
-        
+
         console.log(data.message);
     }
-    
+
     useEffect(() => {
         setCreateMonthly(sessionStorage.getItem('createMonthly') === 'true' ? true : false);
     }, [sessionStorage.getItem('createMonthly')])
@@ -50,7 +50,6 @@ export default function ProfilePage() {
                 />
                 <h1 className='text-gray-300 text-lg text-bold z-10'>{user}</h1>
             </div>
-            <Link href="/">Back</Link>
             <div className='flex flex-row gap-2 justify-center items-center'>
 
                 <h1 className='text-lg md:text-xl font-bold text-gray-300 text-center'>Generate monthly playlists?</h1>

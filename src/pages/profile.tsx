@@ -7,6 +7,7 @@ import { getSession, useSession } from 'next-auth/react';
 import Loading from '@/components/Helpers/Loading';
 import ProfileSettings from '@/components/Profile/ProfileSettings';
 import Library from '@/components/Profile/Library';
+import Link from 'next/link';
 
 interface Playlist {
     playlistId: string;
@@ -127,6 +128,17 @@ export default function Profile({
             <div ref={vantaRef} className='fixed w-screen h-screen'></div>
             <div className='flex flex-col justify center items-center h-auto min-h-screen'>
                 <div className='flex flex-col justify-center items-center h-1/4 pb-10 pt-16 z-10 gap-4'>
+
+                    <Link href='/' className='absolute top-7 left-9'>
+                        <button type="button" className=" text-white rounded-md border-gray-100 py-2 hover:text-white">
+                            <div className="flex flex-row align-middle">
+                                <svg className="w-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd"></path>
+                                </svg>
+                                <p className={`${bebas_neue.className} text-2xl`}>HOME</p>
+                            </div>
+                        </button>
+                    </Link>
                     <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
                     <ProfileSettings />
                     <Library spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} refreshToken={refreshToken} />

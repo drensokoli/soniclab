@@ -28,16 +28,44 @@ export default function Library(
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        setIsLoading(true);
-        if (session && sessionStorage.getItem('playlists')) {
-            const playlistsString = sessionStorage.getItem('playlists');
-            if (playlistsString !== null) {
-                setPlaylists(JSON.parse(playlistsString));
-            }
+
+    async function fetchPlaylists(): Promise<Playlist[]> {
+        try {
+            const userId = sessionStorage.getItem('userId');
+            const response = await fetch('/api/getPlaylists', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                }),
+            });
+
+            const data = await response.json();
+
+            const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
+                playlistId: playlist.playlistId,
+                description: playlist.description,
+                type: 'monthly_playlists',
+            }));
+
+            const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
+                playlistId: playlist.playlistId,
+                description: playlist.description,
+                type: 'ai_gen_playlists',
+            }));
+
+            const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
+            // setPlaylists(allPlaylists);
+            sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
+
+            return allPlaylists;
+        } catch (error) {
+            console.error(error);
+            return [];
         }
-        setIsLoading(false);
-    }, [session]);
+    }
 
     const handleDeletePlaylist = async (playlistId: string, playlistType: string) => {
         try {
@@ -69,6 +97,17 @@ export default function Library(
             console.error(error);
         }
     };
+
+    useEffect(() => {
+        setIsLoading(true);
+        if (!isLoading && !playlists.length) {
+            fetchPlaylists();
+            setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
+            console.log('playlists: ', playlists);
+        }
+        setIsLoading(false);
+    }, [session]);
+
 
     if (isLoading) {
         return <Loading height='h-[400px]' bgColor='transparent' />;
