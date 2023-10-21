@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import Loading from "../Helpers/Loading";
 import NotSignedIn from "../Layout/NotSignedIn";
 import { useEffect, useState } from "react";
-import { getRecentlyPlayedSongs } from "@/lib/spotify";
+import { createSpotifyPlaylist, getRecentlyPlayedSongs } from "@/lib/spotify";
 import SongCard from "../Helpers/SongCard";
 import View from "../Helpers/View";
 import SongList from "../Helpers/SongList";
@@ -12,6 +12,7 @@ interface Song {
     id: string;
     name: string;
     artist: string;
+    artistId: string;
     image: string;
     link: string;
     show: boolean;
@@ -20,10 +21,12 @@ interface Song {
 export default function Recent({
     spotifyClientId,
     spotifyClientSecret,
+    providerAccountId,
     refreshToken
 }: {
     spotifyClientId: string,
     spotifyClientSecret: string,
+    providerAccountId: string,
     refreshToken: string
 }) {
 
@@ -34,6 +37,9 @@ export default function Recent({
 
     const [view, setView] = useState('card');
     const [range, setRange] = useState(50);
+    const [songIds, setSongIds] = useState<string[]>([]);
+    const [playlistId, setPlaylistId] = useState('');
+    const [type, setType] = useState('top_playlists');
 
     const fetchSongs = async (range: number) => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret, range);
@@ -41,6 +47,7 @@ export default function Recent({
             id: recentSong.id,
             name: recentSong.name,
             artist: recentSong.artist,
+            artistId: recentSong.artistId,
             image: recentSong.image,
             link: recentSong.link,
             show: true,
@@ -49,7 +56,7 @@ export default function Recent({
     };
 
     const handleRangeChange = (value: number) => {
-        
+
         setRange(value);
 
         const updatedSongs = songs.map((song, index) => {
@@ -68,6 +75,58 @@ export default function Recent({
         setSongs(updatedSongs);
     };
 
+    const createPlaylistHandler = async () => {
+        setLoading(true);
+
+        try {
+            const userId = sessionStorage.getItem('userId') as string;
+            const description = sessionStorage.getItem('description') as string;
+            const songIds = songs.filter((song) => song.show).map((song) => song.id);
+
+            const playlistId = await createSpotifyPlaylist(
+                providerAccountId,
+                refreshToken,
+                spotifyClientId,
+                spotifyClientSecret,
+                playlistName,
+                songIds,
+                userId,
+                "Session",
+                "session_playlists"
+            );
+
+            setPlaylistId(playlistId);
+
+            sessionStorage.removeItem('songIds');
+            sessionStorage.removeItem('playlistNames');
+            sessionStorage.removeItem('description');
+
+            // setSongIds([]);
+            setRange(50);
+            fetchSongs(50);
+
+            // Retrieve the existing playlist IDs
+            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string }[];
+
+            // Append the new playlist data
+            playlists.push({ playlistId, description, type });
+
+            // Store the updated playlist data
+            sessionStorage.setItem('playlists', JSON.stringify(playlists));
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setLoading(false);
+            }, 500);
+            setTimeout(() => {
+                setPlaylistId('');
+                setPlaylistName('');
+            }, 5000);
+        }
+    };
+
     useEffect(() => {
         setLoading(true);
         fetchSongs(range);
@@ -84,6 +143,7 @@ export default function Recent({
             bgColor='transparent'
         />
     }
+
     return (
         <>
             <div>
@@ -105,6 +165,15 @@ export default function Recent({
                             }}
                         />
                     </div>
+                    <button
+                        type="button"
+                        className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!playlistName ? 'opacity-50' : ''}`}
+                        data-te-ripple-init
+                        onClick={() => { createPlaylistHandler() }}
+                        disabled={!playlistName}
+                    >
+                        Create Playlist
+                    </button>
                 </div>
             </div>
             <div className="flex flex-row justify-center">
@@ -114,9 +183,9 @@ export default function Recent({
             </div>
             <div className="flex justify-center">
                 {view === 'card' ? (
-                    <SongCard songs={songs} />
+                    <SongCard songs={songs} setSongs={setSongs} setRange={setRange} />
                 ) : (
-                    <SongList songs={songs} />
+                    <SongList songs={songs} setSongs={setSongs} setRange={setRange} />
                 )}
             </div>
         </>

@@ -54,7 +54,7 @@ export async function searchSongs(
     return songIds;
 }
 
-export async function createAIPlaylist(
+export async function createSpotifyPlaylist(
     providerAccountId: string,
     refreshToken: string,
     spotifyClientId: string,
@@ -63,7 +63,7 @@ export async function createAIPlaylist(
     songIds: string[],
     userId: string,
     description: string,
-    songNumber: number,
+    type: string
 ): Promise<string> {
 
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
@@ -75,7 +75,7 @@ export async function createAIPlaylist(
         },
         body: JSON.stringify({
             name: playlistName,
-            description: description + ` with ${songNumber} songs`,
+            description: "SpotiLab " + description + " Playlist",
             public: false
         })
     });
@@ -87,7 +87,7 @@ export async function createAIPlaylist(
     const data = await response.json();
     const playlistId = data.id;
 
-    await addTracksToAIPlaylist(playlistId, accessToken, songIds);
+    await addTracksToSpotifyPlaylist(playlistId, accessToken, songIds);
 
     const endpoint = '/api/savePlaylist';
 
@@ -101,7 +101,7 @@ export async function createAIPlaylist(
             playlistId,
             playlistName,
             description,
-            type: "ai_gen_playlists"
+            type: type
         })
     });
 
@@ -114,6 +114,62 @@ export async function createAIPlaylist(
 
     return playlistId;
 
+}
+
+const addTracksToSpotifyPlaylist = async (
+    playlistId: string,
+    accessToken: string,
+    songIds: string[]
+) => {
+
+    const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            uris: songIds.map(id => `spotify:track:${id}`)
+        })
+    });
+
+    if (!addTracksResponse.ok) {
+        throw new Error(`HTTP error! status: ${addTracksResponse.status}`);
+    }
+
+    return addTracksResponse;
+}
+
+export async function deletePlaylist(
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string,
+    playlistId: string
+): Promise<void> {
+    try {
+        const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const deletePlaylistData = await response.json();
+        console.log(deletePlaylistData.message);
+
+        return deletePlaylistData.message;
+
+    } catch (error) {
+        console.error(error);
+        return Promise.reject("Error deleting playlist" + error);
+    }
 }
 
 export async function createMonthlyPlaylist(
@@ -195,30 +251,6 @@ export async function createMonthlyPlaylist(
     return "Create monthly playlist is false";
 }
 
-const addTracksToAIPlaylist = async (
-    playlistId: string,
-    accessToken: string,
-    songIds: string[]
-) => {
-
-    const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + accessToken,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            uris: songIds.map(id => `spotify:track:${id}`)
-        })
-    });
-
-    if (!addTracksResponse.ok) {
-        throw new Error(`HTTP error! status: ${addTracksResponse.status}`);
-    }
-
-    return addTracksResponse;
-}
-
 const addTracksToMonthlyPlaylist = async (
     playlistId: string,
     accessToken: string,
@@ -261,38 +293,6 @@ const getMonthlyTracks = async (
     return trackIds;
 }
 
-export async function deletePlaylist(
-    refreshToken: string,
-    spotifyClientId: string,
-    spotifyClientSecret: string,
-    playlistId: string
-): Promise<void> {
-    try {
-        const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
-
-        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const deletePlaylistData = await response.json();
-        console.log(deletePlaylistData.message);
-
-        return deletePlaylistData.message;
-
-    } catch (error) {
-        console.error(error);
-        return Promise.reject("Error deleting playlist" + error);
-    }
-}
-
 interface Song {
     id: string;
     name: string;
@@ -323,9 +323,10 @@ export async function getRecentlyPlayedSongs(
         songs = data.items.map((item: { track: any; }) => {
             const track = item.track;
             return {
-                id : track.id,
+                id: track.id,
                 name: track.name,
                 artist: track.artists[0].name,
+                artistId: track.artists[0].id,
                 image: track.album.images[0].url,
                 link: track.external_urls.spotify
             };
@@ -359,6 +360,7 @@ export async function getTopSongs(
             id: item.id,
             name: item.name,
             artist: item.artists[0].name,
+            artistId: item.artists[0].id,
             image: item.album.images[0].url,
             link: item.external_urls.spotify
         }));

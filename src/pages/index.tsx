@@ -94,7 +94,19 @@ export default function Home({
         type: 'ai_gen_playlists',
       }));
 
-      const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists];
+      const topPlaylists = data.top_playlists.map((playlist: Playlist) => ({
+        playlistId: playlist.playlistId,
+        description: playlist.description,
+        type: 'top_playlists',
+      }));
+
+      const sessionPlaylists = data.session_playlists.map((playlist: Playlist) => ({
+        playlistId: playlist.playlistId,
+        description: playlist.description,
+        type: 'session_playlists',
+      }));
+
+      const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists, ...topPlaylists, ...sessionPlaylists];
 
       sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
 

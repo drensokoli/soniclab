@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import Loading from "../Helpers/Loading";
 import NotSignedIn from "../Layout/NotSignedIn";
 import { SetStateAction, useEffect, useState } from "react";
-import { getTopSongs } from "@/lib/spotify";
+import { createSpotifyPlaylist, getTopSongs } from "@/lib/spotify";
 import SongCard from "../Helpers/SongCard";
 import { Select, Option, select } from "@material-tailwind/react";
 import SongList from "../Helpers/SongList";
@@ -13,6 +13,7 @@ interface Song {
     id: string;
     name: string;
     artist: string;
+    artistId: string;
     image: string;
     link: string;
     show: boolean;
@@ -21,10 +22,12 @@ interface Song {
 export default function Top({
     spotifyClientId,
     spotifyClientSecret,
+    providerAccountId,
     refreshToken
 }: {
     spotifyClientId: string,
     spotifyClientSecret: string,
+    providerAccountId: string,
     refreshToken: string
 }) {
 
@@ -36,6 +39,9 @@ export default function Top({
 
     const [view, setView] = useState('card');
     const [range, setRange] = useState(50);
+    const [songIds, setSongIds] = useState<string[]>([]);
+    const [playlistId, setPlaylistId] = useState('');
+    const [type, setType] = useState('top_playlists');
 
     const fetchSongs = async (timeRange: string, range: number) => {
         const topSongs = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, timeRange, range);
@@ -43,6 +49,7 @@ export default function Top({
             id: topSong.id,
             name: topSong.name,
             artist: topSong.artist,
+            artistId: topSong.artistId,
             image: topSong.image,
             link: topSong.link,
             show: true,
@@ -51,7 +58,7 @@ export default function Top({
     };
 
     const handleRangeChange = (value: number) => {
-        
+
         setRange(value);
 
         const updatedSongs = songs.map((song, index) => {
@@ -68,6 +75,58 @@ export default function Top({
         });
 
         setSongs(updatedSongs);
+    };
+
+    const createPlaylistHandler = async () => {
+        setLoading(true);
+
+        try {
+            const userId = sessionStorage.getItem('userId') as string;
+            const description = sessionStorage.getItem('description') as string;
+            const songIds = songs.filter((song) => song.show).map((song) => song.id);
+
+            const playlistId = await createSpotifyPlaylist(
+                providerAccountId,
+                refreshToken,
+                spotifyClientId,
+                spotifyClientSecret,
+                playlistName,
+                songIds,
+                userId,
+                "Top",
+                "top_playlists"
+            );
+
+            setPlaylistId(playlistId);
+
+            sessionStorage.removeItem('songIds');
+            sessionStorage.removeItem('playlistNames');
+            sessionStorage.removeItem('description');
+
+            // setSongIds([]);
+            setRange(50);
+            fetchSongs(timeRange, 50);
+
+            // Retrieve the existing playlist IDs
+            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string }[];
+
+            // Append the new playlist data
+            playlists.push({ playlistId, description, type });
+
+            // Store the updated playlist data
+            sessionStorage.setItem('playlists', JSON.stringify(playlists));
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setLoading(false);
+            }, 500);
+            setTimeout(() => {
+                setPlaylistId('');
+                setPlaylistName('');
+            }, 5000);
+        }
     };
 
     useEffect(() => {
@@ -106,6 +165,15 @@ export default function Top({
                             }}
                         />
                     </div>
+                    <button
+                        type="button"
+                        className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!playlistName ? 'opacity-50' : ''}`}
+                        data-te-ripple-init
+                        onClick={() => { createPlaylistHandler() }}
+                        disabled={!playlistName}
+                    >
+                        Create Playlist
+                    </button>
                 </div>
             </div>
             <div className="flex flex-row justify-center items-center">
@@ -116,7 +184,8 @@ export default function Top({
                         value={timeRange}
                         onChange={(e) => {
                             setTimeRange(e.target.value);
-                            fetchSongs(e.target.value, range);
+                            fetchSongs(e.target.value, 50);
+                            setRange(50);
                         }}
                     >
                         <option value="short_term">Four weeks</option>
@@ -128,9 +197,9 @@ export default function Top({
             </div>
             <div className="flex justify-center">
                 {view === 'card' ? (
-                    <SongCard songs={songs} />
+                    <SongCard songs={songs} setSongs={setSongs} setRange={setRange} />
                 ) : (
-                    <SongList songs={songs} />
+                    <SongList songs={songs} setSongs={setSongs} setRange={setRange} />
                 )}
             </div>
         </>

@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { MongoClient, ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -22,12 +21,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const collection = db.collection('user_playlists');
 
         const user = await collection.findOne({ userId: userId });
-        
+
         if (!user) {
             await collection.insertOne({
                 userId: userId,
                 monthly_playlists: [],
-                ai_gen_playlists: []
+                ai_gen_playlists: [],
+                top_playlists: [],
+                session_playlists: []
             });
         }
 

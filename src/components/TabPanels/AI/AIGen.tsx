@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
-import { createAIPlaylist, searchSongs } from '../../../lib/spotify';
+import { createSpotifyPlaylist, searchSongs } from '../../../lib/spotify';
 import Loading from '../../Helpers/Loading';
 import AIGenForm from './AIGenForm';
 import PlaylistCreator from './PlaylistCreator';
@@ -159,7 +159,7 @@ export default function AIGen({
             const checkMonthly = sessionStorage.getItem('createMonthly') as any;
 
             // Add await here to wait for the playlistId
-            const playlistId = await createAIPlaylist(
+            const playlistId = await createSpotifyPlaylist(
                 providerAccountId,
                 refreshToken,
                 spotifyClientId,
@@ -167,8 +167,8 @@ export default function AIGen({
                 playlistName,
                 songIds,
                 userId,
-                description,
-                range,
+                "AI Gen",
+                "ai_gen_playlists"
             );
 
             setPlaylistId(playlistId);

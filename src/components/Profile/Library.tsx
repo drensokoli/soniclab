@@ -1,9 +1,8 @@
 import { useSession } from 'next-auth/react';
-import NotSignedIn from '../Layout/NotSignedIn';
 import { useEffect, useState } from 'react';
 import Loading from '../Helpers/Loading';
-import axios from 'axios';
 import { deletePlaylist } from '@/lib/spotify';
+import axios from 'axios';
 
 interface Playlist {
     playlistId: string;
@@ -16,17 +15,16 @@ export default function Library(
     {
         spotifyClientId,
         spotifyClientSecret,
-        refreshToken,
     }: {
         spotifyClientId: string;
         spotifyClientSecret: string;
-        refreshToken: string;
     }
 ) {
     const { data: session } = useSession();
 
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const refreshToken = sessionStorage.getItem('refreshToken')?.toString() || '';
 
     const handleDeletePlaylist = async (playlistId: string, playlistType: string) => {
         try {
@@ -44,11 +42,14 @@ export default function Library(
 
             if (response.status === 200) {
                 const playlistsString = sessionStorage.getItem('playlists');
+
                 if (playlistsString !== null) {
+
                     const playlists = JSON.parse(playlistsString);
                     const updatedPlaylists = playlists.filter((playlist: Playlist) => playlist.playlistId !== playlistId);
                     sessionStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
                     const newPlaylistsString = sessionStorage.getItem('playlists');
+
                     if (newPlaylistsString !== null) {
                         setPlaylists(JSON.parse(newPlaylistsString));
                     }

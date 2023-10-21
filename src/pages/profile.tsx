@@ -17,19 +17,16 @@ const bebas_neue = Bebas_Neue({
 
 export default function Profile({
     spotifyClientId,
-    spotifyClientSecret
+    spotifyClientSecret,
 }: {
     spotifyClientId: string,
-    spotifyClientSecret: string
+    spotifyClientSecret: string,
 }) {
-    const { data: session } = useSession();
 
     const [isLoading, setIsLoading] = useState(true);
 
     const [vantaEffect, setVantaEffect] = useState<any>(null);
     const vantaRef = useRef(null);
-
-    const [refreshToken, setRefreshToken] = useState('');
 
     useEffect(() => {
         if (!isLoading && !vantaEffect && vantaRef.current) {
@@ -88,7 +85,7 @@ export default function Profile({
                     </Link>
                     <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
                     <ProfileSettings />
-                    <Library spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} refreshToken={refreshToken} />
+                    <Library spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
                 </div>
                 <div className='flex flex-grow'></div>
                 <Footer />
