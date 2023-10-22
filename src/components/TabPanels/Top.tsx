@@ -35,14 +35,41 @@ export default function Top({
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
     const [timeRange, setTimeRange] = useState('short_term');
-    const [playlistName, setPlaylistName] = useState('');
-
+    
     const [view, setView] = useState('card');
     const [range, setRange] = useState(50);
-    const [songIds, setSongIds] = useState<string[]>([]);
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const monthName = monthNames[currentMonth - 1];
+    const date = currentDate.getDate();
+    const dateName = date + " " + monthName + " " + currentDate.getFullYear();
+
+    let seasons = "";
+    
+    if (currentMonth >= 8 && currentMonth <= 10) {
+        seasons = "Summer";
+    } else if (currentMonth >= 11 || currentMonth <= 1) {
+        seasons = "Autumn";
+    } else if (currentMonth >= 2 && currentMonth <= 4) {
+        seasons = "Winter";
+    } else if (currentMonth >= 5 && currentMonth <= 7) {
+        seasons = "Spring";
+    }    
+
+    const nameMatch: { [key: string]: string } = {
+        short_term: `SpotiLab Monthly Mix - ${dateName}`,
+        medium_term: `SpotiLab ${seasons} Collection`,
+        long_term: "SpotiLab All Time Favorites"
+    }
+
+    const [playlistName, setPlaylistName] = useState(`${nameMatch[timeRange]}`);
+    
     const [playlistId, setPlaylistId] = useState('');
     const [type, setType] = useState('top_playlists');
-
+    
     const fetchSongs = async (timeRange: string, range: number) => {
         const topSongs = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, timeRange, range);
         const songsArray = topSongs.map((topSong: any) => ({
@@ -124,7 +151,6 @@ export default function Top({
             }, 500);
             setTimeout(() => {
                 setPlaylistId('');
-                setPlaylistName('');
             }, 5000);
         }
     };
@@ -179,18 +205,18 @@ export default function Top({
             <div className="flex flex-row justify-center items-center">
                 <div className="flex items-center justify-end w-full py-4 gap-2">
                     <select
-                        id="timeRange"
                         className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={timeRange}
                         onChange={(e) => {
                             setTimeRange(e.target.value);
                             fetchSongs(e.target.value, 50);
                             setRange(50);
+                            setPlaylistName(nameMatch[e.target.value]);
                         }}
                     >
-                        <option value="short_term">Four weeks</option>
-                        <option value="medium_term">Six months</option>
-                        <option value="long_term">All time</option>
+                        <option value="short_term">Monthly Mix</option>
+                        <option value="medium_term">Season Collection</option>
+                        <option value="long_term">All Time Favorites</option>
                     </select>
                     <View setView={setView} />
                 </div>

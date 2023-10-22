@@ -21,7 +21,7 @@ export default function AIGen({
     const { data: session } = useSession();
 
     const [description, setDescription] = useState('');
-    const [range, setRange] = useState(13);
+    const [range, setRange] = useState(8);
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
@@ -67,51 +67,6 @@ export default function AIGen({
                     {
                         "name": "Everybody Dies",
                         "artist": "J. Cole",
-                        "feature": null
-                    },
-                    {
-                        "name": "Heather",
-                        "artist": "Billy Cobham",
-                        "feature": null
-                    },
-                    {
-                        "name": "93 'til Infinity",
-                        "artist": "Souls of Mischief",
-                        "feature": null
-                    },
-                    {
-                        "name": "Never Too Much / What's The Use (Tom Misch Arrangement)",
-                        "artist": "Nic Kierstead",
-                        "feature": null
-                    },
-                    {
-                        "name": "What's the Use?",
-                        "artist": "Mac Miller",
-                        "feature": null
-                    },
-                    {
-                        "name": "Between the Sheets",
-                        "artist": "The Isley Brothers",
-                        "feature": null
-                    },
-                    {
-                        "name": "Big Poppa",
-                        "artist": "The Notorious B.I.G.",
-                        "feature": null
-                    },
-                    {
-                        "name": "Funky Worm",
-                        "artist": "Ohio Players",
-                        "feature": null
-                    },
-                    {
-                        "name": "Regulate",
-                        "artist": "Warren G",
-                        "feature": "Nate Dogg"
-                    },
-                    {
-                        "name": "I Keep Forgettin'",
-                        "artist": "Michael McDonald",
                         "feature": null
                     }
                 ],
@@ -178,7 +133,7 @@ export default function AIGen({
             sessionStorage.removeItem('description');
 
             setSongIds([]);
-            setRange(13);
+            setRange(8);
             setDescription('');
 
             // Retrieve the existing playlist IDs

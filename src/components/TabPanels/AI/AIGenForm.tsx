@@ -32,7 +32,7 @@ export default function AIGenForm({ setDescription,
             </div>
             <div className='w-full md:w-3/4'>
                 <Slider
-                    max={25}
+                    max={15}
                     range={range}
                     onChange={(value: number) => setRange(value)}
                 />

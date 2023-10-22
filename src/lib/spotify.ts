@@ -83,9 +83,24 @@ export async function createSpotifyPlaylist(
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
-
+    
     const data = await response.json();
     const playlistId = data.id;
+
+    const updatePlaylist = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            description: "SpotiLab " + description + " Playlist",
+        })
+    });
+
+    if (!updatePlaylist.ok) {
+        throw new Error(`HTTP error! status: ${updatePlaylist.status}`);
+    }
 
     await addTracksToSpotifyPlaylist(playlistId, accessToken, songIds);
 

@@ -33,26 +33,44 @@ export default function Recent({
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
-    const [playlistName, setPlaylistName] = useState('');
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const monthName = monthNames[currentMonth - 1];
+    const date = currentDate.getDate();
+    const dateName = date + " " + monthName + " " + currentDate.getFullYear();
+
+    const [playlistName, setPlaylistName] = useState(`SpotiLab Session Playlist - ${dateName}`);
 
     const [view, setView] = useState('card');
     const [range, setRange] = useState(50);
-    const [songIds, setSongIds] = useState<string[]>([]);
+    const [max, setMax] = useState(50);
     const [playlistId, setPlaylistId] = useState('');
     const [type, setType] = useState('top_playlists');
 
     const fetchSongs = async (range: number) => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret, range);
-        const songsArray = recentSongs.map((recentSong: any) => ({
-            id: recentSong.id,
-            name: recentSong.name,
-            artist: recentSong.artist,
-            artistId: recentSong.artistId,
-            image: recentSong.image,
-            link: recentSong.link,
+        const idCounts = recentSongs.reduce((counts: {[id: string]: number}, song: any) => {
+            counts[song.id] = (counts[song.id] || 0) + 1;
+            return counts;
+        }, {});
+
+        const uniqueSongs = recentSongs.filter((song: any) => idCounts[song.id] === 1);
+
+        const songsArray = uniqueSongs.map((song: any) => ({
+            id: song.id,
+            name: song.name,
+            artist: song.artist,
+            artistId: song.artistId,
+            image: song.image,
+            link: song.link,
             show: true,
-        }))
+        }));
         setSongs(songsArray);
+        setRange(songsArray.length);
+        setMax(songsArray.length);
     };
 
     const handleRangeChange = (value: number) => {
@@ -122,7 +140,6 @@ export default function Recent({
             }, 500);
             setTimeout(() => {
                 setPlaylistId('');
-                setPlaylistName('');
             }, 5000);
         }
     };
@@ -158,7 +175,7 @@ export default function Recent({
                     />
                     <div className="w-full md:w-4/5">
                         <Slider
-                            max={50}
+                            max={max}
                             range={range}
                             onChange={(value) => {
                                 handleRangeChange(value);
