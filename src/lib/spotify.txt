@@ -1,0 +1,159 @@
+const getRangeTracks = async (
+    accessToken: string,
+    time_range: string,
+) => {
+    const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${time_range}&limit=50`, {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const trackIds = data.items.map((item: any) => item.id);
+    return trackIds;
+}
+
+export async function createCronPlaylist(
+    providerAccountId: string,
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string,
+    userId: string,
+    type: string,
+    cronCondition: boolean,
+    time_range: string,
+): Promise<string> {
+    
+    const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+
+    const currentDate = new Date();
+
+    let previousMonth = currentDate.getMonth() - 1;
+    let previousYear = currentDate.getFullYear();
+
+    if (previousMonth === -1) {
+        previousMonth = 11;
+        previousYear--;
+    }
+
+    const monthlyDate = new Date(previousYear, previousMonth).toLocaleString('en-US', { month: 'short', year: 'numeric' });
+
+
+    let day = currentDate.getDate();
+    let month = currentDate.getMonth();
+    let year = currentDate.getFullYear();
+
+    const date = new Date(year, month, day).toLocaleString('en-US', { month: 'short', year: 'numeric', day: 'numeric' });
+
+    const nameMatch: { [key: string]: { name: string, description: string } } = {
+        short_term: {
+            name: `SpotiLab Monthly Mix - ${monthlyDate}`,
+            description: `Craft your own unique mixtape with the SpotiLab Monthly Mix. Your top 50 tracks from the past month, designed by you, delivered by SpotiLab.`
+        },
+        medium_term: {
+            name: `SpotiLab Half-Year Jam - ${date}`,
+            description: `Relive your musical journey with the SpotiLab Half-Year Jam. Your top 50 tracks from the last 6 months, creating your personal symphony.`
+        },
+        long_term: {
+            name: `SpotiLab Timeless Gems - ${date}`,
+            description: `Rediscover your musical history through SpotiLab Timeless Gems. Your 50 all-time favorite tracks, eternally cherished.`
+        }
+    };
+    
+    const playlistName = `SpotiLab Monthly Mix - ${date}`;
+    const type = 'monthly_playlists';
+    const description = `Elevate your listening experience with the SpotiLab Monthly Mix. Your top 50 tracks from ${date}, delivered to you by SpotiLab.`
+    const url = process.env.NEXTAUTH_URL ?? '';
+
+    if (cronCondition) {
+        const response = await fetch(`https://api.spotify.com/v1/users/${providerAccountId}/playlists`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: playlistName,
+                description: description,
+                public: false
+            })
+        });
+
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const playlistId = data.id;
+
+        const songIds = await getRangeTracks(accessToken, time_range);
+
+        await addTracksToCronPlaylist(playlistId, accessToken, songIds);
+
+        await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                description: description
+            })
+        });
+
+        const endpoint = `${url}/api/savePlaylist`;
+
+        const savePlaylist = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId,
+                playlistId,
+                playlistName,
+                description,
+                type
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const savePlaylistData = await savePlaylist.json();
+        console.log("savePlaylistData.message - ", savePlaylistData.message);
+        return playlistId;
+    }
+
+    return "Create monthly playlist is false for " + userId;
+}
+
+const addTracksToCronPlaylist = async (
+    playlistId: string,
+    accessToken: string,
+    songIds: string[]
+) => {
+
+    const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            uris: songIds.map(id => `spotify:track:${id}`)
+        })
+    });
+
+    if (!addTracksResponse.ok) {
+        throw new Error(`HTTP error! status: ${addTracksResponse.status}`);
+    }
+
+    return addTracksResponse;
+}

@@ -207,7 +207,7 @@ export default function Top({
                     >
                         <option value="short_term">Monthly Mix</option>
                         <option value="medium_term">Seasonal Mix</option>
-                        <option value="long_term">All Times Mix</option>
+                        <option value="long_term">Yearly Mix</option>
                     </select>
                     <View setView={setView} />
                 </div>
