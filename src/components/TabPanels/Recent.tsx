@@ -7,6 +7,7 @@ import SongCard from "../Helpers/SongCard";
 import View from "../Helpers/View";
 import SongList from "../Helpers/SongList";
 import Slider from "../Helpers/Slider";
+import SpotifyBubble from "../Helpers/SpotifyBubble";
 
 interface Song {
     id: string;
@@ -35,20 +36,20 @@ export default function Recent({
     const [songs, setSongs] = useState<Song[]>([]);
 
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1;
 
-    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const monthName = monthNames[currentMonth - 1];
-    const date = currentDate.getDate();
-    const dateName = date + " " + monthName + " " + currentDate.getFullYear();
+    let day = currentDate.getDate();
+    let month = currentDate.getMonth();
+    let year = currentDate.getFullYear();
 
-    const [playlistName, setPlaylistName] = useState(`SpotiLab Session Playlist - ${dateName}`);
+    const date = new Date(year, month, day).toLocaleString('en-US', { month: 'short', year: 'numeric', day: 'numeric' });
+
+    const [playlistName, setPlaylistName] = useState(`SpotiLab Session Groove - ${date}`);
 
     const [view, setView] = useState('card');
     const [range, setRange] = useState(50);
     const [max, setMax] = useState(50);
     const [playlistId, setPlaylistId] = useState('');
-    const [type, setType] = useState('top_playlists');
+    const [type, setType] = useState('session_playlists');
 
     const fetchSongs = async (range: number) => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret, range);
@@ -109,15 +110,11 @@ export default function Recent({
                 playlistName,
                 songIds,
                 userId,
-                "Session",
-                "session_playlists"
+                "Dive into the sounds of the moment with the SpotiLab Session Groove. Your recent tracks in one place, delivered to you by SpotiLab",
+                type
             );
 
             setPlaylistId(playlistId);
-
-            sessionStorage.removeItem('songIds');
-            sessionStorage.removeItem('playlistNames');
-            sessionStorage.removeItem('description');
 
             // setSongIds([]);
             setRange(50);
@@ -164,6 +161,7 @@ export default function Recent({
     return (
         <>
             <div>
+            {playlistId && (<SpotifyBubble playlistId={playlistId} playlistName={playlistName} /> )}
                 <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
                     <h1 className="text-gray-300 text-xl md:text-2xl text-center">Create a session playlist with your recently played songs</h1>
                     <input

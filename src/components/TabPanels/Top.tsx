@@ -1,13 +1,13 @@
 import { useSession } from "next-auth/react";
 import Loading from "../Helpers/Loading";
 import NotSignedIn from "../Layout/NotSignedIn";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createSpotifyPlaylist, getTopSongs } from "@/lib/spotify";
 import SongCard from "../Helpers/SongCard";
-import { Select, Option, select } from "@material-tailwind/react";
 import SongList from "../Helpers/SongList";
 import View from "../Helpers/View";
 import Slider from "../Helpers/Slider";
+import SpotifyBubble from "../Helpers/SpotifyBubble";
 
 interface Song {
     id: string;
@@ -35,41 +35,37 @@ export default function Top({
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
     const [timeRange, setTimeRange] = useState('short_term');
-    
+    const type = 'top_playlists';
+
     const [view, setView] = useState('card');
     const [range, setRange] = useState(50);
 
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1;
 
-    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const monthName = monthNames[currentMonth - 1];
-    const date = currentDate.getDate();
-    const dateName = date + " " + monthName + " " + currentDate.getFullYear();
+    let day = currentDate.getDate();
+    let month = currentDate.getMonth();
+    let year = currentDate.getFullYear();
 
-    let seasons = "";
-    
-    if (currentMonth >= 8 && currentMonth <= 10) {
-        seasons = "Summer";
-    } else if (currentMonth >= 11 || currentMonth <= 1) {
-        seasons = "Autumn";
-    } else if (currentMonth >= 2 && currentMonth <= 4) {
-        seasons = "Winter";
-    } else if (currentMonth >= 5 && currentMonth <= 7) {
-        seasons = "Spring";
-    }    
+    const date = new Date(year, month, day).toLocaleString('en-US', { month: 'short', year: 'numeric', day: 'numeric' });
 
-    const nameMatch: { [key: string]: string } = {
-        short_term: `SpotiLab Monthly Mix - ${dateName}`,
-        medium_term: `SpotiLab ${seasons} Collection`,
-        long_term: "SpotiLab All Time Favorites"
-    }
+    const nameMatch: { [key: string]: { name: string, description: string } } = {
+        medium_term: {
+            name: `SpotiLab Half-Year Jam - ${date}`,
+            description: `Relive your musical journey with the SpotiLab Half-Year Jam. Your top ${range} tracks from the last 6 months, creating your personal symphony.`
+        },
+        short_term: {
+            name: `SpotiLab Monthly Mix - ${date}`,
+            description: `Craft your own unique mixtape with the SpotiLab Monthly Mix. Your top ${range} tracks from the past month, designed by you, delivered by SpotiLab.`
+        },
+        long_term: {
+            name: `SpotiLab Timeless Gems - ${date}`,
+            description: `Rediscover your musical history through SpotiLab Timeless Gems. Your ${range} all-time favorite tracks, eternally cherished.`
+        }
+    };
 
-    const [playlistName, setPlaylistName] = useState(`${nameMatch[timeRange]}`);
-    
+    const [playlistName, setPlaylistName] = useState(nameMatch[timeRange].name);
     const [playlistId, setPlaylistId] = useState('');
-    const [type, setType] = useState('top_playlists');
-    
+
     const fetchSongs = async (timeRange: string, range: number) => {
         const topSongs = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, timeRange, range);
         const songsArray = topSongs.map((topSong: any) => ({
@@ -109,8 +105,8 @@ export default function Top({
 
         try {
             const userId = sessionStorage.getItem('userId') as string;
-            const description = sessionStorage.getItem('description') as string;
             const songIds = songs.filter((song) => song.show).map((song) => song.id);
+            const description = nameMatch[timeRange].description;
 
             const playlistId = await createSpotifyPlaylist(
                 providerAccountId,
@@ -120,17 +116,12 @@ export default function Top({
                 playlistName,
                 songIds,
                 userId,
-                "Top",
-                "top_playlists"
+                description,
+                type
             );
 
             setPlaylistId(playlistId);
 
-            sessionStorage.removeItem('songIds');
-            sessionStorage.removeItem('playlistNames');
-            sessionStorage.removeItem('description');
-
-            // setSongIds([]);
             setRange(50);
             fetchSongs(timeRange, 50);
 
@@ -165,7 +156,6 @@ export default function Top({
         return <NotSignedIn title='Please sign in to see your recently played songs' />
     }
 
-
     if (loading) {
         return <Loading height='h-[400px]' bgColor='transparent' />
     }
@@ -173,6 +163,7 @@ export default function Top({
     return (
         <>
             <div>
+                {playlistId && (<SpotifyBubble playlistId={playlistId} playlistName={playlistName} /> )}
                 <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
                     <h1 className="text-gray-300 text-xl md:text-2xl text-center">Create a playlist with your top songs</h1>
                     <input
@@ -211,12 +202,12 @@ export default function Top({
                             setTimeRange(e.target.value);
                             fetchSongs(e.target.value, 50);
                             setRange(50);
-                            setPlaylistName(nameMatch[e.target.value]);
+                            setPlaylistName(nameMatch[e.target.value].name);
                         }}
                     >
                         <option value="short_term">Monthly Mix</option>
-                        <option value="medium_term">Season Collection</option>
-                        <option value="long_term">All Time Favorites</option>
+                        <option value="medium_term">Seasonal Mix</option>
+                        <option value="long_term">All Times Mix</option>
                     </select>
                     <View setView={setView} />
                 </div>

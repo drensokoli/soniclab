@@ -21,7 +21,7 @@ export default function AIGen({
     const { data: session } = useSession();
 
     const [description, setDescription] = useState('');
-    const [range, setRange] = useState(8);
+    const [range, setRange] = useState(15);
     const [songIds, setSongIds] = useState<string[]>([]);
     const [playlistNames, setPlaylistNames] = useState<string[]>([]);
     const [playlistName, setPlaylistName] = useState('');
@@ -113,7 +113,6 @@ export default function AIGen({
             const description = sessionStorage.getItem('description') as string;
             const checkMonthly = sessionStorage.getItem('createMonthly') as any;
 
-            // Add await here to wait for the playlistId
             const playlistId = await createSpotifyPlaylist(
                 providerAccountId,
                 refreshToken,
@@ -122,7 +121,7 @@ export default function AIGen({
                 playlistName,
                 songIds,
                 userId,
-                "AI Gen",
+                "Craft your ideal musical experience with the SpotiLab AI Gen. Describe your perfect playlist, and let AI bring it to life, exclusively for you.",
                 "ai_gen_playlists"
             );
 
@@ -133,7 +132,7 @@ export default function AIGen({
             sessionStorage.removeItem('description');
 
             setSongIds([]);
-            setRange(8);
+            setRange(15);
             setDescription('');
 
             // Retrieve the existing playlist IDs

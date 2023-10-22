@@ -75,7 +75,7 @@ export async function createSpotifyPlaylist(
         },
         body: JSON.stringify({
             name: playlistName,
-            description: "SpotiLab " + description + " Playlist",
+            description: description,
             public: false
         })
     });
@@ -83,26 +83,22 @@ export async function createSpotifyPlaylist(
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
-    const data = await response.json();
-    const playlistId = data.id;
 
-    const updatePlaylist = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+    const data = await response.json();
+
+    const playlistId = data.id;
+    await addTracksToSpotifyPlaylist(playlistId, accessToken, songIds);
+
+    await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
         method: 'PUT',
         headers: {
             'Authorization': 'Bearer ' + accessToken,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            description: "SpotiLab " + description + " Playlist",
+            description: description
         })
     });
-
-    if (!updatePlaylist.ok) {
-        throw new Error(`HTTP error! status: ${updatePlaylist.status}`);
-    }
-
-    await addTracksToSpotifyPlaylist(playlistId, accessToken, songIds);
 
     const endpoint = '/api/savePlaylist';
 
@@ -116,7 +112,7 @@ export async function createSpotifyPlaylist(
             playlistId,
             playlistName,
             description,
-            type: type
+            type
         })
     });
 
@@ -207,9 +203,11 @@ export async function createMonthlyPlaylist(
         previousYear--;
     }
 
-    const playlistName = `SpotiLab Monthly Playlist - ${new Date(previousYear, previousMonth).toLocaleString('en-US', { month: 'long', year: 'numeric' })}`;
+    const date = new Date(previousYear, previousMonth).toLocaleString('en-US', { month: 'short', year: 'numeric' });
+
+    const playlistName = `SpotiLab Monthly Mix - ${date}`;
     const type = 'monthly_playlists';
-    const description = 'SpotiLab Monthly Playlist with your top 50 songs from the month of ' + new Date(previousYear, previousMonth).toLocaleString('en-US', { month: 'long', year: 'numeric' }) + '. Automatically created by SpotiLab.';
+    const description = `Elevate your listening experience with the SpotiLab Monthly Mix. Your top 50 tracks from ${date}, delivered to you by SpotiLab.`
     const url = process.env.NEXTAUTH_URL ?? '';
 
     if (createMonthly) {
@@ -225,7 +223,7 @@ export async function createMonthlyPlaylist(
                 public: false
             })
         });
-        
+
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -238,20 +236,16 @@ export async function createMonthlyPlaylist(
 
         await addTracksToMonthlyPlaylist(playlistId, accessToken, songIds);
 
-        const updatePlaylist = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+        await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                description: "SpotiLab " + description + " Playlist",
+                description: description
             })
         });
-    
-        if (!updatePlaylist.ok) {
-            throw new Error(`HTTP error! status: ${updatePlaylist.status}`);
-        }
 
         const endpoint = `${url}/api/savePlaylist`;
 
@@ -278,7 +272,7 @@ export async function createMonthlyPlaylist(
         return playlistId;
     }
 
-    return "Create monthly playlist is false";
+    return "Create monthly playlist is false for " + userId;
 }
 
 const addTracksToMonthlyPlaylist = async (
