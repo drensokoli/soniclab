@@ -47,31 +47,26 @@ export default function Recent({
 
     const [view, setView] = useState('card');
     const [range, setRange] = useState(50);
-    const [max, setMax] = useState(50);
     const [playlistId, setPlaylistId] = useState('');
     const [type, setType] = useState('session_playlists');
 
     const fetchSongs = async (range: number) => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret, range);
-        const idCounts = recentSongs.reduce((counts: {[id: string]: number}, song: any) => {
+
+        const idCounts = recentSongs.reduce((counts: { [id: string]: number }, song: any) => {
             counts[song.id] = (counts[song.id] || 0) + 1;
             return counts;
         }, {});
 
-        const uniqueSongs = recentSongs.filter((song: any) => idCounts[song.id] === 1);
+        const updatedSongs = recentSongs.map((song: any, index: number) => {
+            if (idCounts[song.id] > 1 && index !== recentSongs.findIndex((s: any) => s.id === song.id)) {
+                return { ...song, show: false };
+            }
+            return { ...song, show: true };
+        });
 
-        const songsArray = uniqueSongs.map((song: any) => ({
-            id: song.id,
-            name: song.name,
-            artist: song.artist,
-            artistId: song.artistId,
-            image: song.image,
-            link: song.link,
-            show: true,
-        }));
-        setSongs(songsArray);
-        setRange(songsArray.length);
-        setMax(songsArray.length);
+        setSongs(updatedSongs);
+        setRange(updatedSongs.length);
     };
 
     const handleRangeChange = (value: number) => {
@@ -161,7 +156,7 @@ export default function Recent({
     return (
         <>
             <div>
-            {playlistId && (<SpotifyBubble playlistId={playlistId} playlistName={playlistName} /> )}
+                {playlistId && (<SpotifyBubble playlistId={playlistId} playlistName={playlistName} />)}
                 <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
                     <h1 className="text-gray-300 text-xl md:text-2xl text-center">Create a session playlist with your recently played songs</h1>
                     <input
@@ -173,12 +168,20 @@ export default function Recent({
                     />
                     <div className="w-full md:w-4/5">
                         <Slider
-                            max={max}
+                            max={50}
                             range={range}
                             onChange={(value) => {
                                 handleRangeChange(value);
                             }}
                         />
+                    </div>
+                    <div className='flex justify-center items-center w-full md:w-3/4'>
+                        <div className='flex flex-row items-center cursor-pointer text-gray-300 hover:text-gray-400 w-fit'>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                            </svg>
+                            <h1 className='text-sm'>Repeated songs have been unchecked by default</h1>
+                        </div>
                     </div>
                     <button
                         type="button"
