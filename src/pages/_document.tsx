@@ -21,8 +21,8 @@ export default function Document() {
 
   return (
     <Html lang="en">
-      <title>SpotiLab</title>
-      <meta name="SpotiLab" content="" />
+      <title>SonicLab</title>
+      <meta name="SonicLab" content="" />
       <meta name="google-adsense-account" content="ca-pub-3464540666338005" />
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" defer></script>

@@ -57,7 +57,7 @@ export default function ProfilePage() {
                     content={
                         <div className='flex flex-col justify-center items-center w-[200px]'>
                             <h1 className='text-center'>
-                                SpotiLab will create a monthly playlist based on your top tracks of the last 4 weeks.
+                                SonicLab will create a monthly playlist based on your top tracks of the last 4 weeks.
                             </h1>
                         </div>
                     }

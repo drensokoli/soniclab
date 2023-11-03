@@ -14,7 +14,7 @@ export default function Footer() {
         <p className="text-gray-400 mr-2 ">
           &copy; {new Date().getFullYear()}{' - '}
           <span className="text-blue-300">
-            <a href="https://github.com/drensokoli/spotilab" target="_blank">SpotiLab</a>
+            <a href="https://github.com/drensokoli/spotilab" target="_blank">SonicLab</a>
           </span>
         </p>
       </footer>

@@ -50,16 +50,16 @@ export default function Top({
 
     const nameMatch: { [key: string]: { name: string, description: string } } = {
         medium_term: {
-            name: `SpotiLab Half-Year Jam - ${date}`,
-            description: `Relive your musical journey with the SpotiLab Half-Year Jam. Your top ${range} tracks from the last 6 months, creating your personal symphony.`
+            name: `SonicLab Half-Year Jam - ${date}`,
+            description: `Relive your musical journey with the SonicLab Half-Year Jam. Your top ${range} tracks from the last 6 months, creating your personal symphony.`
         },
         short_term: {
-            name: `SpotiLab Monthly Mix - ${date}`,
-            description: `Craft your own unique mixtape with the SpotiLab Monthly Mix. Your top ${range} tracks from the past month, designed by you, delivered by SpotiLab.`
+            name: `SonicLab Monthly Mix - ${date}`,
+            description: `Craft your own unique mixtape with the SonicLab Monthly Mix. Your top ${range} tracks from the past month, designed by you, delivered by SonicLab.`
         },
         long_term: {
-            name: `SpotiLab Timeless Gems - ${date}`,
-            description: `Rediscover your musical history through SpotiLab Timeless Gems. Your ${range} all-time favorite tracks, eternally cherished.`
+            name: `SonicLab Timeless Gems - ${date}`,
+            description: `Rediscover your musical history through SonicLab Timeless Gems. Your ${range} all-time favorite tracks, eternally cherished.`
         }
     };
 

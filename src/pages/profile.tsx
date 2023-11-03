@@ -83,7 +83,7 @@ export default function Profile({
                             </div>
                         </button>
                     </Link>
-                    <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SpotiLab</h1>
+                    <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SonicLab</h1>
                     <ProfileSettings />
                     <Library spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
                 </div>

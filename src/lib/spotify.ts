@@ -205,9 +205,9 @@ export async function createMonthlyPlaylist(
 
     const date = new Date(previousYear, previousMonth).toLocaleString('en-US', { month: 'short', year: 'numeric' });
 
-    const playlistName = `SpotiLab Monthly Mix - ${date}`;
+    const playlistName = `SonicLab Monthly Mix - ${date}`;
     const type = 'monthly_playlists';
-    const description = `Elevate your listening experience with the SpotiLab Monthly Mix. Your top 50 tracks from ${date}, delivered to you by SpotiLab.`
+    const description = `Elevate your listening experience with the SonicLab Monthly Mix. Your top 50 tracks from ${date}, delivered to you by SonicLab.`
     const url = process.env.NEXTAUTH_URL ?? '';
 
     if (createMonthly) {

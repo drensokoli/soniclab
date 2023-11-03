@@ -43,7 +43,7 @@ export default function Recent({
 
     const date = new Date(year, month, day).toLocaleString('en-US', { month: 'short', year: 'numeric', day: 'numeric' });
 
-    const [playlistName, setPlaylistName] = useState(`SpotiLab Session Groove - ${date}`);
+    const [playlistName, setPlaylistName] = useState(`SonicLab Session Groove - ${date}`);
 
     const [view, setView] = useState('card');
     const [range, setRange] = useState(50);
@@ -105,7 +105,7 @@ export default function Recent({
                 playlistName,
                 songIds,
                 userId,
-                "Dive into the sounds of the moment with the SpotiLab Session Groove. Your recent tracks in one place, delivered to you by SpotiLab",
+                "Dive into the sounds of the moment with the SonicLab Session Groove. Your recent tracks in one place, delivered to you by SonicLab",
                 type
             );
 

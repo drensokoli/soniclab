@@ -121,7 +121,7 @@ export default function AIGen({
                 playlistName,
                 songIds,
                 userId,
-                "Craft your ideal musical experience with the SpotiLab AI Gen. Describe your perfect playlist, and let AI bring it to life, exclusively for you.",
+                "Craft your ideal musical experience with the SonicLab AI Gen. Describe your perfect playlist, and let AI bring it to life, exclusively for you.",
                 "ai_gen_playlists"
             );
 
@@ -205,7 +205,7 @@ export default function AIGen({
                     )}
                 </>
             ) : (
-                <NotSignedIn title='Please sign in to generate your AI Spotify playlist with SpotiLab' />
+                <NotSignedIn title='Please sign in to generate your AI Spotify playlist with SonicLab' />
             )}
         </>
     )
