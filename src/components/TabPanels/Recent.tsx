@@ -31,6 +31,16 @@ export default function Recent({
     refreshToken: string
 }) {
 
+    useEffect(() => {
+        fetchSongs(50);
+    }, []);
+
+    useEffect(() => {
+        if (refreshToken) {
+            fetchSongs(range);
+        }
+    }, [refreshToken]);
+
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
@@ -136,11 +146,6 @@ export default function Recent({
         }
     };
 
-    useEffect(() => {
-        setLoading(true);
-        fetchSongs(range);
-        setLoading(false);
-    }, [refreshToken, spotifyClientId, spotifyClientSecret]);
 
     if (!session) {
         return <NotSignedIn title='Please sign in to see your recently played songs' />
