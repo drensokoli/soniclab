@@ -36,14 +36,20 @@ export default function SongList({
                     >
                         <div className="flex flex-row gap-4 items-center">
                             <img src={song.image} alt={song.name} className="rounded-md md:h-20 h-16" />
-                            <div className="flex flex-col">
-                                <a href={`https://open.spotify.com/track/${song.id}`} target="_blank">
-                                    <p className="text-sm sm:text-lg font-bold">
-                                        {index + 1}. {song.name.length > songLength ? song.name.slice(0, songLength) + '...' : song.name}
-                                    </p>
-                                </a>
-                                <a href={`https://open.spotify.com/artist/${song.artistId}`} target="_blank">
-                                    <p className="sm:text-sm text-xs text-gray-300">{song.artist}</p>
+                            <div className="flex flex-col gap-2">
+                                <div>
+                                    <a href={`https://open.spotify.com/track/${song.id}`} target="_blank">
+                                        <p className="text-sm sm:text-lg font-bold">
+                                            {index + 1}. {song.name.length > songLength ? song.name.slice(0, songLength) + '...' : song.name}
+                                        </p>
+                                    </a>
+                                    <a href={`https://open.spotify.com/artist/${song.artistId}`} target="_blank">
+                                        <p className="sm:text-sm text-xs text-gray-300">{song.artist}</p>
+                                    </a>
+                                </div>
+                                <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-1">
+                                    <img src="./spotify.png" alt="Spotify Icon" width={15} height={15} className="inline-block" />
+                                    <h1 className="text-sm">Spotify</h1>
                                 </a>
                             </div>
                         </div>
