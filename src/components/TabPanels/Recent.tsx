@@ -76,7 +76,6 @@ export default function Recent({
         });
 
         setSongs(updatedSongs);
-        setRange(updatedSongs.length);
     };
 
     const handleRangeChange = (value: number) => {
