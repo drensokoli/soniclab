@@ -32,7 +32,7 @@ export default function PlaylistCreator({
             <h1 className='text-xl md:text-2xl text-gray-300 text-center mt-8'>Your generated songs</h1>
             <div className='flex flex-col justify-center items-center w-full md:w-4/5'>
                 {songIds.map((songId: any, index: Key | null | undefined) => (
-                    <iframe className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe key={index} className="" src={`https://open.spotify.com/embed/track/${songId}?utm_source=generator`} width="100%" height="100" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 ))}
                 {/* {songIds.map((songId: any, index: Key | null | undefined) => (
                     <div key={index} className='flex flex-row items-center justify-center w-full'>
