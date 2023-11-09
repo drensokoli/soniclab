@@ -37,7 +37,7 @@ export default function Recent({
 
     useEffect(() => {
         if (refreshToken) {
-            fetchSongs(range);
+            fetchSongs(50);
         }
     }, [refreshToken]);
 
@@ -55,10 +55,11 @@ export default function Recent({
 
     const [playlistName, setPlaylistName] = useState(`SonicLab Session Groove - ${date}`);
 
-    const [view, setView] = useState('card');
+    const [view, setView] = useState('list');
     const [range, setRange] = useState(50);
     const [playlistId, setPlaylistId] = useState('');
     const [type, setType] = useState('session_playlists');
+    const [max, setMax] = useState(50);
 
     const fetchSongs = async (range: number) => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret, range);
@@ -70,12 +71,14 @@ export default function Recent({
 
         const updatedSongs = recentSongs.map((song: any, index: number) => {
             if (idCounts[song.id] > 1 && index !== recentSongs.findIndex((s: any) => s.id === song.id)) {
-                return { ...song, show: false };
+                return null;
             }
             return { ...song, show: true };
-        });
+        }).filter((song: any) => song !== null);
 
         setSongs(updatedSongs);
+        setRange(updatedSongs.length);
+        setMax(updatedSongs.length);
     };
 
     const handleRangeChange = (value: number) => {
@@ -170,32 +173,7 @@ export default function Recent({
                         value={playlistName}
                         onChange={(e) => setPlaylistName(e.target.value)}
                     />
-                    <div className="w-full md:w-4/5">
-                        <Slider
-                            max={50}
-                            range={range}
-                            onChange={(value) => {
-                                handleRangeChange(value);
-                            }}
-                        />
-                    </div>
-                    <div className='flex justify-center items-center w-full md:w-3/4'>
-                        <div className='flex flex-row items-center cursor-pointer text-gray-300 hover:text-gray-400 w-fit'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                            </svg>
-                            <h1 className='text-sm'>Repeated songs have been unchecked by default</h1>
-                        </div>
-                    </div>
-                    <button
-                        type="button"
-                        className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!playlistName ? 'opacity-50' : ''}`}
-                        data-te-ripple-init
-                        onClick={() => { createPlaylistHandler() }}
-                        disabled={!playlistName}
-                    >
-                        Create Playlist
-                    </button>
+
                 </div>
             </div>
             <div className="flex flex-row justify-center">
@@ -209,6 +187,27 @@ export default function Recent({
                 ) : (
                     <SongList songs={songs} setSongs={setSongs} setRange={setRange} />
                 )}
+            </div>
+            <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
+
+                <div className="w-full md:w-4/5">
+                    <Slider
+                        max={max}
+                        range={range}
+                        onChange={(value) => {
+                            handleRangeChange(value);
+                        }}
+                    />
+                </div>
+                <button
+                    type="button"
+                    className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!playlistName ? 'opacity-50' : ''}`}
+                    data-te-ripple-init
+                    onClick={() => { createPlaylistHandler() }}
+                    disabled={!playlistName}
+                >
+                    Create Playlist
+                </button>
             </div>
         </>
     )

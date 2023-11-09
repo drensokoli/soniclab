@@ -5,7 +5,7 @@ interface Props {
 }type IconType = "card" | "list";
 
 export default function View({ setView }: Props) {
-    const [icon, setIcon] = useState<IconType>("list");
+    const [icon, setIcon] = useState<IconType>("card");
 
     const images = {
         card: {

@@ -24,12 +24,8 @@ export default function Nav({
 }) {
 
     return (
-        <Tabs value="aigen" className="w-5/6">
+        <Tabs value="recent" className="w-5/6">
             <TabsHeader>
-                <Tab
-                    value="aigen"
-                    className={`${montserrat.className} px-2`}
-                >AI Gen</Tab>
                 <Tab
                     value="recent"
                     className={`${montserrat.className} px-5`}
@@ -38,16 +34,12 @@ export default function Nav({
                     value="top"
                     className={`${montserrat.className} px-5`}
                 >Top</Tab>
+                <Tab
+                    value="aigen"
+                    className={`${montserrat.className} px-2`}
+                >AI Gen</Tab>
             </TabsHeader>
             <TabsBody>
-                <TabPanel value="aigen" className="p-0">
-                    <AIGen
-                        spotifyClientId={spotifyClientId}
-                        spotifyClientSecret={spotifyClientSecret}
-                        providerAccountId={providerAccountId}
-                        refreshToken={refreshToken}
-                    />
-                </TabPanel>
                 <TabPanel value="recent" className="p-0">
                     <Recent
                         spotifyClientId={spotifyClientId}
@@ -57,7 +49,15 @@ export default function Nav({
                     />
                 </TabPanel>
                 <TabPanel value="top" className="p-0">
-                    <Top 
+                    <Top
+                        spotifyClientId={spotifyClientId}
+                        spotifyClientSecret={spotifyClientSecret}
+                        providerAccountId={providerAccountId}
+                        refreshToken={refreshToken}
+                    />
+                </TabPanel>
+                <TabPanel value="aigen" className="p-0">
+                    <AIGen
                         spotifyClientId={spotifyClientId}
                         spotifyClientSecret={spotifyClientSecret}
                         providerAccountId={providerAccountId}

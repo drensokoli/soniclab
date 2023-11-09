@@ -37,7 +37,7 @@ export default function Top({
     const [timeRange, setTimeRange] = useState('short_term');
     const type = 'top_playlists';
 
-    const [view, setView] = useState('card');
+    const [view, setView] = useState('list');
     const [range, setRange] = useState(50);
 
     const currentDate = new Date();
@@ -163,7 +163,7 @@ export default function Top({
     return (
         <>
             <div>
-                {playlistId && (<SpotifyBubble playlistId={playlistId} playlistName={playlistName} /> )}
+                {playlistId && (<SpotifyBubble playlistId={playlistId} playlistName={playlistName} />)}
                 <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
                     <h1 className="text-gray-300 text-xl md:text-2xl text-center">Create a playlist with your top songs</h1>
                     <input
@@ -173,24 +173,6 @@ export default function Top({
                         value={playlistName}
                         onChange={(e) => setPlaylistName(e.target.value)}
                     />
-                    <div className="w-full md:w-4/5">
-                        <Slider
-                            max={50}
-                            range={range}
-                            onChange={(value) => {
-                                handleRangeChange(value);
-                            }}
-                        />
-                    </div>
-                    <button
-                        type="button"
-                        className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!playlistName ? 'opacity-50' : ''}`}
-                        data-te-ripple-init
-                        onClick={() => { createPlaylistHandler() }}
-                        disabled={!playlistName}
-                    >
-                        Create Playlist
-                    </button>
                 </div>
             </div>
             <div className="flex flex-row justify-center items-center">
@@ -218,6 +200,26 @@ export default function Top({
                 ) : (
                     <SongList songs={songs} setSongs={setSongs} setRange={setRange} />
                 )}
+            </div>
+            <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
+                <div className="w-full md:w-4/5">
+                    <Slider
+                        max={50}
+                        range={range}
+                        onChange={(value) => {
+                            handleRangeChange(value);
+                        }}
+                    />
+                </div>
+                <button
+                    type="button"
+                    className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!playlistName ? 'opacity-50' : ''}`}
+                    data-te-ripple-init
+                    onClick={() => { createPlaylistHandler() }}
+                    disabled={!playlistName}
+                >
+                    Create Playlist
+                </button>
             </div>
         </>
     )
