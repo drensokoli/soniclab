@@ -32,15 +32,16 @@ export default function SongList({
                 {songs.map((song, index) => (
                     <div
                         key={index}
-                        className="flex flex-row items-center justify-between gap-4 p-3 bg-[#282828] text-gray-200 rounded-lg shadow-md dark:bg-gray-800"
+                        className="flex flex-row items-center justify-between gap-4 p-3 bg-[#282828] text-gray-200 rounded-sm shadow-md dark:bg-gray-800"
                     >
                         <div className="flex flex-row gap-4 items-center">
-                            <img src={song.image} alt={song.name} className="rounded-md md:h-20 h-16" />
+                            <img src={song.image} alt={song.name} className="md:h-20 h-16" />
                             <div className="flex flex-col gap-2">
                                 <div>
                                     <a href={`https://open.spotify.com/track/${song.id}`} target="_blank">
                                         <p className="text-sm sm:text-lg font-bold">
-                                            {index + 1}. {song.name.length > songLength ? song.name.slice(0, songLength) + '...' : song.name}
+                                            {/* {index + 1}. {song.name.length > songLength ? song.name.slice(0, songLength) + '...' : song.name} */}
+                                            {song.name}
                                         </p>
                                     </a>
                                     <a href={`https://open.spotify.com/artist/${song.artistId}`} target="_blank">
@@ -48,8 +49,8 @@ export default function SongList({
                                     </a>
                                 </div>
                                 <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-1">
-                                    <img src="./spotify.png" alt="Spotify Icon" width={15} height={15} className="inline-block" />
-                                    <h1 className="text-sm">Spotify</h1>
+                                    <img src="./spotify.png" alt="Spotify Icon" width={17} height={17} className="inline-block" />
+                                    <h1 className="text-sm">Play on Spotify</h1>
                                 </a>
                             </div>
                         </div>
