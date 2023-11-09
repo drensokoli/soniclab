@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import { Checkbox } from "@material-tailwind/react";
+import { Plus_Jakarta_Sans } from "next/font/google";
+
+const jakarta = Plus_Jakarta_Sans({
+    subsets: ['latin'],
+    weight: '400',
+    style: 'normal',
+})
 
 export default function SongList({
     songs,
@@ -32,7 +39,7 @@ export default function SongList({
                 {songs.map((song, index) => (
                     <div
                         key={index}
-                        className="flex flex-row items-center justify-between gap-4 p-3 bg-[#282828] text-gray-200 rounded-sm shadow-md dark:bg-gray-800"
+                        className="flex flex-row items-center justify-between gap-4 p-3 bg-[#282828] text-gray-200 rounded-md shadow-md dark:bg-gray-800"
                     >
                         <div className="flex flex-row gap-4 items-center">
                             <img src={song.image} alt={song.name} className="md:h-20 h-16" />
@@ -48,9 +55,9 @@ export default function SongList({
                                         <p className="sm:text-sm text-xs text-gray-300">{song.artist}</p>
                                     </a>
                                 </div>
-                                <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-1">
+                                <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-2">
                                     <img src="./spotify.png" alt="Spotify Icon" width={17} height={17} className="inline-block" />
-                                    <h1 className="text-sm">Play on Spotify</h1>
+                                    <h1 className={`${jakarta.className} text-sm`}>PLAY ON SPOTIFY</h1>
                                 </a>
                             </div>
                         </div>
