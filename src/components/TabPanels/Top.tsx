@@ -8,6 +8,7 @@ import SongList from "../Helpers/SongList";
 import View from "../Helpers/View";
 import Slider from "../Helpers/Slider";
 import SpotifyBubble from "../Helpers/SpotifyBubble";
+import SkeletonScreen from "../Helpers/SkeletonScreen";
 
 interface Song {
     id: string;
@@ -194,13 +195,18 @@ export default function Top({
                     <View setView={setView} />
                 </div>
             </div>
-            <div className="flex justify-center">
-                {view === 'card' ? (
-                    <SongCard songs={songs} setSongs={setSongs} setRange={setRange} />
-                ) : (
-                    <SongList songs={songs} setSongs={setSongs} setRange={setRange} />
-                )}
-            </div>
+
+            {songs.length > 0 ? (
+                <div className="flex justify-center">
+                    {view === 'card' ? (
+                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} />
+                    ) : (
+                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} />
+                    )}
+                </div>
+            ) : (
+                <SkeletonScreen />
+            )}
             <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
                 <div className="w-full md:w-4/5">
                     <Slider
