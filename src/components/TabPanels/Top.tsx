@@ -154,7 +154,7 @@ export default function Top({
     }, [refreshToken, spotifyClientId, spotifyClientSecret]);
 
     if (!session) {
-        return <NotSignedIn title='Please sign in to see your recently played songs' />
+        return <NotSignedIn title='Please sign in to see your top songs' />
     }
 
     if (loading) {
