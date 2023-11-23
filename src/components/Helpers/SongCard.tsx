@@ -44,7 +44,7 @@ export default function SongCard({
                                 <a href={`https://open.spotify.com/track/${song.id}`} target="_blank">
                                     <p className="sm:text-lg text-sm font-bold w-full">
                                         {/* {index + 1}. {song.name.length > songLength ? song.name.slice(0, songLength) + '...' : song.name} */}
-                                        {index + 1} {song.name}
+                                        {index + 1}. {song.name}
                                     </p>
                                 </a>
                                 <a href={`https://open.spotify.com/artist/${song.artistId}`} target="_blank">

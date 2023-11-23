@@ -48,7 +48,7 @@ export default function SongList({
                                     <a href={`https://open.spotify.com/track/${song.id}`} target="_blank">
                                         <p className="text-sm sm:text-lg font-bold">
                                             {/* {index + 1}. {song.name.length > songLength ? song.name.slice(0, songLength) + '...' : song.name} */}
-                                            {index + 1} {song.name}
+                                            {index + 1}. {song.name}
                                         </p>
                                     </a>
                                     <a href={`https://open.spotify.com/artist/${song.artistId}`} target="_blank">
