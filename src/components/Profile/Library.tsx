@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Loading from '../Helpers/Loading';
 import { deletePlaylist } from '@/lib/spotify';
 import axios from 'axios';
@@ -26,6 +26,75 @@ export default function Library(
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const refreshToken = sessionStorage.getItem('refreshToken')?.toString() || '';
+
+    async function fetchPlaylists(): Promise<Playlist[]> {
+        try {
+            const userResponse = await fetch('/api/getUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userEmail: session?.user?.email,
+                }),
+            });
+            const userData = await userResponse.json();
+
+            const userId = userData?.userId;
+            const response = await fetch('/api/getPlaylists', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                }),
+            });
+
+            const data = await response.json();
+
+            const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
+                playlistId: playlist.playlistId,
+                description: playlist.description,
+                created_at: playlist.created_at,
+                type: 'monthly_playlists',
+            }));
+
+            const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
+                playlistId: playlist.playlistId,
+                description: playlist.description,
+                created_at: playlist.created_at,
+                type: 'ai_gen_playlists',
+            }));
+
+            const topPlaylists = data.top_playlists.map((playlist: Playlist) => ({
+                playlistId: playlist.playlistId,
+                description: playlist.description,
+                created_at: playlist.created_at,
+                type: 'top_playlists',
+            }));
+
+            const sessionPlaylists = data.session_playlists.map((playlist: Playlist) => ({
+                playlistId: playlist.playlistId,
+                description: playlist.description,
+                created_at: playlist.created_at,
+                type: 'session_playlists',
+            }));
+
+            const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists, ...topPlaylists, ...sessionPlaylists];
+
+            allPlaylists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+            sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
+
+            setPlaylists(allPlaylists);
+
+            return allPlaylists;
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    }
 
     const handleDeletePlaylist = async (playlistId: string, playlistType: string) => {
         try {
@@ -63,14 +132,9 @@ export default function Library(
 
     useEffect(() => {
         setIsLoading(true);
-        if (session) {
-            const playlistsString = sessionStorage.getItem('playlists');
-            if (playlistsString !== null) {
-                setPlaylists(JSON.parse(playlistsString));
-            }
-        }
+        fetchPlaylists();
         setIsLoading(false);
-    }, [session]);
+    }, []);
 
 
     if (isLoading) {
