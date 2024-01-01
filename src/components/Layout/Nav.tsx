@@ -34,10 +34,10 @@ export default function Nav({
                     value="top"
                     className={`${montserrat.className} px-5`}
                 >Top</Tab>
-                <Tab
+                {/* <Tab
                     value="aigen"
                     className={`${montserrat.className} px-2`}
-                >AI Gen</Tab>
+                >AI Gen</Tab> */}
             </TabsHeader>
             <TabsBody>
                 <TabPanel value="recent" className="p-0">
