@@ -12,6 +12,7 @@ interface Playlist {
   playlistId: string;
   description: string;
   type: string;
+  created_at?: string;
 }
 
 const bebas_neue = Bebas_Neue({
@@ -85,28 +86,34 @@ export default function Home({
       const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
         playlistId: playlist.playlistId,
         description: playlist.description,
+        created_at: playlist.created_at,
         type: 'monthly_playlists',
       }));
 
       const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
         playlistId: playlist.playlistId,
         description: playlist.description,
+        created_at: playlist.created_at,
         type: 'ai_gen_playlists',
       }));
 
       const topPlaylists = data.top_playlists.map((playlist: Playlist) => ({
         playlistId: playlist.playlistId,
         description: playlist.description,
+        created_at: playlist.created_at,
         type: 'top_playlists',
       }));
 
       const sessionPlaylists = data.session_playlists.map((playlist: Playlist) => ({
         playlistId: playlist.playlistId,
         description: playlist.description,
+        created_at: playlist.created_at,
         type: 'session_playlists',
       }));
 
       const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists, ...topPlaylists, ...sessionPlaylists];
+
+      allPlaylists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
       sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
 

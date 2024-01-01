@@ -37,7 +37,9 @@ export default function SongCard({
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 sm:gap-4 gap-2">
             {songs.map((song, index) => (
                 <div key={index} className="flex flex-col gap-2 text-left p-2 sm:p-3 bg-[#282828] text-gray-200 rounded-md shadow-md dark:bg-gray-800 justify-around">
-                    <img src={song.image} alt={song.name} className="" />
+                    <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-center items-center gap-1">
+                        <img src={song.image} alt={song.name} className="" />
+                    </a>
                     <div className="flex flex-col justify-between h-full">
                         <div className="flex flex-row justify-between items-start">
                             <div className="flex flex-col justify-between items-start w-full">

@@ -129,10 +129,12 @@ export default function Recent({
             fetchSongs(50);
 
             // Retrieve the existing playlist IDs
-            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string }[];
+            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string, created_at: string }[];
 
             // Append the new playlist data
-            playlists.push({ playlistId, description, type });
+            playlists.push({ playlistId, description, type, created_at: new Date().toISOString() });
+
+            playlists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
             // Store the updated playlist data
             sessionStorage.setItem('playlists', JSON.stringify(playlists));

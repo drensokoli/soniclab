@@ -8,6 +8,7 @@ interface Playlist {
     playlistId: string;
     playlistName: string;
     description: string;
+    created_at: string;
     type: string;
 }
 
