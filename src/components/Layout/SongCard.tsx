@@ -25,14 +25,6 @@ export default function SongCard({
     setRange: any;
 }) {
 
-    let songLength: number;
-
-    if (window.screen.width <= 640) {
-        songLength = 17;
-    } else if (window.screen.width > 640) {
-        songLength = 35;
-    }
-
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 sm:gap-4 gap-2">
             {songs.map((song, index) => (
@@ -45,7 +37,6 @@ export default function SongCard({
                             <div className="flex flex-col justify-between items-start w-full">
                                 <a href={`https://open.spotify.com/track/${song.id}`} target="_blank">
                                     <p className="sm:text-lg text-sm font-bold w-full">
-                                        {/* {index + 1}. {song.name.length > songLength ? song.name.slice(0, songLength) + '...' : song.name} */}
                                         {index + 1}. {song.name}
                                     </p>
                                 </a>
@@ -66,7 +57,7 @@ export default function SongCard({
                         </div>
                         <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-center items-center gap-1">
                             <img src="./spotify.png" alt="Spotify Icon" width={15} height={15} className="inline-block" />
-                            <h1 className={`${jakarta.className} text-sm`}>PLAY ON SPOTIFY</h1>
+                            <h1 className={`${jakarta.className} sm:text-sm text-xs py-1`}>PLAY ON SPOTIFY</h1>
                         </a>
                     </div>
                 </div>

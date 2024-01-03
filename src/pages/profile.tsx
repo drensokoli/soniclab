@@ -5,15 +5,27 @@ import NET from "vanta/dist/vanta.net.min";
 import Footer from '../components/Layout/Footer'
 import { getSession, useSession } from 'next-auth/react';
 import Loading from '@/components/Helpers/Loading';
-import ProfileSettings from '@/components/Profile/ProfileSettings';
-import Library from '@/components/Profile/Library';
+import Library from '@/components/Layout/Library';
 import Link from 'next/link';
+import { fetchPlaylists, fetchUser } from '@/lib/helpers';
+import Header from '@/components/Layout/Header';
+import MonthlyToggle from '@/components/Helpers/MonthlyToggle';
+import BackButton from '@/components/Helpers/BackButton';
+import SignOutButton from '@/components/Helpers/SignOutButton';
 
 const bebas_neue = Bebas_Neue({
     subsets: ['latin'],
     weight: '400',
     style: 'normal',
 })
+
+interface Playlist {
+    playlistId: string;
+    playlistName: string;
+    description: string;
+    created_at: string;
+    type: string;
+}
 
 export default function Profile({
     spotifyClientId,
@@ -23,11 +35,30 @@ export default function Profile({
     spotifyClientSecret: string,
 }) {
 
+    const { data: session } = useSession();
+    const userEmail = session?.user?.email as string;
+
     const [isLoading, setIsLoading] = useState(true);
 
     const [vantaEffect, setVantaEffect] = useState<any>(null);
     const vantaRef = useRef(null);
 
+    const [playlists, setPlaylists] = useState<Playlist[]>([]);
+
+    // FETCH USER AND PLAYLISTS
+    useEffect(() => {
+        if (session
+            || !sessionStorage.getItem('userId')
+            || !sessionStorage.getItem('createMonthly')
+            || !sessionStorage.getItem('playlists')) {
+            fetchUser(userEmail).then(() => {
+                fetchPlaylists(sessionStorage.getItem('userId') as string);
+                setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
+            })
+        }
+    }, [session])
+
+    // VANTA EFFECT
     useEffect(() => {
         if (!isLoading && !vantaEffect && vantaRef.current) {
             const spacing = window.innerWidth >= 640 ? 20 : 30;
@@ -53,6 +84,7 @@ export default function Profile({
         }
     }, [isLoading, vantaEffect])
 
+    // LOADING
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false);
@@ -71,25 +103,13 @@ export default function Profile({
     return (
         <>
             <div ref={vantaRef} className='fixed w-screen h-screen'></div>
-            <div className='flex flex-col justify center items-center'>
-                <div className='flex flex-col justify-center items-center h-1/4 pb-10 pt-16 z-10 gap-4 w-full'>
-                    <Link href='/' className='absolute md:top-7 top-3 md:left-9 left-4'>
-                        <button type="button" className=" text-white rounded-md border-gray-100 py-2 hover:text-white">
-                            <div className="flex flex-row align-middle">
-                                <svg className="w-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fillRule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd"></path>
-                                </svg>
-                                <p className={`${bebas_neue.className} text-2xl`}>HOME</p>
-                            </div>
-                        </button>
-                    </Link>
-                    <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SonicLab</h1>
-                    <ProfileSettings />
-                    <Library spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
-                </div>
-                <div className='flex flex-grow'></div>
-                <Footer />
-            </div>
+            <Header />
+            <MonthlyToggle />
+            <BackButton />
+            <SignOutButton />
+            <Library playlists={playlists} setPlaylists={setPlaylists} spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
+            <div className='flex flex-grow'></div>
+            <Footer />
         </>
     )
 }

@@ -1,10 +1,7 @@
 import { useState } from "react";
 
-interface Props {
-    setView: (view: string) => void;
-}type IconType = "card" | "list";
-
-export default function View({ setView }: Props) {
+export default function View({ setView }: { setView: (view: string) => void }) {
+    type IconType = "card" | "list";
     const [icon, setIcon] = useState<IconType>("card");
 
     const images = {
@@ -24,11 +21,11 @@ export default function View({ setView }: Props) {
     };
 
     return (
-            <button onClick={handleClick}>
-                <img
-                    src={images[icon].path}
-                    className="h-[40px] p-1 rounded-md"
-                />
-            </button>
+        <button onClick={handleClick}>
+            <img
+                src={images[icon].path}
+                className="h-[40px] p-1 rounded-md"
+            />
+        </button>
     );
 }

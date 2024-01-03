@@ -1,4 +1,12 @@
 
+interface Song {
+    id: string;
+    name: string;
+    artist: string;
+    image: string;
+    link: string;
+}
+
 const getAccessToken = async (
     refresh_token: any,
     spotifyClientId: string,
@@ -315,14 +323,6 @@ const getMonthlyTracks = async (
     const data = await response.json();
     const trackIds = data.items.map((item: any) => item.id);
     return trackIds;
-}
-
-interface Song {
-    id: string;
-    name: string;
-    artist: string;
-    image: string;
-    link: string;
 }
 
 export async function getRecentlyPlayedSongs(

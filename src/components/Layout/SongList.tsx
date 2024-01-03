@@ -59,7 +59,7 @@ export default function SongList({
                                 </div>
                                 <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-2">
                                     <img src="./spotify.png" alt="Spotify Icon" width={17} height={17} className="inline-block" />
-                                    <h1 className={`${jakarta.className} text-sm`}>PLAY ON SPOTIFY</h1>
+                                    <h1 className={`${jakarta.className} sm:text-sm text-xs`}>PLAY ON SPOTIFY</h1>
                                 </a>
                             </div>
                         </div>

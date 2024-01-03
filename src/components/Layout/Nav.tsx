@@ -1,7 +1,6 @@
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
 import { Montserrat, Bebas_Neue } from 'next/font/google'
 import AIGen from "../TabPanels/AI/AIGen";
-import Library from "../Profile/Library";
 import Recent from "../TabPanels/Recent";
 import Top from "../TabPanels/Top";
 

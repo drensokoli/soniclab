@@ -1,12 +1,10 @@
-import React from 'react';
 
-type SliderProps = {
+export default function Slider({ max, range, onChange }: {
     max: number;
     range: number;
     onChange: (value: number) => void;
-};
 
-const Slider: React.FC<SliderProps> = ({ max, range, onChange }) => {
+}) {
     const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(parseInt(e.target.value));
     };
@@ -30,5 +28,3 @@ const Slider: React.FC<SliderProps> = ({ max, range, onChange }) => {
         </>
     );
 };
-
-export default Slider;
