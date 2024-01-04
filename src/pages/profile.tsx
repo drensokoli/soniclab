@@ -50,7 +50,7 @@ export default function Profile({
         if (sessionStorage.getItem('playlists')) {
             setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
         }
-        
+
         if (session) {
             fetchUser(userEmail)
                 .then(() => {
@@ -104,13 +104,15 @@ export default function Profile({
     return (
         <>
             <div ref={vantaRef} className='fixed w-screen h-screen'></div>
-            <Header />
-            <MonthlyToggle />
-            <BackButton />
-            <SignOutButton />
-            <Library playlists={playlists} setPlaylists={setPlaylists} spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
-            <div className='flex flex-grow'></div>
-            <Footer />
+            <div>
+                <Header />
+                <MonthlyToggle />
+                <BackButton />
+                <SignOutButton />
+                <Library playlists={playlists} setPlaylists={setPlaylists} spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
+                <Footer />
+            </div>
+
         </>
     )
 }
