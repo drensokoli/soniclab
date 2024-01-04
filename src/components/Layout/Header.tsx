@@ -22,7 +22,7 @@ export default function Header() {
                     <img
                         src={session?.user?.image?.toString()!}
                         alt="Profile image"
-                        className="rounded-full mx-auto w-12 h-12 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 "
+                        className="rounded-full mx-auto w-12 h-12 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 object-cover "
                         width={20}
                         height={20}
                     />
