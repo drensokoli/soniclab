@@ -41,14 +41,14 @@ export default function SongList({
                         key={index}
                         className="flex flex-row items-center justify-between gap-4 p-3 bg-[#282828] text-gray-200 rounded-md shadow-md dark:bg-gray-800"
                     >
-                        <div className="flex flex-row gap-4 items-center">
+                        <div className="flex flex-row gap-4 items-start">
                             <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-2">
-                                <img src={song.image} alt={song.name} className="md:h-20 h-16 object-fit" />
+                                <img src={song.image} alt={song.name} className="md:h-20 h-16" />
                             </a>
                             <div className="flex flex-col gap-2">
-                                <div className="">
+                                <div>
                                     <a href={`https://open.spotify.com/track/${song.id}`} target="_blank">
-                                        <p className="text-sm sm:text-lg font-bold overflow-hidden text-ellipsis">
+                                        <p className="text-sm sm:text-lg font-bold w-[140px] sm:w-auto">
                                             {index + 1}. {song.name}
                                         </p>
                                     </a>
