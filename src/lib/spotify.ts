@@ -239,10 +239,12 @@ export async function createMonthlyPlaylist(
 
         const data = await response.json();
         const playlistId = data.id;
-        const songIds = await getMonthlyTracks(accessToken);
+        // const songIds = await getMonthlyTracks(accessToken);
+        const songIds = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, 'short_term', 50);
 
+        const songIdsArray = songIds.map(song => song.id);
 
-        await addTracksToMonthlyPlaylist(playlistId, accessToken, songIds);
+        await addTracksToSpotifyPlaylist(playlistId, accessToken, songIdsArray);
 
         await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
             method: 'PUT',
@@ -283,46 +285,89 @@ export async function createMonthlyPlaylist(
     return "Create monthly playlist is false for " + userId;
 }
 
-const addTracksToMonthlyPlaylist = async (
-    playlistId: string,
-    accessToken: string,
-    songIds: string[]
-) => {
+export async function createHalfYearPlaylist(
+    providerAccountId: string,
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string,
+    userId: string,
+    createHalfYear: boolean
+): Promise<string> {
+    const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
-    const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + accessToken,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            uris: songIds.map(id => `spotify:track:${id}`)
-        })
-    });
+    const currentDate = new Date();
+    const thisYear = currentDate.getFullYear().toString();
 
-    if (!addTracksResponse.ok) {
-        throw new Error(`HTTP error! status: ${addTracksResponse.status}`);
-    }
+    const playlistName = `SonicLab Half Year Mix (Jan-Jun ${thisYear})`;
+    const type = 'half_year_playlists';
+    const description = `Elevate your listening experience with the SonicLab Half Year Mix. Your top 50 tracks from the first half of ${thisYear}, delivered to you by SonicLab.`
+    const url = process.env.NEXTAUTH_URL ?? '';
 
-    return addTracksResponse;
-}
+    if (createHalfYear) {
+        const response = await fetch(`https://api.spotify.com/v1/users/${providerAccountId}/playlists`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: playlistName,
+                description: description,
+                public: false
+            })
+        });
 
-const getMonthlyTracks = async (
-    accessToken: string
-) => {
-    const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50`, {
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    });
 
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        const playlistId = data.id;
+        const songIds = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, 'medium_term', 50);
+
+        const songIdsArray = songIds.map(song => song.id);
+
+
+        await addTracksToSpotifyPlaylist(playlistId, accessToken, songIdsArray);
+
+        await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                description: description
+            })
+        });
+
+        const endpoint = `${url}/api/savePlaylist`;
+
+        const savePlaylist = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId,
+                playlistId,
+                playlistName,
+                description,
+                type
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const savePlaylistData = await savePlaylist.json();
+        console.log("savePlaylistData.message - ", savePlaylistData.message);
+        return playlistId;
     }
 
-    const data = await response.json();
-    const trackIds = data.items.map((item: any) => item.id);
-    return trackIds;
+    return "Create half year playlist is false for " + userId;
 }
 
 export async function getRecentlyPlayedSongs(
