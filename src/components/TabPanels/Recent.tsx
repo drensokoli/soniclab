@@ -33,10 +33,6 @@ export default function Recent({
 }) {
 
     useEffect(() => {
-        fetchSongs(50);
-    }, []);
-
-    useEffect(() => {
         if (refreshToken) {
             fetchSongs(50);
         }

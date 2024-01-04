@@ -47,14 +47,15 @@ export default function Profile({
 
     // FETCH USER AND PLAYLISTS
     useEffect(() => {
-        if (session
-            || !sessionStorage.getItem('userId')
-            || !sessionStorage.getItem('createMonthly')
-            || !sessionStorage.getItem('playlists')) {
-            fetchUser(userEmail).then(() => {
-                fetchPlaylists(sessionStorage.getItem('userId') as string);
-                setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
-            })
+        if (sessionStorage.getItem('playlists')) {
+            setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
+        }
+        
+        if (session) {
+            fetchUser(userEmail)
+                .then(() => {
+                    fetchPlaylists(sessionStorage.getItem('userId') as string, setPlaylists as any)
+                })
         }
     }, [session])
 

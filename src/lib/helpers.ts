@@ -30,7 +30,7 @@ export async function fetchUser(userEmail: string) {
     }
 }
 
-export async function fetchPlaylists(userId: string) {
+export async function fetchPlaylists(userId: string, setPlaylists: any) {
     try {
         const response = await fetch('/api/getPlaylists', {
             method: 'POST',
@@ -76,6 +76,7 @@ export async function fetchPlaylists(userId: string) {
 
         allPlaylists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
+        setPlaylists(allPlaylists);
         sessionStorage.setItem('playlists', JSON.stringify(allPlaylists));
 
     } catch (error) {

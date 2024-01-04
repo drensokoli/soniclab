@@ -27,6 +27,7 @@ export default function Home({
   const [userId, setUserId] = useState('');
   const [providerAccountId, setProviderAccountId] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
+  const [playlists, setPlaylists] = useState<any[]>([]); // TODO: type this as Playlist[]
 
   // FETCH USER AND PLAYLISTS
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function Home({
         setUserId(sessionStorage.getItem('userId') as string);
         setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);
         setRefreshToken(sessionStorage.getItem('refreshToken') as string);
-        fetchPlaylists(userId);
+        fetchPlaylists(userId, setPlaylists);
       })
     }
   }, [session])

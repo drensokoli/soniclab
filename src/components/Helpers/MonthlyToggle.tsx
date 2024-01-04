@@ -1,10 +1,16 @@
 import { handleCreateMonthly } from "@/lib/helpers";
 import { Tooltip } from "@material-tailwind/react"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function MonthlyToggle() {
 
     const [createMonthly, setCreateMonthly] = useState(sessionStorage.getItem('createMonthly') === 'true' ? true : false);
+
+    useEffect(() => {
+        if (sessionStorage.getItem('createMonthly')) {
+            setCreateMonthly(sessionStorage.getItem('createMonthly') === 'true' ? true : false);
+        }
+    }, [sessionStorage.getItem('createMonthly')])
 
     return (
         <div className='flex flex-row gap-2 justify-center items-center'>
