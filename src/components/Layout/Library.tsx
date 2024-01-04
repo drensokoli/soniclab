@@ -30,7 +30,7 @@ export default function Library(
                     {playlists.length !== 0 ? (
                         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
                             {playlists.map((playlist, index) => (
-                                <div key={index} className='flex flex-col gap-2 p-2 z-10 backdrop-blur'>
+                                <div key={index} className='flex flex-col gap-2 p-3 z-10 border-2 border-[#f33f81] border-opacity-40 backdrop-blur rounded-md '>
                                     <iframe
                                         className='opacity-75'
                                         src={`https://open.spotify.com/embed/playlist/${playlist.playlistId}?utm_source=generator`}
