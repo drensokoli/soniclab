@@ -127,14 +127,21 @@ export const handleDeletePlaylist = async (playlistId: string, playlistType: str
         deletePlaylist(refreshToken, spotifyClientId, spotifyClientSecret, playlistId);
 
         const userId = sessionStorage.getItem('userId');
+
         const response = await fetch('/api/deletePlaylist', {
-            method: 'DELETE',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 userId: userId,
                 playlistId: playlistId,
                 playlistType: playlistType,
             }),
         });
+
+        const data = await response.json();
+        console.log(data.message);
 
         return updatedPlaylists;
     } catch (error) {
