@@ -51,12 +51,19 @@ export async function fetchPlaylists(userId: string, setPlaylists: any) {
             type: 'monthly_playlists',
         }));
 
-        const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
+        const halfYearPlaylists = data.half_year_playlists.map((playlist: Playlist) => ({
             playlistId: playlist.playlistId,
             description: playlist.description,
             created_at: playlist.created_at,
-            type: 'ai_gen_playlists',
+            type: 'half_year_playlists',
         }));
+
+        // const aiGenPlaylists = data.ai_gen_playlists.map((playlist: Playlist) => ({
+        //     playlistId: playlist.playlistId,
+        //     description: playlist.description,
+        //     created_at: playlist.created_at,
+        //     type: 'ai_gen_playlists',
+        // }));
 
         const topPlaylists = data.top_playlists.map((playlist: Playlist) => ({
             playlistId: playlist.playlistId,
@@ -72,7 +79,8 @@ export async function fetchPlaylists(userId: string, setPlaylists: any) {
             type: 'session_playlists',
         }));
 
-        const allPlaylists = [...monthlyPlaylists, ...aiGenPlaylists, ...topPlaylists, ...sessionPlaylists];
+        // const allPlaylists = [...monthlyPlaylists, ...halfYearPlaylists, ...aiGenPlaylists, ...topPlaylists, ...sessionPlaylists];
+        const allPlaylists = [...monthlyPlaylists, ...halfYearPlaylists, ...topPlaylists, ...sessionPlaylists];
 
         allPlaylists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 

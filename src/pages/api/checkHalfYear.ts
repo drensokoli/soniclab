@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '../../lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { providerAccountId, createMonthly } = req.body;
+    const { providerAccountId, createHalfYear } = req.body;
 
 
     const client = await clientPromise;
@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const updatedUserAccount = await accountsCollection.updateOne(
             { providerAccountId: providerAccountId },
-            { $set: { createMonthly: createMonthly } }
+            { $set: { createHalfYear: createHalfYear } }
         );
 
         res.status(200).json(updatedUserAccount);

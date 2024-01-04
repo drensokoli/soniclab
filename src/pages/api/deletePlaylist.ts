@@ -6,8 +6,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { userId, playlistId, playlistType } = req.body;
 
         const client = await clientPromise;
-        const db = client.db('playlists');
-        const collection = db.collection('user_playlists');
+        const db = client.db('users');
+        const collection = db.collection('playlists');
 
         const user = await collection.findOne({ userId: userId });
 
@@ -28,6 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await collection.updateOne({ userId: userId }, { $set: user });
 
         res.json({ message: 'Playlist marked as deleted successfully' });
+
+        // client.close();        
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });

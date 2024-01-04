@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
 
     } catch (error) {
-      console.error(`Error creating monthly playlist for user ${userId}: ${error}`);
+      console.error(`Error creating half year playlist for user ${userId}: ${error}`);
       continue;
     }
     

@@ -6,11 +6,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { userEmail } = req.body;
 
-    const dbName = process.env.MONGODB_DB_NAME;
-    const collectionName = process.env.MONGODB_COLLECTION_NAME;
-
     const client = await clientPromise;
-    const db = client.db(dbName);
+    const db = client.db("users");
     const usersCollection = db.collection("users");
     const accountsCollection = db.collection("accounts");
 
@@ -24,10 +21,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await accountsCollection.updateOne({ userId: id }, { $set: { createMonthly: true } });
       }
 
+      if (userAccount && !userAccount.hasOwnProperty('createHalfYear')) {
+        await accountsCollection.updateOne({ userId: id }, { $set: { createHalfYear: true } });
+      }
+
       res.status(200).json(userAccount);
     } else {
       res.status(404).json({ message: 'User not found' });
     }
+
+    // client.close();
 
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
