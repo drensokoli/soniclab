@@ -298,7 +298,7 @@ export async function createHalfYearPlaylist(
     const currentDate = new Date();
     const thisYear = currentDate.getFullYear().toString();
 
-    const playlistName = `SonicLab Half Year Mix (Jan-Jun ${thisYear})`;
+    const playlistName = `SonicLab Half Year Mix - Jan/Jun ${thisYear}`;
     const type = 'half_year_playlists';
     const description = `Elevate your listening experience with the SonicLab Half Year Mix. Your top 50 tracks from the first half of ${thisYear}, delivered to you by SonicLab.`
     const url = process.env.NEXTAUTH_URL ?? '';
