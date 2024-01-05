@@ -7,7 +7,7 @@ interface Playlist {
     created_at?: string;
 }
 
-export async function fetchUser(userEmail: string) {
+export async function fetchUser(userEmail: string, setPlaylists: any) {
     try {
         const response = await fetch('/api/getUser', {
             method: 'POST',
@@ -25,6 +25,8 @@ export async function fetchUser(userEmail: string) {
         sessionStorage.setItem('refreshToken', data.refresh_token);
         sessionStorage.setItem('createMonthly', data.createMonthly);
         sessionStorage.setItem('createHalfYear', data.createHalfYear);
+
+        fetchPlaylists(data.userId, setPlaylists);
 
     } catch (error) {
         console.error('Error:', error);
