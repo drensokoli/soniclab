@@ -182,7 +182,7 @@ export default function Top({
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                 </svg>
-                <h1 className='text-center text-sm'>We are not related to Spotify AB or any of its partners in any way.All images are copyrighted by their respective copyright owners.</h1>
+                <h1 className='text-center text-sm'>We are not related to Spotify AB or any of its partners in any way. All images are copyrighted by their respective copyright owners.</h1>
             </div>
             <div className="flex flex-row justify-center items-center">
                 <div className="flex items-center justify-end w-full py-4 gap-2">

@@ -31,6 +31,10 @@ export default function Home({
 
   // FETCH USER AND PLAYLISTS
   useEffect(() => {
+    if (sessionStorage.getItem('playlists')) {
+      setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
+    }
+
     if (session
       || !sessionStorage.getItem('userId')
       || !sessionStorage.getItem('providerAccountId')
@@ -99,6 +103,8 @@ export default function Home({
           spotifyClientSecret={spotifyClientSecret}
           providerAccountId={providerAccountId}
           refreshToken={refreshToken}
+          playlists={playlists}
+          setPlaylists={setPlaylists}
         />
         <Footer />
       </div>

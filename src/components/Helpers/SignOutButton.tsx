@@ -2,7 +2,7 @@ import { signOut } from "next-auth/react";
 
 export default function SignOutButton() {
     return (
-        <div className='flex flex-row mt-4 justify-center items-center'>
+        <div className='flex flex-row justify-center items-center'>
 
             <button
                 type="button"

@@ -24,6 +24,7 @@ export async function fetchUser(userEmail: string) {
         sessionStorage.setItem('providerAccountId', data.providerAccountId);
         sessionStorage.setItem('refreshToken', data.refresh_token);
         sessionStorage.setItem('createMonthly', data.createMonthly);
+        sessionStorage.setItem('createHalfYear', data.createHalfYear);
 
     } catch (error) {
         console.error('Error:', error);

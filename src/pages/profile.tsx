@@ -105,11 +105,11 @@ export default function Profile({
         <>
             <div ref={vantaRef} className='fixed w-screen h-screen'></div>
             <div>
-                <Header />
-                <MonthlyToggle />
                 <BackButton />
+                <Header />
                 <SignOutButton />
-                <Library playlists={playlists} setPlaylists={setPlaylists} spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} />
+                <MonthlyToggle />
+                {/* <Library playlists={playlists} setPlaylists={setPlaylists} spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} /> */}
                 <Footer />
             </div>
 

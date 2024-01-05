@@ -26,9 +26,9 @@ export default function Library(
     return (
         <>
             <div className='flex flex-row justify-center items-center'>
-                <div className='w-[75%] md:w-[85%] pt-4'>
+                <div className='w-[95%] pt-8'>
                     {playlists.length !== 0 ? (
-                        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
                             {playlists.map((playlist, index) => (
                                 <div key={index} className='flex flex-col gap-2 p-3 z-10 border-2 border-[#f33f81] border-opacity-40 backdrop-blur rounded-md '>
                                     <iframe
