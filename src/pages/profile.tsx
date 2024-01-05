@@ -46,18 +46,18 @@ export default function Profile({
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
     // FETCH USER AND PLAYLISTS
-    useEffect(() => {
-        if (sessionStorage.getItem('playlists')) {
-            setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
-        }
+    // useEffect(() => {
+    //     if (sessionStorage.getItem('playlists')) {
+    //         setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
+    //     }
 
-        if (session) {
-            fetchUser(userEmail)
-                .then(() => {
-                    fetchPlaylists(sessionStorage.getItem('userId') as string, setPlaylists as any)
-                })
-        }
-    }, [session])
+    //     if (session) {
+    //         fetchUser(userEmail)
+    //             .then(() => {
+    //                 fetchPlaylists(sessionStorage.getItem('userId') as string, setPlaylists as any)
+    //             })
+    //     }
+    // }, [session])
 
     // VANTA EFFECT
     useEffect(() => {
