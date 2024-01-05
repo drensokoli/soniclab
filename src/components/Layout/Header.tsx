@@ -16,9 +16,9 @@ export default function Header() {
 
     return (
         <div className='flex flex-col justify-center items-center h-1/4 pb-4 pt-16 z-10 gap-4'>
-            <a href="/">
+            <Link href="/">
                 <h1 className={`sm:text-8xl font-bold text-7xl text-[#f33f81] opacity-70 ${bebas_neue.className}`}>SonicLab</h1>
-            </a>
+            </Link>
             {session && (
                 <Link href='/profile' className='flex flex-row justify-center items-center gap-2'>
                     <img
