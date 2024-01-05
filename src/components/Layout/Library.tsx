@@ -26,7 +26,7 @@ export default function Library(
     return (
         <>
             <div className='flex flex-row justify-center items-center'>
-                <div className='w-[95%] pt-8'>
+                <div className='w-[100%] pt-8'>
                     {playlists.length !== 0 ? (
                         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
                             {playlists.map((playlist, index) => (
