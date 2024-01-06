@@ -14,8 +14,8 @@ export default function CronToggle({ name, title, description, checked, setCheck
             <div className="border-2 border-[#f33f81] border-opacity-40 backdrop-blur rounded-md md:w-[70%] w-[90%]">
                 <div className="flex flex-row justify-between items-center p-4 gap-1">
                     <div className="flex flex-col">
-                        <h1 className="text-gray-300 md:text-lg font-semibold">{title}</h1>
-                        <h1 className="text-gray-400 md:text-md text-sm">{description}</h1>
+                        <h1 className="text-gray-300 md:text-lg text-sm font-semibold">{title}</h1>
+                        <h1 className="text-gray-400 md:text-md text-xs">{description}</h1>
                     </div>
                     <div>
 
