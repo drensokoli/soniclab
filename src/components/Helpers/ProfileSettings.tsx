@@ -2,10 +2,10 @@ import { useState } from "react";
 import CronToggle from "./CronToggle";
 
 export default function ProfileSettings() {
-    
+
     const [createMonthly, setCreateMonthly] = useState(sessionStorage.getItem('createMonthly') === 'true' ? true : false);
     const [createHalfYear, setCreateHalfYear] = useState(sessionStorage.getItem('createHalfYear') === 'true' ? true : false);
-    
+
     const cronToggleSettings = [
         {
             name: 'createMonthly',
@@ -25,14 +25,15 @@ export default function ProfileSettings() {
     return (
         <>
             {cronToggleSettings.map((setting) => (
-                <CronToggle
-                    key={setting.name}
-                    name={setting.name}
-                    title={setting.title}
-                    description={setting.description}
-                    checked={setting.checked}
-                    setChecked={setting.setChecked}
-                />
+                <div key={setting.name}>
+                    <CronToggle
+                        name={setting.name}
+                        title={setting.title}
+                        description={setting.description}
+                        checked={setting.checked}
+                        setChecked={setting.setChecked}
+                    />
+                </div>
             ))}
         </>
     )
