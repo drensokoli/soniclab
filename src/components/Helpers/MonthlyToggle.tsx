@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 
 export default function MonthlyToggle() {
 
-    const [createMonthly, setCreateMonthly] = useState(sessionStorage.getItem('createMonthly') === 'true' ? true : false);
+    const [createMonthly, setCreateMonthly] = useState(localStorage.getItem('createMonthly') === 'true' ? true : false);
 
     useEffect(() => {
-        if (sessionStorage.getItem('createMonthly')) {
-            setCreateMonthly(sessionStorage.getItem('createMonthly') === 'true' ? true : false);
+        if (localStorage.getItem('createMonthly')) {
+            setCreateMonthly(localStorage.getItem('createMonthly') === 'true' ? true : false);
         }
-    }, [sessionStorage.getItem('createMonthly')])
+    }, [localStorage.getItem('createMonthly')])
 
     return (
         <div className='flex flex-row gap-2 justify-center items-center'>

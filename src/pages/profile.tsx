@@ -1,39 +1,16 @@
 "use client"
-import { Bebas_Neue } from 'next/font/google'
 import { useEffect, useRef, useState } from "react";
 import NET from "vanta/dist/vanta.net.min";
 import Footer from '../components/Layout/Footer'
 import { getSession, useSession } from 'next-auth/react';
 import Loading from '@/components/Helpers/Loading';
-import Library from '@/components/Layout/Library';
-import Link from 'next/link';
-import { fetchPlaylists, fetchUser } from '@/lib/helpers';
 import Header from '@/components/Layout/Header';
-import MonthlyToggle from '@/components/Helpers/MonthlyToggle';
 import BackButton from '@/components/Helpers/BackButton';
 import SignOutButton from '@/components/Helpers/SignOutButton';
+import ProfileSettings from '@/components/Helpers/ProfileSettings';
+import { fetchUser } from '@/lib/helpers';
 
-const bebas_neue = Bebas_Neue({
-    subsets: ['latin'],
-    weight: '400',
-    style: 'normal',
-})
-
-interface Playlist {
-    playlistId: string;
-    playlistName: string;
-    description: string;
-    created_at: string;
-    type: string;
-}
-
-export default function Profile({
-    spotifyClientId,
-    spotifyClientSecret,
-}: {
-    spotifyClientId: string,
-    spotifyClientSecret: string,
-}) {
+export default function Profile() {
 
     const { data: session } = useSession();
     const userEmail = session?.user?.email as string;
@@ -43,21 +20,14 @@ export default function Profile({
     const [vantaEffect, setVantaEffect] = useState<any>(null);
     const vantaRef = useRef(null);
 
-    const [playlists, setPlaylists] = useState<Playlist[]>([]);
-
-    // FETCH USER AND PLAYLISTS
-    // useEffect(() => {
-    //     if (sessionStorage.getItem('playlists')) {
-    //         setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
-    //     }
-
-    //     if (session) {
-    //         fetchUser(userEmail)
-    //             .then(() => {
-    //                 fetchPlaylists(sessionStorage.getItem('userId') as string, setPlaylists as any)
-    //             })
-    //     }
-    // }, [session])
+    // FETCH USER SETTINGS
+    useEffect(() => {
+        if (session
+            || !sessionStorage.getItem('createMonthly')
+            || !sessionStorage.getItem('createHalfYear')) {
+            fetchUser(userEmail)
+        }
+    }, [session])
 
     // VANTA EFFECT
     useEffect(() => {
@@ -108,8 +78,7 @@ export default function Profile({
                 <BackButton />
                 <Header />
                 <SignOutButton />
-                <MonthlyToggle />
-                {/* <Library playlists={playlists} setPlaylists={setPlaylists} spotifyClientId={spotifyClientId} spotifyClientSecret={spotifyClientSecret} /> */}
+                <ProfileSettings />
                 <Footer />
             </div>
 

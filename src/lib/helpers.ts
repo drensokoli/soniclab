@@ -7,7 +7,7 @@ interface Playlist {
     created_at?: string;
 }
 
-export async function fetchUser(userEmail: string, setPlaylists: any) {
+export async function fetchUser(userEmail: string) {
     try {
         const response = await fetch('/api/getUser', {
             method: 'POST',
@@ -26,7 +26,7 @@ export async function fetchUser(userEmail: string, setPlaylists: any) {
         sessionStorage.setItem('createMonthly', data.createMonthly);
         sessionStorage.setItem('createHalfYear', data.createHalfYear);
 
-        fetchPlaylists(data.userId, setPlaylists);
+        // fetchPlaylists(data.userId, setPlaylists);
 
     } catch (error) {
         console.error('Error:', error);
@@ -95,25 +95,42 @@ export async function fetchPlaylists(userId: string, setPlaylists: any) {
     }
 }
 
-export async function handleCreateMonthly() {
+export async function handleCreateMonthly(name: string) {
 
     const createMonthly = sessionStorage.getItem('createMonthly') === 'true' ? false : true;
+    const createHalfYear = sessionStorage.getItem('createHalfYear') === 'true' ? false : true;
     const providerAccountId = sessionStorage.getItem('providerAccountId');
 
-    const response = await fetch('/api/checkMonthly', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            providerAccountId: providerAccountId,
-            createMonthly: createMonthly,
-        }),
-    });
+    let response;
+
+    if (name === 'createMonthly') {
+        response = await fetch('/api/checkMonthly', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                providerAccountId: providerAccountId,
+                createMonthly: createMonthly,
+            }),
+        });
+        sessionStorage.setItem('createMonthly', createMonthly.toString());
+    } else {
+        response = await fetch('/api/checkHalfYear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                providerAccountId: providerAccountId,
+                createHalfYear: createHalfYear,
+            }),
+        });
+        sessionStorage.setItem('createHalfYear', createHalfYear.toString());
+
+    }
 
     const data = await response.json();
-
-    sessionStorage.setItem('createMonthly', createMonthly.toString());
 
     console.log(data.message);
 }
