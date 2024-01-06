@@ -164,7 +164,7 @@ export default function Recent({
             <div>
                 {playlistId && (<SpotifyBubble playlistId={playlistId} playlistName={playlistName} />)}
                 <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
-                    <h1 className="text-gray-300 text-lg md:text-xl text-center">Create a session playlist with your recently played songs</h1>
+                    <h1 className="text-gray-300 text-md md:text-xl text-center">Create a session playlist with your recently played songs</h1>
                     <input
                         id="description"
                         className=" block p-2.5 w-full md:w-4/5 text-md text-gray-300 bg-transparent rounded-lg border border-gray-200"

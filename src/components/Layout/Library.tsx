@@ -1,4 +1,6 @@
 import { handleDeletePlaylist } from '@/lib/helpers';
+import { useSession } from 'next-auth/react';
+import NotSignedIn from './NotSignedIn';
 
 interface Playlist {
     playlistId: string;
@@ -21,8 +23,12 @@ export default function Library(
         spotifyClientSecret: string;
     }
 ) {
-    const refreshToken = sessionStorage.getItem('refreshToken')?.toString() || '';
+    const { data: session } = useSession();
 
+    const refreshToken = sessionStorage.getItem('refreshToken')?.toString() || '';
+    if (!session) {
+        return <NotSignedIn title='Please sign in to see your playlist library' />
+    }
     return (
         <>
             <div className='flex flex-row justify-center items-center'>
