@@ -130,10 +130,10 @@ export default function Top({
             setPlaylistName(nameMatch[timeRange].name);
 
             // Retrieve the existing playlist IDs
-            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string, created_at: string }[];
+            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistName: string, playlistId: string, description: string, type: string, created_at: string }[];
 
             // Append the new playlist data at the beginning
-            playlists.push({ playlistId, description, type, created_at: new Date().toISOString() });
+            playlists.push({ playlistName, playlistId, description, type, created_at: new Date().toISOString() });
             playlists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
             setPlaylists(playlists);

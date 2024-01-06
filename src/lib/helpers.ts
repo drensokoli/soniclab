@@ -1,7 +1,8 @@
 import { deletePlaylist } from "./spotify";
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 
 interface Playlist {
+    playlistName: string;
     playlistId: string;
     description: string;
     type: string;
@@ -49,6 +50,7 @@ export async function fetchPlaylists(userId: string, setPlaylists: any) {
         const data = await response.json();
 
         const monthlyPlaylists = data.monthly_playlists.map((playlist: Playlist) => ({
+            playlistName: playlist.playlistName,
             playlistId: playlist.playlistId,
             description: playlist.description,
             created_at: playlist.created_at,
@@ -56,6 +58,7 @@ export async function fetchPlaylists(userId: string, setPlaylists: any) {
         }));
 
         const halfYearPlaylists = data.half_year_playlists.map((playlist: Playlist) => ({
+            playlistName: playlist.playlistName,
             playlistId: playlist.playlistId,
             description: playlist.description,
             created_at: playlist.created_at,
@@ -70,6 +73,7 @@ export async function fetchPlaylists(userId: string, setPlaylists: any) {
         // }));
 
         const topPlaylists = data.top_playlists.map((playlist: Playlist) => ({
+            playlistName: playlist.playlistName,
             playlistId: playlist.playlistId,
             description: playlist.description,
             created_at: playlist.created_at,
@@ -77,6 +81,7 @@ export async function fetchPlaylists(userId: string, setPlaylists: any) {
         }));
 
         const sessionPlaylists = data.session_playlists.map((playlist: Playlist) => ({
+            playlistName: playlist.playlistName,
             playlistId: playlist.playlistId,
             description: playlist.description,
             created_at: playlist.created_at,
@@ -136,16 +141,13 @@ export async function handleCreateMonthly(name: string) {
     console.log(data.message);
 }
 
-export const handleDeletePlaylist = async (playlistId: string, playlistType: string, setPlaylists: any, refreshToken: string, spotifyClientId: string, spotifyClientSecret: string) => {
+export const handleDeletePlaylist = async (playlistName: string, playlistId: string, playlistType: string, setPlaylists: any, refreshToken: string, spotifyClientId: string, spotifyClientSecret: string) => {
     Modal.confirm({
-        title: 'Delete Playlist ?',
-        content: `Are you sure you want to delete this playlist?`,
+        title: 'Delete Playlist?',
+        content: `Are you sure you want to delete ${playlistName}?`,
         okText: 'Yes',
         okType: 'danger',
         cancelText: 'No',
-        keyboard: true,
-        destroyOnClose: true,
-        confirmLoading: true,
         maskClosable: true,
         style: {
             top: 220,

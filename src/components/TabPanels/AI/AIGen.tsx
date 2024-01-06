@@ -136,10 +136,10 @@ export default function AIGen({
             setDescription('');
 
             // Retrieve the existing playlist IDs
-            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string }[];
+            const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistName: string, playlistId: string, description: string, type: string }[];
 
             // Append the new playlist data
-            playlists.push({ playlistId, description, type });
+            playlists.push({ playlistName, playlistId, description, type });
 
             // Store the updated playlist data
             sessionStorage.setItem('playlists', JSON.stringify(playlists));
