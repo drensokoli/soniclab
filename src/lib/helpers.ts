@@ -144,7 +144,7 @@ export async function handleCreateMonthly(name: string) {
 export const handleDeletePlaylist = async (playlistName: string, playlistId: string, playlistType: string, setPlaylists: any, refreshToken: string, spotifyClientId: string, spotifyClientSecret: string) => {
     Modal.confirm({
         title: 'Delete Playlist?',
-        content: `Are you sure you want to delete ${playlistName}?`,
+        content: `Are you sure you want to delete "${playlistName}"?`,
         okText: 'Yes',
         okType: 'danger',
         cancelText: 'No',
