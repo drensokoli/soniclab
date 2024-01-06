@@ -24,12 +24,14 @@ export default function Top({
     spotifyClientId,
     spotifyClientSecret,
     providerAccountId,
-    refreshToken
+    refreshToken,
+    setPlaylists,
 }: {
     spotifyClientId: string,
     spotifyClientSecret: string,
     providerAccountId: string,
-    refreshToken: string
+    refreshToken: string,
+    setPlaylists: any,
 }) {
 
     const { data: session } = useSession();
@@ -125,14 +127,16 @@ export default function Top({
 
             setRange(50);
             fetchSongs(timeRange, 50);
+            setPlaylistName(nameMatch[timeRange].name);
 
             // Retrieve the existing playlist IDs
             const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistId: string, description: string, type: string, created_at: string }[];
 
             // Append the new playlist data at the beginning
             playlists.push({ playlistId, description, type, created_at: new Date().toISOString() });
-
             playlists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+            setPlaylists(playlists);
 
             // Store the updated playlist data
             sessionStorage.setItem('playlists', JSON.stringify(playlists));
@@ -223,7 +227,10 @@ export default function Top({
                     type="button"
                     className={`inline-block rounded border-2 border-[#f33f81] px-6 py-2 text-xs font-bold uppercase leading-normal text-gray-300 transition duration-150 ease-in-out hover:bg-[#f33f81] hover:text-black ${!playlistName ? 'opacity-50' : ''}`}
                     data-te-ripple-init
-                    onClick={() => { createPlaylistHandler() }}
+                    onClick={() => {
+                        createPlaylistHandler(); // scroll to top
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     disabled={!playlistName}
                 >
                     Create Playlist

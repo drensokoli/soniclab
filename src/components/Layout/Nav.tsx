@@ -54,6 +54,7 @@ export default function Nav({
                         spotifyClientSecret={spotifyClientSecret}
                         providerAccountId={providerAccountId}
                         refreshToken={refreshToken}
+                        setPlaylists={setPlaylists}
                     />
                 </TabPanel>
                 <TabPanel value="top" className="p-0">
@@ -62,6 +63,7 @@ export default function Nav({
                         spotifyClientSecret={spotifyClientSecret}
                         providerAccountId={providerAccountId}
                         refreshToken={refreshToken}
+                        setPlaylists={setPlaylists}
                     />
                 </TabPanel>
                 <TabPanel value="library" className="p-0">
