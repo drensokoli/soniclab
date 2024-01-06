@@ -25,7 +25,7 @@ export default function Profile() {
         if (session
             || !sessionStorage.getItem('createMonthly')
             || !sessionStorage.getItem('createHalfYear')) {
-            fetchUser(userEmail)
+            fetchUser(userEmail, undefined)
         }
     }, [session])
 

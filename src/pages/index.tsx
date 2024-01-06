@@ -41,8 +41,12 @@ export default function Home({
       || !sessionStorage.getItem('refreshToken')
       || !sessionStorage.getItem('createMonthly')
       || !sessionStorage.getItem('playlists')) {
-      fetchUser(userEmail)
-      fetchPlaylists(userId, setPlaylists)
+      fetchUser(userEmail, setPlaylists).then(() => {
+        setUserId(sessionStorage.getItem('userId') as string);
+        setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);
+        setRefreshToken(sessionStorage.getItem('refreshToken') as string);
+        // fetchPlaylists(userId, setPlaylists);
+      })
     }
   }, [session])
 
