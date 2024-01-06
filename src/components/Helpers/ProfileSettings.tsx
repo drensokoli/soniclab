@@ -26,6 +26,7 @@ export default function ProfileSettings() {
         <>
             {cronToggleSettings.map((setting) => (
                 <CronToggle
+                    key={setting.name}
                     name={setting.name}
                     title={setting.title}
                     description={setting.description}
