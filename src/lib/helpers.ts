@@ -1,4 +1,5 @@
 import { deletePlaylist } from "./spotify";
+import { Modal } from 'antd';
 
 interface Playlist {
     playlistId: string;
@@ -135,36 +136,54 @@ export async function handleCreateMonthly(name: string) {
     console.log(data.message);
 }
 
-
 export const handleDeletePlaylist = async (playlistId: string, playlistType: string, setPlaylists: any, refreshToken: string, spotifyClientId: string, spotifyClientSecret: string) => {
-    try {
-        const playlistArray = sessionStorage.getItem('playlists');
-        const parsedPlaylistArray = JSON.parse(playlistArray as string);
-        const updatedPlaylists = parsedPlaylistArray.filter((playlist: Playlist) => playlist.playlistId !== playlistId);
-        setPlaylists(updatedPlaylists);
-        sessionStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
+    Modal.confirm({
+        title: 'Delete Playlist ?',
+        content: `Are you sure you want to delete this playlist?`,
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        keyboard: true,
+        destroyOnClose: true,
+        confirmLoading: true,
+        maskClosable: true,
+        style: {
+            top: 220,
+        },
+        onOk: async () => {
+            try {
+                const playlistArray = sessionStorage.getItem('playlists');
+                const parsedPlaylistArray = JSON.parse(playlistArray as string);
+                const updatedPlaylists = parsedPlaylistArray.filter((playlist: Playlist) => playlist.playlistId !== playlistId);
+                setPlaylists(updatedPlaylists);
+                sessionStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
 
-        deletePlaylist(refreshToken, spotifyClientId, spotifyClientSecret, playlistId);
+                deletePlaylist(refreshToken, spotifyClientId, spotifyClientSecret, playlistId);
 
-        const userId = sessionStorage.getItem('userId');
+                const userId = sessionStorage.getItem('userId');
 
-        const response = await fetch('/api/deletePlaylist', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: userId,
-                playlistId: playlistId,
-                playlistType: playlistType,
-            }),
-        });
+                const response = await fetch('/api/deletePlaylist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        playlistId: playlistId,
+                        playlistType: playlistType,
+                    }),
+                });
 
-        const data = await response.json();
-        console.log(data.message);
+                const data = await response.json();
+                console.log(data.message);
 
-        return updatedPlaylists;
-    } catch (error) {
-        console.error(error);
-    }
+                return updatedPlaylists;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+    });
 };
