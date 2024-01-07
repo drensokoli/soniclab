@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import Loading from "../Helpers/Loading";
 import NotSignedIn from "../Layout/NotSignedIn";
 import { useEffect, useState } from "react";
-import { createSpotifyPlaylist, getTopSongs } from "@/lib/spotify";
+import { createSpotifyPlaylist, getRecommandations, getTopSongs } from "@/lib/spotify";
 import SongCard from "../Layout/SongCard";
 import SongList from "../Layout/SongList";
 import View from "../Helpers/View";
@@ -42,7 +42,7 @@ export default function Top({
 
     const [view, setView] = useState('list');
     const [range, setRange] = useState(50);
-
+    const [max, setMax] = useState(50);
     const currentDate = new Date();
 
     let day = currentDate.getDate();
@@ -68,6 +68,26 @@ export default function Top({
 
     const [playlistName, setPlaylistName] = useState(nameMatch[timeRange].name);
     const [playlistId, setPlaylistId] = useState('');
+
+    const fetchRecommandations = async () => {
+        const seedTracks = songs.slice(0, 5);
+        const recommandations = await getRecommandations(refreshToken, spotifyClientId, spotifyClientSecret, seedTracks);
+        console.log("RECOMMANDATIONS ", recommandations);
+        const songsArray = recommandations.map((recommandation: any) => ({
+            id: recommandation.id,
+            name: recommandation.name,
+            artist: recommandation.artists[0].name,
+            artistId: recommandation.artists[0].id,
+            image: recommandation.album.images[0].url,
+            link: recommandation.link, 
+            show: true,
+        }))
+
+        setSongs([...songs, ...songsArray]);
+        console.log("LENGTH ", songs.length + songsArray.length);
+        setRange(songs.length + songsArray.length);
+        setMax(songs.length + songsArray.length);
+    }
 
     const fetchSongs = async (timeRange: string, range: number) => {
         const topSongs = await getTopSongs(refreshToken, spotifyClientId, spotifyClientSecret, timeRange, range);
@@ -205,9 +225,9 @@ export default function Top({
             {songs.length > 0 ? (
                 <div className="flex justify-center">
                     {view === 'card' ? (
-                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} />
+                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations} />
                     ) : (
-                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} />
+                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations}/>
                     )}
                 </div>
             ) : (
@@ -216,7 +236,7 @@ export default function Top({
             <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-2">
                 <div className="w-full md:w-4/5">
                     <Slider
-                        max={50}
+                        max={max}
                         range={range}
                         onChange={(value) => {
                             handleRangeChange(value);

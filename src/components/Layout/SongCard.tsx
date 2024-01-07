@@ -11,7 +11,8 @@ const jakarta = Plus_Jakarta_Sans({
 export default function SongCard({
     songs,
     setSongs,
-    setRange
+    setRange,
+    fetchRecommendation
 }: {
     songs: {
         id: any;
@@ -23,6 +24,7 @@ export default function SongCard({
     }[];
     setSongs: any;
     setRange: any;
+    fetchRecommendation: any;
 }) {
 
     return (
@@ -66,7 +68,7 @@ export default function SongCard({
 
             </div>
             <div className="mt-4">
-                <RecommendSongs />
+                <RecommendSongs fetchRecommendation={fetchRecommendation}/>
             </div>
         </div>
     )

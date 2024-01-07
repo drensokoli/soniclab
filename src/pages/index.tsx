@@ -31,21 +31,16 @@ export default function Home({
 
   // FETCH USER AND PLAYLISTS
   useEffect(() => {
-    if (sessionStorage.getItem('playlists')) {
+    if (sessionStorage.getItem('playlists') && sessionStorage.getItem('userId') && sessionStorage.getItem('providerAccountId') && sessionStorage.getItem('refreshToken')) {
       setPlaylists(JSON.parse(sessionStorage.getItem('playlists') as string));
-    }
-
-    if (session
-      || !sessionStorage.getItem('userId')
-      || !sessionStorage.getItem('providerAccountId')
-      || !sessionStorage.getItem('refreshToken')
-      || !sessionStorage.getItem('createMonthly')
-      || !sessionStorage.getItem('playlists')) {
+      setUserId(sessionStorage.getItem('userId') as string);
+      setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);
+      setRefreshToken(sessionStorage.getItem('refreshToken') as string);
+    } else {
       fetchUser(userEmail, setPlaylists).then(() => {
         setUserId(sessionStorage.getItem('userId') as string);
         setProviderAccountId(sessionStorage.getItem('providerAccountId') as string);
         setRefreshToken(sessionStorage.getItem('refreshToken') as string);
-        // fetchPlaylists(userId, setPlaylists);
       })
     }
   }, [session])

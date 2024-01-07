@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import Loading from "../Helpers/Loading";
 import NotSignedIn from "../Layout/NotSignedIn";
 import { useEffect, useState } from "react";
-import { createSpotifyPlaylist, getRecentlyPlayedSongs } from "@/lib/spotify";
+import { createSpotifyPlaylist, getRecentlyPlayedSongs, getRecommandations } from "@/lib/spotify";
 import SongCard from "../Layout/SongCard";
 import View from "../Helpers/View";
 import SongList from "../Layout/SongList";
@@ -60,6 +60,26 @@ export default function Recent({
     const [type, setType] = useState('session_playlists');
     const [max, setMax] = useState(50);
 
+    const fetchRecommandations = async () => {
+        const seedTracks = songs.slice(0, 5);
+        const recommandations = await getRecommandations(refreshToken, spotifyClientId, spotifyClientSecret, seedTracks);
+        console.log("RECOMMANDATIONS ", recommandations);
+        const songsArray = recommandations.map((recommandation: any) => ({
+            id: recommandation.id,
+            name: recommandation.name,
+            artist: recommandation.artists[0].name,
+            artistId: recommandation.artists[0].id,
+            image: recommandation.album.images[0].url,
+            link: recommandation.link, 
+            show: true,
+        }))
+
+        setSongs([...songs, ...songsArray]);
+        console.log("LENGTH ", songs.length + songsArray.length);
+        setRange(songs.length + songsArray.length);
+        setMax(songs.length + songsArray.length);
+    }
+    
     const fetchSongs = async (range: number) => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret, range);
 
@@ -185,9 +205,9 @@ export default function Recent({
             {songs.length > 0 ? (
                 <div className="flex justify-center">
                     {view === 'card' ? (
-                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} />
+                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations}/>
                     ) : (
-                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} />
+                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations}/>
                     )}
                 </div>
             ) : (

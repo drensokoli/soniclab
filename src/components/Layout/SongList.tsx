@@ -12,7 +12,8 @@ const jakarta = Plus_Jakarta_Sans({
 export default function SongList({
     songs,
     setSongs,
-    setRange
+    setRange,
+    fetchRecommendation
 }: {
     songs: {
         id: any;
@@ -24,6 +25,7 @@ export default function SongList({
     }[];
     setSongs: any;
     setRange: any;
+    fetchRecommendation: any;
 }) {
 
     let songLength: number;
@@ -72,7 +74,7 @@ export default function SongList({
                         />
                     </div>
                 ))}
-                <RecommendSongs />
+                <RecommendSongs fetchRecommendation={fetchRecommendation}/>
             </div>
         </>
     )

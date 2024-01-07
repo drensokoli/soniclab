@@ -437,3 +437,38 @@ export async function getTopSongs(
 
     return songs;
 }
+
+export async function getRecommandations(
+    refreshToken: string,
+    spotifyClientId: string,
+    spotifyClientSecret: string,
+    songs: any
+): Promise<Song[]> {
+    const seed_artists = songs.map((song: { artist: { id: any; }; }) => song.artist.id);
+    const seed_tracks = songs.map((song: { id: any; }) => song.id);
+
+    const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
+
+    const response = await fetch(`https://api.spotify.com/v1/recommendations?limit=10&seed_artists=${seed_artists.join(",")}&seed_tracks=${seed_tracks.join(",")}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    });
+
+    const data = await response.json();
+    const tracks = data.tracks;
+
+    let recommendations: Song[] = [];
+    if (data.items) {
+        recommendations = tracks.items.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            artist: item.artists[0].name,
+            artistId: item.artists[0].id,
+            image: item.album.images[0].url,
+            link: item.external_urls.spotify
+        }));
+    }
+
+    return tracks;
+}
