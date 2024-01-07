@@ -9,7 +9,7 @@ const jakarta = Plus_Jakarta_Sans({
 export default function RecommendSongs() {
 
     return (
-        <div className="flex flex-col items-center justify-center gap-2 p-3 border-2 border-[#f33f81] backdrop-blur cursor-pointer text-gray-200 rounded-md shadow-md dark:bg-gray-800 z-10">
+        <div className="flex flex-col items-center justify-center gap-2 p-3 border-2 border-[#f33f81] border-opacity-60 backdrop-blur cursor-pointer text-gray-200 rounded-md shadow-md dark:bg-gray-800">
             <img src="./plus.png" alt="Add more songs" width={40} height={40} className="mt-4" />
 
             <div className="flex flex-row justify-center items-center gap-1">
