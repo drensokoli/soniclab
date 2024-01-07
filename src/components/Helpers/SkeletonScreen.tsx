@@ -1,7 +1,7 @@
 export default function SkeletonScreen() {
     return (
         <>
-            {Array.from({ length: 50 }).map((_, index) => (
+            {Array.from({ length: 15 }).map((_, index) => (
                 <div className="flex flex-col gap-4 w-full pb-4" key={index}>
                     <div
                         className="flex flex-row items-center justify-between gap-4 p-3 bg-[#282828] text-gray-200 rounded-md shadow-md dark:bg-gray-800"

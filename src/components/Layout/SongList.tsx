@@ -71,6 +71,10 @@ export default function SongList({
                         />
                     </div>
                 ))}
+                <div className="flex flex-col items-center justify-center gap-2 p-4 bg-[#282828] border-gray-400 border-2 cursor-pointer text-gray-200 rounded-md shadow-md dark:bg-gray-800">
+                    <img src="./plus.png" alt="Add more songs" width={40} height={40} className="mt-2" />
+                    <h1 className={`${jakarta.className} text-xs`}>RECOMMEND MORE SONGS</h1>
+                </div>
             </div>
         </>
     )
