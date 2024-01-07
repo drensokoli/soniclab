@@ -1,6 +1,6 @@
 import { handleDeletePlaylist } from '@/lib/helpers';
 import { useSession } from 'next-auth/react';
-import NotSignedIn from './NotSignedIn';
+import NotSignedIn from '../Layout/NotSignedIn';
 
 interface Playlist {
     playlistId: string;

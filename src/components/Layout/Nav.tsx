@@ -3,7 +3,7 @@ import { Montserrat, Bebas_Neue } from 'next/font/google'
 import AIGen from "../TabPanels/AI/AIGen";
 import Recent from "../TabPanels/Recent";
 import Top from "../TabPanels/Top";
-import Library from "./Library";
+import Library from "../TabPanels/Library";
 
 const montserrat = Montserrat({
     subsets: ['latin'],
