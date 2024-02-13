@@ -22,7 +22,10 @@ const withPWA = require('next-pwa')({
 module.exports = withPWA({
   nextConfig,
   images: {
-    domains: ['image.tmdb.org', 'lh3.googleusercontent.com'],
+    domains: ['image.tmdb.org', 'i.scdn.co'],
     unoptimized: true,
+  },
+  env: {
+    BASE_URL: process.env.BASE_URL,
   }
 })
