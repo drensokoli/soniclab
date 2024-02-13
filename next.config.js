@@ -1,13 +1,28 @@
 /** @type {import('next').NextConfig} */
+const runtimeCaching = require("next-pwa/cache");
+
 const nextConfig = {
   reactStrictMode: true,
-}
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV !== "development",
+  },
+};
+
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  runtimeCaching,
+  disable: process.env.NODE_ENV === "development",
+})
 
 // module.exports = nextConfig
-module.exports = {
-  reactStrictMode: true,
+
+module.exports = withPWA({
+  nextConfig,
   images: {
-    domains: ['image.tmdb.org', 'i.scdn.co'],
+    domains: ['image.tmdb.org', 'lh3.googleusercontent.com'],
     unoptimized: true,
   }
-}
+})
