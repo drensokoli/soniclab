@@ -2,18 +2,24 @@ import { signOut } from "next-auth/react";
 
 export default function SignOutButton() {
     const handleSignOut = () => {
-        // Clear session storage
+        // Clear localStorage
+        localStorage.clear();
+
+        // Clear sessionStorage
         sessionStorage.clear();
 
         // Clear cookies
-        document.cookie.split(";").forEach((cookie) => {
+        const cookies = document.cookie.split(";");
+        for (let i =  0; i < cookies.length; i++) {
+            const cookie = cookies[i];
             const eqPos = cookie.indexOf("=");
             const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        });
+            document.cookie = name + "=;expires=Thu,  01 Jan  1970  00:00:00 GMT";
+        }
 
-        // Sign out from NextAuth
-        signOut();
+        // Sign out and redirect
+        signOut({ redirect: false });
+        window.location.href = '/'; // Replace '/' with the path you want to redirect to
     };
 
     return (
@@ -26,7 +32,6 @@ export default function SignOutButton() {
             >
                 Sign Out
             </button>
-
         </div>
     );
 }
