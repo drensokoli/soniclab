@@ -29,6 +29,7 @@ export default function Document() {
       <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" defer></script>
 
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005" crossOrigin="anonymous"></script>
+      <link rel="manifest" href="/manifest.webmanifest" />
 
       <Head>
         <script async src="https://fundingchoicesmessages.google.com/i/pub-3464540666338005?ers=1" nonce="RH0oI1spY4eKumxENDXqgg"></script>
