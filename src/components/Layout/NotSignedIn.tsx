@@ -3,7 +3,7 @@ import { signIn } from "next-auth/react";
 export default function NotSignedIn({ title }: { title: string }) {
 
     return (
-        <div className='flex flex-col justify-center items-center py-20 text-center gap-6'>
+        <div className='flex flex-col justify-center items-center mt-40 text-center gap-6'>
             <h1 className='text-2xl md:text-3xl text-gray-300'>You are not signed in.</h1>
             <p className='text-lg md:text-xl text-gray-300'>{title}</p>
             <button

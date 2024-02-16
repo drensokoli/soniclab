@@ -9,6 +9,7 @@ import BackButton from '@/components/Helpers/BackButton';
 import SignOutButton from '@/components/Helpers/SignOutButton';
 import ProfileSettings from '@/components/Helpers/ProfileSettings';
 import { fetchUser } from '@/lib/helpers';
+import HeaderCopy from "@/components/Layout/Header";
 
 export default function Profile() {
 
@@ -75,9 +76,7 @@ export default function Profile() {
         <>
             <div ref={vantaRef} className='fixed w-screen h-screen'></div>
             <div className='flex flex-col min-h-screen'>
-                <BackButton />
                 <Header />
-                <SignOutButton />
                 <ProfileSettings />
             </div>
             <div className="flex flex-col h-auto">
