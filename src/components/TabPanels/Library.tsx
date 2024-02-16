@@ -57,12 +57,12 @@ export default function Library(
                             ))}
                         </div>
                     ) : (
-                        <div className='flex flex-col h-[200px] justify-center items-center'>
+                        <div className='flex flex-col h-[200px] justify-center items-center mt-12'>
                             <h1 className='text-xl md:text-xl font-bold text-gray-400 opacity-70 text-center'>
                                 Your SonicLab playlists will appear here
                             </h1>
                             <h1 className='text-xl md:text-xl font-bold text-gray-400 opacity-70 text-center'>
-                                Head over to the Playlist Generator tab and create your first playlist
+                                Head over to the Recent or Top tab and create your first playlist
                             </h1>
                         </div>
                     )}

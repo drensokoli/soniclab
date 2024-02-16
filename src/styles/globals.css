@@ -17,8 +17,28 @@
 }
 
 /* width */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 0px;
+} */
+
+/* This will change the scrollbar track color */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #23153c;
+}
+ 
+/* This will change the scrollbar handle color */
+::-webkit-scrollbar-thumb {
+  background: #b5326d;
+  border-radius: 10px;
+}
+
+/* This will change the scrollbar handle color on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #95295a; 
 }
 
 .cssload-loader-inner {

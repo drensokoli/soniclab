@@ -73,9 +73,9 @@ export default function Home({
 
   // LOADING
   useEffect(() => {
-    setTimeout(() => {
+    if (vantaRef) {
       setIsLoading(false);
-    }, 500);
+    }
   }, [])
 
 
@@ -101,6 +101,8 @@ export default function Home({
           playlists={playlists}
           setPlaylists={setPlaylists}
         />
+      </div>
+      <div className="flex flex-col h-auto">
         <Footer />
       </div>
     </>

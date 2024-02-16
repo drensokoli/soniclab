@@ -57,9 +57,9 @@ export default function Profile() {
 
     // LOADING
     useEffect(() => {
-        setTimeout(() => {
+        if (vantaRef) {
             setIsLoading(false);
-        }, 500);
+        }
     }, [])
 
     if (isLoading) {
@@ -74,11 +74,13 @@ export default function Profile() {
     return (
         <>
             <div ref={vantaRef} className='fixed w-screen h-screen'></div>
-            <div>
+            <div className='flex flex-col min-h-screen'>
                 <BackButton />
                 <Header />
                 <SignOutButton />
                 <ProfileSettings />
+            </div>
+            <div className="flex flex-col h-auto">
                 <Footer />
             </div>
 

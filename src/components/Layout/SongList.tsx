@@ -40,41 +40,39 @@ export default function SongList({
         <>
             <div className="flex flex-col gap-4 w-full">
                 {songs.map((song, index) => (
-                    <div
-                        key={index}
-                        className="flex flex-row items-center justify-between gap-4 p-3 bg-[#282828] text-gray-200 rounded-md shadow-md dark:bg-gray-800"
-                    >
-                        <div className="flex flex-row gap-4 items-start">
-                            <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-2">
-                                <img src={song.image} alt={song.name} className="md:h-20 h-16" />
-                            </a>
-                            <div className="flex flex-col gap-2">
-                                <div>
+                    <>
+                        <div
+                            key={index}
+                            className="flex flex-row justify-between p-3 bg-[#282828] text-gray-200 rounded-md shadow-md dark:bg-gray-800"
+                        >
+                            <div className="flex flex-row gap-4">
+                                <img src={song.image} alt={song.name} className="h-20 w-20 object-cover" />
+                                <div className="flex flex-col gap-1">
                                     <a href={`https://open.spotify.com/track/${song.id}`} target="_blank">
-                                        <p className="text-sm sm:text-lg font-bold w-[140px] sm:w-auto">
+                                        <p className="text-sm sm:text-lg font-bold sm:w-auto">
                                             {index + 1}. {song.name}
                                         </p>
                                     </a>
                                     <a href={`https://open.spotify.com/artist/${song.artistId}`} target="_blank">
                                         <p className="sm:text-sm text-xs text-gray-300">{song.artist}</p>
                                     </a>
+                                    <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-2">
+                                        <img src="./spotify.png" alt="Spotify Icon" width={17} height={17} className="inline-block" />
+                                        <h1 className={`${jakarta.className} sm:text-sm text-xs`}>PLAY ON SPOTIFY</h1>
+                                    </a>
                                 </div>
-                                <a href={`https://open.spotify.com/track/${song.id}`} target="_blank" className="flex flex-row justify-start items-center gap-2">
-                                    <img src="./spotify.png" alt="Spotify Icon" width={17} height={17} className="inline-block" />
-                                    <h1 className={`${jakarta.className} sm:text-sm text-xs`}>PLAY ON SPOTIFY</h1>
-                                </a>
                             </div>
+                            <Checkbox
+                                className="w-6 h-6 items-center justify-center"
+                                checked={song.show}
+                                color="pink"
+                                crossOrigin={undefined}
+                                onChange={() => { song.show = !song.show; setSongs([...songs]); setRange(songs.filter((song) => song.show).length) }}
+                            />
                         </div>
-                        <Checkbox
-                            className="w-6 h-6 items-center justify-center"
-                            checked={song.show}
-                            color="pink"
-                            crossOrigin={undefined}
-                            onChange={() => { song.show = !song.show; setSongs([...songs]); setRange(songs.filter((song) => song.show).length) }}
-                        />
-                    </div>
+                    </>
                 ))}
-                <RecommendSongs fetchRecommendation={fetchRecommendation}/>
+                <RecommendSongs fetchRecommendation={fetchRecommendation} />
             </div>
         </>
     )
