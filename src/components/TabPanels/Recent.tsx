@@ -63,7 +63,6 @@ export default function Recent({
     const fetchRecommandations = async () => {
         const seedTracks = songs.slice(0, 5);
         const recommandations = await getRecommandations(refreshToken, spotifyClientId, spotifyClientSecret, seedTracks);
-        console.log("RECOMMANDATIONS ", recommandations);
         const songsArray = recommandations.map((recommandation: any) => ({
             id: recommandation.id,
             name: recommandation.name,

@@ -397,7 +397,7 @@ export async function getRecentlyPlayedSongs(
                 artist: track.artists[0].name,
                 artistId: track.artists[0].id,
                 image: track.album.images[0].url,
-                link: track.external_urls.spotify
+                link: track.external_urls.spotify,
             };
         });
     }
@@ -444,7 +444,7 @@ export async function getRecommandations(
     spotifyClientSecret: string,
     songs: any
 ): Promise<Song[]> {
-    const seed_artists = songs.map((song: { artist: { id: any; }; }) => song.artist.id);
+    const seed_artists = songs.map((song: { artistId: any; }) => song.artistId);
     const seed_tracks = songs.map((song: { id: any; }) => song.id);
 
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
