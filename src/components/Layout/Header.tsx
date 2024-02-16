@@ -1,7 +1,6 @@
 import { signOut, useSession } from "next-auth/react";
 import { Bebas_Neue } from "next/font/google"
 import Link from "next/link"
-import { useRouter } from "next/router";
 import UserDropDown from "../Helpers/UserDropDown";
 
 

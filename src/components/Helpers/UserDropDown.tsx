@@ -52,7 +52,7 @@ export default function UserDropDown({ userImage }: { userImage: string }) {
                             {({ active }) => (
                                 <button
                                     onClick={() => signOut()}
-                                    className={classNames(active ? 'bg-gray-100 hover:bg-gray-200 w-full' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                    className={classNames(active ? 'bg-gray-100 hover:bg-gray-200 w-full' : '', 'block px-4 py-2 text-sm text-gray-700 w-full')}
                                     aria-label='Notion'
                                 >
                                     <div className='flex flex-row justify-start items-center gap-1'>
