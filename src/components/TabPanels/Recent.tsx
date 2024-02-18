@@ -44,6 +44,8 @@ export default function Recent({
     const [loading, setLoading] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
 
+    const [recommandationPosition, setRecommandationPosition] = useState(0);
+
     const currentDate = new Date();
 
     let day = currentDate.getDate();
@@ -60,8 +62,9 @@ export default function Recent({
     const [type, setType] = useState('session_playlists');
     const [max, setMax] = useState(50);
 
-    const fetchRecommandations = async () => {
-        const seedTracks = songs.slice(0, 5);
+    const fetchRecommandations = async () => {      
+        const seedTracks = songs.slice(recommandationPosition, recommandationPosition + 5)
+        setRecommandationPosition(recommandationPosition + 5);
         const recommandations = await getRecommandations(refreshToken, spotifyClientId, spotifyClientSecret, seedTracks);
         const songsArray = recommandations.map((recommandation: any) => ({
             id: recommandation.id,

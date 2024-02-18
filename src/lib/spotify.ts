@@ -449,7 +449,7 @@ export async function getRecommandations(
 
     const { access_token: accessToken } = await getAccessToken(refreshToken, spotifyClientId, spotifyClientSecret);
 
-    const response = await fetch(`https://api.spotify.com/v1/recommendations?limit=10&seed_artists=${seed_artists.join(",")}&seed_tracks=${seed_tracks.join(",")}`, {
+    const response = await fetch(`https://api.spotify.com/v1/recommendations?limit=10&&seed_tracks=${seed_tracks.join(",")}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }

@@ -43,6 +43,9 @@ export default function Top({
     const [view, setView] = useState('list');
     const [range, setRange] = useState(50);
     const [max, setMax] = useState(50);
+
+    const [recommandationPosition, setRecommandationPosition] = useState(0);
+
     const currentDate = new Date();
 
     let day = currentDate.getDate();
@@ -70,7 +73,8 @@ export default function Top({
     const [playlistId, setPlaylistId] = useState('');
 
     const fetchRecommandations = async () => {
-        const seedTracks = songs.slice(0, 5);
+        const seedTracks = songs.slice(recommandationPosition, recommandationPosition + 5)
+        setRecommandationPosition(recommandationPosition + 5);
         const recommandations = await getRecommandations(refreshToken, spotifyClientId, spotifyClientSecret, seedTracks);
         console.log("RECOMMANDATIONS ", recommandations);
         const songsArray = recommandations.map((recommandation: any) => ({
