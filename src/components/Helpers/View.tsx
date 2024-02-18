@@ -21,10 +21,10 @@ export default function View({ setView }: { setView: (view: string) => void }) {
     };
 
     return (
-        <button onClick={handleClick}>
+        <button onClick={handleClick} className="pt-1.5">
             <img
                 src={images[icon].path}
-                className="h-[40px] p-1 rounded-md"
+                className="h-[35px] p-1 rounded-md"
             />
         </button>
     );

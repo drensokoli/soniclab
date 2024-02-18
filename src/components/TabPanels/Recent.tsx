@@ -9,6 +9,7 @@ import SongList from "../Layout/SongList";
 import Slider from "../Helpers/Slider";
 import SpotifyBubble from "../Helpers/SpotifyBubble";
 import SkeletonScreen from "../Helpers/SkeletonScreen";
+import { Checkbox } from "@material-tailwind/react";
 
 interface Song {
     id: string;
@@ -62,6 +63,8 @@ export default function Recent({
     const [playlistId, setPlaylistId] = useState('');
     const [type, setType] = useState('session_playlists');
     const [max, setMax] = useState(50);
+    const [selected, setSelected] = useState(true);
+    const [selectAllText, setSelectAllText] = useState('Deselect All');
 
     const fetchRecommendation = async () => {
         setFetchingRecommendation(true);
@@ -74,7 +77,7 @@ export default function Recent({
             artist: recommandation.artists[0].name,
             artistId: recommandation.artists[0].id,
             image: recommandation.album.images[0].url,
-            link: recommandation.link, 
+            link: recommandation.link,
             show: true,
         }))
 
@@ -83,7 +86,39 @@ export default function Recent({
         setRange(songs.length + songsArray.length);
         setMax(songs.length + songsArray.length);
     }
-    
+
+    const selectAll = async () => {
+        let updatedSongs: Song[] = [];
+        if (!selected) {
+            updatedSongs = songs.map((song) => {
+                return {
+                    ...song,
+                    show: true,
+                };
+            });
+        } else {
+            updatedSongs = songs.map((song) => {
+                return {
+                    ...song,
+                    show: false,
+                };
+            });
+        }
+        setSelected(!selected);
+        setSelectAllText(!selected ? 'Deselect All' : 'Select All');
+        setSongs(updatedSongs);
+    }
+
+    useEffect(() => {
+        if (songs.filter((song) => song.show).length === songs.length) {
+            setSelected(true);
+            setSelectAllText('Deselect All');
+        } else if (songs.filter((song) => song.show).length === 0) {
+            setSelected(false);
+            setSelectAllText('Select All');
+        }
+    }, [songs]);
+
     const fetchSongs = async (range: number) => {
         const recentSongs = await getRecentlyPlayedSongs(refreshToken, spotifyClientId, spotifyClientSecret, range);
 
@@ -153,7 +188,7 @@ export default function Recent({
             const playlists = JSON.parse(sessionStorage.getItem('playlists') || '[]') as { playlistName: string, playlistId: string, description: string, type: string, created_at: string }[];
 
             // Append the new playlist data
-            playlists.push({playlistName, playlistId, description, type, created_at: new Date().toISOString() });
+            playlists.push({ playlistName, playlistId, description, type, created_at: new Date().toISOString() });
             playlists.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
             setPlaylists(playlists);
@@ -201,15 +236,25 @@ export default function Recent({
 
                 </div>
             </div>
-            <div className="flex flex-row justify-center">
-                <div className="flex items-center justify-end w-full py-4">
+            <div className="flex flex-row justify-between w-full px-3 py-2">
+                <div>
                     <View setView={setView} />
+                </div>
+                <div className="flex flex-row items-center">
+                    <h1 className="text-gray-200 text-sm">{selectAllText}</h1>
+                    <Checkbox
+                        className="w-6 h-6 items-center justify-center"
+                        checked={selected}
+                        color="pink"
+                        crossOrigin={undefined}
+                        onChange={() => selectAll()}
+                    />
                 </div>
             </div>
             {songs.length > 0 ? (
                 <div className="flex justify-center">
                     {view === 'card' ? (
-                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommendation} fetchingRecommendation={fetchingRecommendation}/>
+                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommendation} fetchingRecommendation={fetchingRecommendation} />
                     ) : (
                         <SongList songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommendation} fetchingRecommendation={fetchingRecommendation} />
                     )}

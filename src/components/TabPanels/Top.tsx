@@ -9,6 +9,7 @@ import View from "../Helpers/View";
 import Slider from "../Helpers/Slider";
 import SpotifyBubble from "../Helpers/SpotifyBubble";
 import SkeletonScreen from "../Helpers/SkeletonScreen";
+import { Checkbox } from "@material-tailwind/react";
 
 interface Song {
     id: string;
@@ -46,6 +47,9 @@ export default function Top({
 
     const [fetchingRecommendation, setFetchingRecommendation] = useState(false);
     const [recommandationPosition, setRecommandationPosition] = useState(0);
+
+    const [selected, setSelected] = useState(true);
+    const [selectAllText, setSelectAllText] = useState('Deselect All');
 
     const currentDate = new Date();
 
@@ -85,7 +89,7 @@ export default function Top({
             artist: recommandation.artists[0].name,
             artistId: recommandation.artists[0].id,
             image: recommandation.album.images[0].url,
-            link: recommandation.link, 
+            link: recommandation.link,
             show: true,
         }))
 
@@ -109,25 +113,37 @@ export default function Top({
         setSongs(songsArray);
     };
 
-    const handleRangeChange = (value: number) => {
-
-        setRange(value);
-
-        const updatedSongs = songs.map((song, index) => {
-            if (index < value) {
+    const selectAll = async () => {
+        let updatedSongs: Song[] = [];
+        if (!selected) {
+            updatedSongs = songs.map((song) => {
                 return {
                     ...song,
                     show: true,
                 };
-            }
-            return {
-                ...song,
-                show: false,
-            };
-        });
-
+            });
+        } else {
+            updatedSongs = songs.map((song) => {
+                return {
+                    ...song,
+                    show: false,
+                };
+            });
+        }
+        setSelected(!selected);
+        setSelectAllText(!selected ? 'Deselect All' : 'Select All');
         setSongs(updatedSongs);
-    };
+    }
+    
+    useEffect(() => {
+        if (songs.filter((song) => song.show).length === songs.length) {
+            setSelected(true);
+            setSelectAllText('Deselect All');
+        } else if (songs.filter((song) => song.show).length === 0) {
+            setSelected(false);
+            setSelectAllText('Select All');
+        }
+    }, [songs]);
 
     const createPlaylistHandler = async () => {
         setLoading(true);
@@ -208,10 +224,11 @@ export default function Top({
                     />
                 </div>
             </div>
-            <div className="flex flex-row justify-center items-center">
-                <div className="flex items-center justify-end w-full py-4 gap-2">
+            <div className="flex flex-row justify-between w-full px-3 py-2">
+                <div className="flex flex-row items-start gap-2">
+                    <View setView={setView} />
                     <select
-                        className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-200 h-[38px] mt-1 w-[100px] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={timeRange}
                         onChange={(e) => {
                             setTimeRange(e.target.value);
@@ -220,14 +237,22 @@ export default function Top({
                             setPlaylistName(nameMatch[e.target.value].name);
                         }}
                     >
-                        <option value="short_term">Monthly Mix</option>
-                        <option value="medium_term">Seasonal Mix</option>
-                        <option value="long_term">All Time Mix</option>
+                        <option value="short_term">Monthly</option>
+                        <option value="medium_term">Seasonal</option>
+                        <option value="long_term">All Time</option>
                     </select>
-                    <View setView={setView} />
+                </div>
+                <div className="flex flex-row items-center">
+                    <h1 className="text-gray-200 text-sm">{selectAllText}</h1>
+                    <Checkbox
+                        className="w-6 h-6 items-center justify-center"
+                        checked={selected}
+                        color="pink"
+                        crossOrigin={undefined}
+                        onChange={() => selectAll()}
+                    />
                 </div>
             </div>
-
             {songs.length > 0 ? (
                 <div className="flex justify-center">
                     {view === 'card' ? (
