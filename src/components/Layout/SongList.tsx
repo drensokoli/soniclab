@@ -13,7 +13,8 @@ export default function SongList({
     songs,
     setSongs,
     setRange,
-    fetchRecommendation
+    fetchRecommendation,
+    fetchingRecommendation
 }: {
     songs: {
         id: any;
@@ -26,6 +27,7 @@ export default function SongList({
     setSongs: any;
     setRange: any;
     fetchRecommendation: any;
+    fetchingRecommendation: boolean;
 }) {
 
     let songLength: number;
@@ -72,7 +74,7 @@ export default function SongList({
                         </div>
                     </>
                 ))}
-                <RecommendSongs fetchRecommendation={fetchRecommendation} />
+                <RecommendSongs fetchRecommendation={fetchRecommendation} fetchingRecommendation={fetchingRecommendation} />
             </div>
         </>
     )

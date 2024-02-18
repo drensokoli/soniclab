@@ -12,7 +12,8 @@ export default function SongCard({
     songs,
     setSongs,
     setRange,
-    fetchRecommendation
+    fetchRecommendation,
+    fetchingRecommendation
 }: {
     songs: {
         id: any;
@@ -25,6 +26,7 @@ export default function SongCard({
     setSongs: any;
     setRange: any;
     fetchRecommendation: any;
+    fetchingRecommendation: boolean;
 }) {
 
     return (
@@ -68,7 +70,7 @@ export default function SongCard({
 
             </div>
             <div className="mt-4">
-                <RecommendSongs fetchRecommendation={fetchRecommendation}/>
+                <RecommendSongs fetchRecommendation={fetchRecommendation} fetchingRecommendation={fetchingRecommendation}/>
             </div>
         </div>
     )

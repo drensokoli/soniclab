@@ -44,6 +44,7 @@ export default function Top({
     const [range, setRange] = useState(50);
     const [max, setMax] = useState(50);
 
+    const [fetchingRecommendation, setFetchingRecommendation] = useState(false);
     const [recommandationPosition, setRecommandationPosition] = useState(0);
 
     const currentDate = new Date();
@@ -73,6 +74,7 @@ export default function Top({
     const [playlistId, setPlaylistId] = useState('');
 
     const fetchRecommandations = async () => {
+        setFetchingRecommendation(true);
         const seedTracks = songs.slice(recommandationPosition, recommandationPosition + 5)
         setRecommandationPosition(recommandationPosition + 5);
         const recommandations = await getRecommandations(refreshToken, spotifyClientId, spotifyClientSecret, seedTracks);
@@ -88,7 +90,7 @@ export default function Top({
         }))
 
         setSongs([...songs, ...songsArray]);
-        console.log("LENGTH ", songs.length + songsArray.length);
+        setFetchingRecommendation(false);
         setRange(songs.length + songsArray.length);
         setMax(songs.length + songsArray.length);
     }
@@ -229,9 +231,9 @@ export default function Top({
             {songs.length > 0 ? (
                 <div className="flex justify-center">
                     {view === 'card' ? (
-                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations} />
+                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations} fetchingRecommendation={fetchingRecommendation} />
                     ) : (
-                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations}/>
+                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations} fetchingRecommendation={fetchingRecommendation} />
                     )}
                 </div>
             ) : (
