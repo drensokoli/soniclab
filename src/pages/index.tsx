@@ -7,6 +7,7 @@ import Loading from '@/components/Helpers/Loading';
 import Nav from '@/components/Layout/Nav';
 import Header from "@/components/Layout/Header";
 import { fetchPlaylists, fetchUser } from "../lib/helpers";
+import Head from "next/head";
 
 export default function Home({
   spotifyClientId,
@@ -90,6 +91,22 @@ export default function Home({
 
   return (
     <>
+      <Head>
+        <meta property="og:title" content="SonicLab - Create Spotify playlists tailored to you." />
+        <meta property="og:description" content="Create playlists with your top tracks, recent tracks or have SonicLab create them for you automatically every month." />
+        <meta property="og:image" content="https://soniclab.vercel.app/og.png" />
+        <meta property="og:url" content="https://soniclab.vercel.app/" />
+        <meta property="og:site_name" content="SonicLab" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@SokoliDren" />
+        <meta name="twitter:creator" content="@SokoliDren" />
+        <meta name="twitter:title" content="SonicLab - Create Spotify playlists tailored to you." />
+        <meta name="twitter:description" content="Create playlists with your top tracks, recent tracks or have SonicLab create them for you automatically every month." />
+        <meta name="twitter:image" content="https://soniclab.vercel.app/og.png" />
+        <meta name="twitter:domain" content="soniclab.vercel.app" />
+        <meta name="twitter:url" content="https://soniclab.vercel.app/" />
+      </Head>
       <div ref={vantaRef} className='fixed w-screen h-screen'></div>
       <div className='flex flex-col justify center items-center h-auto min-h-screen'>
         <Header />
