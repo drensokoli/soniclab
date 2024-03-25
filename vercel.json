@@ -3,10 +3,6 @@
       {
         "path": "/api/cron/createMonthlyPlaylist",
         "schedule": "0 0 1 * *"
-      },
-      {
-        "path": "/api/cron/createHalfYearPlaylist",
-        "schedule": "0 0 1 7 *"
       }
     ]
   }
