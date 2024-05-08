@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 export default function Footer() {
@@ -10,7 +11,7 @@ export default function Footer() {
         </div>
         <h1 className='text-gray-400 text-center'>Made with ❤️ by
           <span className="text-blue-300">
-            <a href="https://www.linkedin.com/in/dren-sokoli-0003a81a1/" target="_blank"> Dren Sokoli</a>
+            <a href="https://linktr.ee/drensokoli" target="_blank"> Dren Sokoli</a>
           </span>
         </h1>
         <p className="text-gray-400 mr-2 text-center">
@@ -19,6 +20,10 @@ export default function Footer() {
             <a href="https://github.com/drensokoli/soniclab" target="_blank">SonicLab</a>
           </span>
         </p>
+        {/* <div className='flex flex-row gap-4 pt-2'>
+          <Link href="https://clicknotes.site/privacy-policy.html" target="_blank" aria-label='Privacy Policy' className='text-sm text-blue-300 hover:underline'>Privacy Policy</Link>
+          <Link href="https://clicknotes.site/terms-and-conditions.html" target="_blank" aria-label='Terms and Conditions' className='text-sm text-blue-300 hover:underline'>Terms of Use</Link>
+        </div> */}
       </footer>
     </>
   );
