@@ -57,7 +57,7 @@ export default function Document() {
         <meta name="twitter:domain" content="soniclab.vercel.app" />
         <meta name="twitter:url" content="https://soniclab.vercel.app/" />
 
-        <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="drenso" data-description="Support me on Buy me a coffee!" data-message="" data-color="#BD5FFF" data-position="Right" data-x_margin="18" data-y_margin="18" defer></script>
+        <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="drenso" data-description="Support me on Buy me a coffee!" data-message="" data-color="#fd4e9f" data-position="Right" data-x_margin="18" data-y_margin="18" defer></script>
 
         {/* <script async src="https://fundingchoicesmessages.google.com/i/pub-3464540666338005?ers=1" nonce="RH0oI1spY4eKumxENDXqgg"></script> */}
         {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005" crossOrigin="anonymous"></script> */}
