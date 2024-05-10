@@ -20,10 +20,10 @@ export default function Footer() {
             <a href="https://github.com/drensokoli/soniclab" target="_blank">SonicLab</a>
           </span>
         </p>
-        {/* <div className='flex flex-row gap-4 pt-2'>
-          <Link href="https://clicknotes.site/privacy-policy.html" target="_blank" aria-label='Privacy Policy' className='text-sm text-blue-300 hover:underline'>Privacy Policy</Link>
-          <Link href="https://clicknotes.site/terms-and-conditions.html" target="_blank" aria-label='Terms and Conditions' className='text-sm text-blue-300 hover:underline'>Terms of Use</Link>
-        </div> */}
+        <div className='flex flex-row gap-4 pt-2'>
+          <Link href="/privacy-policy.html" target="_blank" aria-label='Privacy Policy' className='text-sm text-blue-300 hover:underline'>Privacy Policy</Link>
+          <Link href="/terms-and-conditions.html" target="_blank" aria-label='Terms and Conditions' className='text-sm text-blue-300 hover:underline'>Terms of Use</Link>
+        </div>
       </footer>
     </>
   );

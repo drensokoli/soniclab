@@ -92,12 +92,22 @@ export default function Home({
   return (
     <>
       <Head>
+        <title>SonicLab</title>
+        <meta name="description" content="Save popular and trending movies to your Notion list or search for your favourites. All your movies in one place, displayed in a beautiful Notion template." />
+        <meta name="robots" content="all"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Dren Sokoli" />
+
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href="https://soniclab.vercel.app" />
+
         <meta property="og:title" content="SonicLab - Create Spotify playlists tailored to you." />
         <meta property="og:description" content="Create playlists with your top tracks, recent tracks or have SonicLab create them for you automatically every month." />
         <meta property="og:image" content="https://soniclab.vercel.app/og.png" />
         <meta property="og:url" content="https://soniclab.vercel.app/" />
         <meta property="og:site_name" content="SonicLab" />
         <meta property="og:type" content="website" />
+
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@SokoliDren" />
         <meta name="twitter:creator" content="@SokoliDren" />

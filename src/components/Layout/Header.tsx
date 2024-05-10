@@ -20,9 +20,9 @@ export default function Header() {
                 <Link href="/">
                     <img src="/logo.png" alt="Sonic Lab Logo" width={75} height={75} />
                 </Link>
-                <Link href="/">
+                {/* <Link href="/">
                     <h1 className={`font-bold text-4xl text-[#f33f81] opacity-80 ${bebas_neue.className}`}>Sonic Lab</h1>
-                </Link>
+                </Link> */}
             </div>
             {session && (
                 <UserDropDown userImage={session?.user?.image?.toString()!} />
