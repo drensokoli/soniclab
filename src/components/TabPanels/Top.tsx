@@ -77,12 +77,30 @@ export default function Top({
     const [playlistName, setPlaylistName] = useState(nameMatch[timeRange].name);
     const [playlistId, setPlaylistId] = useState('');
 
-    const fetchRecommandations = async () => {
+    const fetchRecommendation = async () => {
         setFetchingRecommendation(true);
-        const seedTracks = songs.slice(recommandationPosition, recommandationPosition + 5)
-        setRecommandationPosition(recommandationPosition + 5);
+        
+        let seedTracks: string | any[] = [];
+        let foundValidSeedTrack = false;
+        let positionIncrement = 0;
+    
+        // Loop until a valid seed track is found
+        while (!foundValidSeedTrack) {
+            seedTracks = songs
+                .filter(song => song.show)
+                .slice(recommandationPosition + positionIncrement, recommandationPosition + positionIncrement + 5);
+            
+            // Check if any valid seed tracks are found
+            if (seedTracks.length > 0) {
+                foundValidSeedTrack = true;
+            } else {
+                // If no valid seed tracks are found, increment the position
+                positionIncrement += 5;
+            }
+        }
+    
+        setRecommandationPosition(recommandationPosition + positionIncrement);
         const recommandations = await getRecommandations(refreshToken, spotifyClientId, spotifyClientSecret, seedTracks);
-        console.log("RECOMMANDATIONS ", recommandations);
         const songsArray = recommandations.map((recommandation: any) => ({
             id: recommandation.id,
             name: recommandation.name,
@@ -91,8 +109,8 @@ export default function Top({
             image: recommandation.album.images[0].url,
             link: recommandation.link,
             show: true,
-        }))
-
+        }));
+    
         setSongs([...songs, ...songsArray]);
         setFetchingRecommendation(false);
         setRange(songs.length + songsArray.length);
@@ -256,9 +274,9 @@ export default function Top({
             {songs.length > 0 ? (
                 <div className="flex justify-center">
                     {view === 'card' ? (
-                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations} fetchingRecommendation={fetchingRecommendation} />
+                        <SongCard songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommendation} fetchingRecommendation={fetchingRecommendation} />
                     ) : (
-                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommandations} fetchingRecommendation={fetchingRecommendation} />
+                        <SongList songs={songs} setSongs={setSongs} setRange={setRange} fetchRecommendation={fetchRecommendation} fetchingRecommendation={fetchingRecommendation} />
                     )}
                 </div>
             ) : (

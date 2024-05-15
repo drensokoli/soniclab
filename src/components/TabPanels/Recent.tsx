@@ -68,8 +68,27 @@ export default function Recent({
 
     const fetchRecommendation = async () => {
         setFetchingRecommendation(true);
-        const seedTracks = songs.slice(recommandationPosition, recommandationPosition + 5)
-        setRecommandationPosition(recommandationPosition + 5);
+        
+        let seedTracks: string | any[] = [];
+        let foundValidSeedTrack = false;
+        let positionIncrement = 0;
+    
+        // Loop until a valid seed track is found
+        while (!foundValidSeedTrack) {
+            seedTracks = songs
+                .filter(song => song.show)
+                .slice(recommandationPosition + positionIncrement, recommandationPosition + positionIncrement + 5);
+            
+            // Check if any valid seed tracks are found
+            if (seedTracks.length > 0) {
+                foundValidSeedTrack = true;
+            } else {
+                // If no valid seed tracks are found, increment the position
+                positionIncrement += 5;
+            }
+        }
+    
+        setRecommandationPosition(recommandationPosition + positionIncrement);
         const recommandations = await getRecommandations(refreshToken, spotifyClientId, spotifyClientSecret, seedTracks);
         const songsArray = recommandations.map((recommandation: any) => ({
             id: recommandation.id,
@@ -79,13 +98,14 @@ export default function Recent({
             image: recommandation.album.images[0].url,
             link: recommandation.link,
             show: true,
-        }))
-
+        }));
+    
         setSongs([...songs, ...songsArray]);
         setFetchingRecommendation(false);
         setRange(songs.length + songsArray.length);
         setMax(songs.length + songsArray.length);
     }
+    
 
     const selectAll = async () => {
         let updatedSongs: Song[] = [];
